@@ -1,159 +1,149 @@
 import { component$ } from '@builder.io/qwik';
-import type { DocumentHead } from '@builder.io/qwik-city';
-import { Link } from '@builder.io/qwik-city';
+import {
+  type DocumentHead,
+  globalAction$,
+  Form,
+} from '@builder.io/qwik-city';
+import { createClient } from "@libsql/client";
+import { LoadingAnimation } from '~/components/loading/loading';
+import { Noty } from '~/components/notification/notification';
+import { responseDataAdapter } from './utils';
+
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+export const useFormAction = globalAction$(async(form) => {
+  const db = createClient({
+    url: import.meta.env.VITE_DB_URL
+  });
+
+  // check if atleast one link was added
+  if(
+    !(form.twitter as string).includes('twitter.com/') &&
+    !(form.linkedin as string).includes('linkedin.com/') &&
+    !(form.facebook as string).includes('facebook.com/') &&
+    !(form.github as string).includes('github.com/') &&
+    !(form.youtube as string).includes('youtube.com/')
+  ) {
+    return {
+      success: false,
+      message: "Add at least one link!"
+    }
+  }
+
+  // add account 
+  await db.execute(
+    "insert into users(email, username, full_name) values(?, ?, ?)",
+    [(form.email as string), (form.username as string), (form.fullname as string)]
+  );
+
+  const response = await db.execute(
+    "select * from users where email = ?",
+    [(form.email as string)]
+  );
+  const userData = responseDataAdapter(response);
+  const {id, username} = userData[0]
+
+  // add links
+  if((form.twitter as string).includes('twitter.com/'))
+    await db.execute("insert into links(user_id, website, link) values(?, ?, ?)",[id, "Twitter", form.twitter]);
+  if((form.linkedin as string).includes('linkedin.com/'))
+    await db.execute("insert into links(user_id, website, link) values(?, ?, ?)",[id, "Linkedin", form.linkedin]);
+  if((form.facebook as string).includes('facebook.com/'))
+    await db.execute("insert into links(user_id, website, link) values(?, ?, ?)",[id, "Facebook", form.facebook]);
+  if((form.github as string).includes('github.com/'))
+    await db.execute("insert into links(user_id, website, link) values(?, ?, ?)",[id, "GitHub", form.github]);
+  if((form.youtube as string).includes('youtube.com/'))
+    await db.execute("insert into links(user_id, website, link) values(?, ?, ?)",[id, "Youtube", form.youtube]);
+
+  return {
+    success: true,
+    message: "Links added!",
+    username: username
+  }
+})
 
 export default component$(() => {
+  const formAction = useFormAction();
+
   return (
-    <div>
-      <h1>
-        Welcome to Qwik <span class="lightning">⚡️</span>
-      </h1>
+    <div class="p-8 mx-auto max-w-xl">
+      <h1 class="p-2 text-center font-bold text-xl text-teal-700">Mylinks</h1>
 
-      <ul>
-        <li>
-          Check out the <code>src/routes</code> directory to get started.
-        </li>
-        <li>
-          Add integrations with <code>npm run qwik add</code>.
-        </li>
-        <li>
-          More info about development in <code>README.md</code>
-        </li>
-      </ul>
+      <div>
+        {
+          formAction.isRunning && <div class="flex justify-center w-full"><LoadingAnimation/></div>
+        }
+        {
+          formAction.value?.success && <div class="flex flex-col justify-center space-y-2">
+            <Noty message={formAction.value?.message || "Links added!"} type="success"></Noty>
+            <p class="p-2 text-center">
+              You social links are now available at <a href={`${BASE_URL}/u/${formAction.value?.username}`} target="_blank">{`${BASE_URL}/u/${formAction.value?.username}`}</a>
+            </p>
+          </div>
+        }
+        {
+          formAction.formData && !formAction.isRunning && !formAction.value?.success && <Noty message={formAction.value?.message || "Failed to add you links!"} type="error"></Noty>
+        }
+      </div>
 
-      <h2>Commands</h2>
-
-      <table class="commands">
-        <tbody>
-          <tr>
-            <td>
-              <code>npm run dev</code>
-            </td>
-            <td>Start the dev server and watch for changes.</td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run preview</code>
-            </td>
-            <td>Production build and start preview server.</td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run build</code>
-            </td>
-            <td>Production build.</td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add</code>
-            </td>
-            <td>Select an integration to add.</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Add Integrations</h2>
-
-      <table class="commands">
-        <tbody>
-          <tr>
-            <td>
-              <code>npm run qwik add azure-swa</code>
-            </td>
-            <td>
-              <a href="https://learn.microsoft.com/azure/static-web-apps/overview" target="_blank">
-                Azure Static Web Apps
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add cloudflare-pages</code>
-            </td>
-            <td>
-              <a href="https://developers.cloudflare.com/pages" target="_blank">
-                Cloudflare Pages Server
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add express</code>
-            </td>
-            <td>
-              <a href="https://expressjs.com/" target="_blank">
-                Nodejs Express Server
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add netlify-edge</code>
-            </td>
-            <td>
-              <a href="https://docs.netlify.com/" target="_blank">
-                Netlify Edge Functions
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <code>npm run qwik add vercel-edge</code>
-            </td>
-            <td>
-              <a href="https://vercel.com/docs/concepts/get-started" target="_blank">
-                Vercel Edge Functions
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Community</h2>
-
-      <ul>
-        <li>
-          <span>Questions or just want to say hi? </span>
-          <a href="https://qwik.builder.io/chat" target="_blank">
-            Chat on discord!
-          </a>
-        </li>
-        <li>
-          <span>Follow </span>
-          <a href="https://twitter.com/QwikDev" target="_blank">
-            @QwikDev
-          </a>
-          <span> on Twitter</span>
-        </li>
-        <li>
-          <span>Open issues and contribute on </span>
-          <a href="https://github.com/BuilderIO/qwik" target="_blank">
-            GitHub
-          </a>
-        </li>
-        <li>
-          <span>Watch </span>
-          <a href="https://qwik.builder.io/media/" target="_blank">
-            Presentations, Podcasts, Videos, etc.
-          </a>
-        </li>
-      </ul>
-      <Link class="mindblow" href="/flower/">
-        Blow my mind 🤯
-      </Link>
-      <Link class="todolist" href="/todolist/">
-        TODO demo 📝
-      </Link>
+      <Form
+        class="p-4 flex flex-col space-y-2"
+        action={formAction}
+        spaReset
+      >
+        <div class="p-2 font-semibold text-teal-600">
+          User Details
+        </div>
+        <div>
+          <input type="text" name="fullname" placeholder="Full Name" required
+            />
+        </div>
+        <div>
+          <input type="email" name="email" placeholder="someone@mail.com" required
+            />
+        </div>
+        <div>
+          <input type="text" name="username" placeholder="username" required
+            />
+        </div>
+        <div class="p-2 font-semibold text-teal-600">
+          Social Links
+        </div>
+        <div>
+          <input type="text" name="twitter" placeholder="Twitter"
+            />
+        </div>
+        <div>
+          <input type="text" name="linkedin" placeholder="Linkedin"
+            />
+        </div>
+        <div>
+          <input type="text" name="facebook" placeholder="Facebook"
+            />
+        </div>
+        <div>
+          <input type="text" name="github" placeholder="GitHub"
+            />
+        </div>
+        <div>
+          <input type="text" name="youtube" placeholder="Youtube"
+            />
+        </div>
+        <div class="pt-2">
+          <button type="submit">Add Links</button>
+        </div>
+      </Form>
+      <p class="text-center text-gray-400 italic">~ This little app works even when JavaScript is disabled. ~</p>
     </div>
   );
 });
 
 export const head: DocumentHead = {
-  title: 'Welcome to Qwik',
+  title: 'Mylinks',
   meta: [
     {
-      name: 'description',
-      content: 'Qwik site description',
-    },
-  ],
+      name: "description",
+      content: "All your social links in one place."
+    }
+  ]
 };
