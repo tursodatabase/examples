@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  header, header > *{
+    @apply bg-teal-200
+  }
+  
+  a[title="Mylinks"]{
+    @apply text-teal-800
+  }
+}
