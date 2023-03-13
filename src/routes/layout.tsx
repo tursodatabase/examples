@@ -1,30 +1,19 @@
 import { component$, Slot } from '@builder.io/qwik';
-import { routeLoader$ } from '@builder.io/qwik-city';
 
 import Header from '../components/header/header';
 
-export const useServerTimeLoader = routeLoader$(() => {
-  return {
-    date: new Date().toISOString(),
-  };
-});
-
 export default component$(() => {
-  const serverTime = useServerTimeLoader();
   return (
-    <>
-      <main>
+    <div class="flex flex-col">
+      <main class="flex-grow">
         <Header />
         <section>
           <Slot />
         </section>
       </main>
-      <footer>
-        <a href="https://www.builder.io/" target="_blank">
-          Made with ♡ by Builder.io
-          <div>{serverTime.value.date}</div>
-        </a>
+      <footer class="flex-shrink-0 flex justify-center text-gray-600 max-h-48">
+        <p>Built with  <a href="https://qwik.builder.io" target="_blank">Qwik</a> & <a href="https://chiselstrike.com" target="_blank">Turso</a>.</p>
       </footer>
-    </>
+    </div>
   );
 });
