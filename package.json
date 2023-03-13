@@ -1,6 +1,6 @@
 {
-  "name": "my-qwik-basic-starter",
-  "description": "App with Routing built-in (recommended)",
+  "name": "mylinks",
+  "description": "A social links listing app built with Qwik andn Turso",
   "engines": {
     "node": ">=15.0.0"
   },
