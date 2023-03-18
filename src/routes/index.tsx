@@ -4,7 +4,7 @@ import {
   globalAction$,
   Form,
 } from '@builder.io/qwik-city';
-import { createClient } from "@libsql/client";
+import { createClient } from "@libsql/client/http";
 import { LoadingAnimation } from '~/components/loading/loading';
 import { Noty } from '~/components/notification/notification';
 import { responseDataAdapter } from './utils';

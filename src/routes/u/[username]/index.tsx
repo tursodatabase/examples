@@ -3,7 +3,7 @@ import {
   type DocumentHead,
   routeLoader$,
 } from '@builder.io/qwik-city';
-import { createClient } from "@libsql/client";
+import { createClient } from "@libsql/client/http";
 import { Facebook } from '~/components/icons/facebook';
 import { GitHub } from '~/components/icons/github';
 import { LinkedIn } from '~/components/icons/linkedin';
