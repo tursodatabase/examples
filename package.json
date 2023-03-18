@@ -1,6 +1,6 @@
 {
   "name": "mylinks",
-  "description": "A social links listing app built with Qwik andn Turso",
+  "description": "A social links listing app built with Qwik and Turso",
   "engines": {
     "node": ">=15.0.0"
   },
