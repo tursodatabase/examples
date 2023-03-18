@@ -50,7 +50,7 @@ export const SocialLink = (props: SocialLinks) => {
       href={url()}
       target="_blank"
     >
-        <div class="w-full p-2 text-gray-600 bg-teal-200 hover:bg-teal-300 hover:outline outline-teal-600 rounded-md flex space-x-3">{ getIcon() } <span>{ props.website }</span></div>
+        <div id="social-link" class="w-full p-2 text-gray-600 bg-teal-200 hover:bg-teal-300 rounded-md flex space-x-3">{ getIcon() } <span>{ props.website }</span></div>
     </a>
   )
 }
