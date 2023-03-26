@@ -6,7 +6,6 @@ import { LinkedIn } from "~/components/icons/linkedin";
 import { Twitter } from "~/components/icons/twitter";
 import { User } from "~/components/icons/user";
 import { Youtube } from "~/components/icons/youtube";
-import axios from "axios";
 
 interface SocialLinks {
   website: string;
@@ -60,10 +59,17 @@ export const SocialLink = (props: SocialLinks) => {
 
 export const useLinksLoader = routeLoader$(
   async ({ params, status }): Promise<UserLinksResponse> => {
-    const db = createClient({
-    const {data: userData} = await axios.post(`${import.meta.env.VITE_BASE_URL}/get-user-links`, {
-      username: params.username
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/get-user-links`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: params.username
+      }, null, 2)
     });
+
+    const userData = await response.json();
 
     if (!userData) {
       status(404);
