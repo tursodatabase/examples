@@ -1,13 +1,12 @@
 import { component$ } from "@builder.io/qwik";
 import { type DocumentHead, routeLoader$ } from "@builder.io/qwik-city";
-import { createClient } from "@libsql/client/http";
 import { Facebook } from "~/components/icons/facebook";
 import { GitHub } from "~/components/icons/github";
 import { LinkedIn } from "~/components/icons/linkedin";
 import { Twitter } from "~/components/icons/twitter";
 import { User } from "~/components/icons/user";
 import { Youtube } from "~/components/icons/youtube";
-import { responseDataAdapter } from "~/routes/utils";
+import axios from "axios";
 
 interface SocialLinks {
   website: string;
@@ -23,6 +22,7 @@ interface UserData {
 interface UserLinksResponse {
   user: UserData | null;
   links: SocialLinks[] | null;
+  greeting: string | null
 }
 
 export const ICON_COLOR_STYLE = "fill-teal-700";
@@ -61,31 +61,20 @@ export const SocialLink = (props: SocialLinks) => {
 export const useLinksLoader = routeLoader$(
   async ({ params, status }): Promise<UserLinksResponse> => {
     const db = createClient({
-      url: import.meta.env.VITE_DB_URL,
+    const {data: userData} = await axios.post(`${import.meta.env.VITE_BASE_URL}/get-user-links`, {
+      username: params.username
     });
-    const userResponse = await db.execute(
-      "select full_name, username, id from users where username = ?;",
-      [params.username]
-    );
-    const userData = responseDataAdapter(userResponse);
-    if (!userData.length) {
+
+    if (!userData) {
       status(404);
       return {
         user: null,
         links: null,
+        greeting: null
       };
     }
 
-    const { id } = userData[0];
-    const linksResponse = await db.execute(
-      "select website, link from links where user_id = ?;",
-      [id]
-    );
-    const linksData = responseDataAdapter(linksResponse);
-    return {
-      user: userData[0],
-      links: linksData,
-    };
+    return userData;
   }
 );
 
@@ -106,6 +95,9 @@ export default component$(() => {
         {" "}
         <User /> <span>{links.value.user.full_name}</span>
       </h1>
+      {
+        links.value.greeting && <p class="text-center text-gray-400"><i>{links.value.greeting}</i></p>
+      }
       <div class="p-4 flex flex-col space-y-3">
         {links.value.links!.map((item: SocialLinks) => (
           <div key={item.id}>
