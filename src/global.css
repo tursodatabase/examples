@@ -3,31 +3,32 @@
 @tailwind utilities;
 
 @layer base {
-  header, header > *{
-    @apply bg-teal-200
+  header,
+  header > * {
+    @apply bg-teal-200;
   }
 
-  input{
+  input {
     @apply focus:outline-teal-600 rounded-full px-3 py-1 w-full bg-teal-50 focus:bg-white;
     box-shadow: 0 0 0 1px #14b8a6;
   }
-  input:focus{
+  input:focus {
     box-shadow: none;
   }
 
-  button[type="submit"]{
-    @apply text-white bg-teal-500 hover:bg-teal-600 active:bg-teal-700 rounded-full px-3 py-1 w-full
+  button[type="submit"] {
+    @apply text-white bg-teal-500 hover:bg-teal-600 active:bg-teal-700 rounded-full px-3 py-1 w-full;
   }
 
-  a{
-    @apply text-teal-800 visited:text-teal-400
-  }
-  
-  a[title="Mylinks"]{
-    @apply text-teal-800
+  a {
+    @apply text-teal-800 visited:text-teal-400;
   }
 
-  div#social-link:hover{
+  a[title="Mylinks"] {
+    @apply text-teal-800;
+  }
+
+  div#social-link:hover {
     box-shadow: 0 0 0 2px #14b8a6;
   }
 }
