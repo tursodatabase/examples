@@ -68,7 +68,7 @@ turso db shell [DATABASE-NAME]
 Here is the schema for the users table that we should create.
 
 ```sql
-craete table users(
+create table users(
 	id integer primary key,
 	email varchar(255) not null,
 	full_name varchar(100) not null,
@@ -80,14 +80,14 @@ craete table users(
 And, the links table’s sql is as follows.
 
 ```sql
-craete table links(
+create table links(
 	id integer primary key,
 	user_id integer not null,
 	website varchar(100) not null,
 	link text not null,
 	created_at integer default (cast(iunixepoch() as int)),
 
-	foreign key user_id references users(id)
+	foreign key(user_id) references users(id)
 );
 ```
 
@@ -99,16 +99,16 @@ So create unique indexes of these two colums as follows.
 
 ```sql
 -- unique index for the email row
-create unique index idx_users_email on users(email)
+create unique index idx_users_email on users(email);
 
 -- unique index for the username row
-create unique index idx_users_username on users(username)
+create unique index idx_users_username on users(username);
 ```
 
 Likewise, for the `links` table, we do not want users to have duplicate social links, so we are going to create a multicolumn unique index for the `user_id` and `link` columns.
 
 ```sql
-create unique index idx_links_userid_link on links(user_id, link)
+create unique index idx_links_userid_link on links(user_id, link);
 ```
 
 ### Set up Turso on the project
