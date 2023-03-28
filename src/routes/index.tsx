@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import { type DocumentHead, globalAction$, Form } from "@builder.io/qwik-city";
-import { createClient } from "@libsql/client/http";
+import { createClient } from "@libsql/client";
 import { LoadingAnimation } from "~/components/loading/loading";
 import { Noty } from "~/components/notification/notification";
 import { responseDataAdapter } from "./utils";
@@ -9,7 +9,8 @@ export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const useFormAction = globalAction$(async (form) => {
   const db = createClient({
-    url: import.meta.env.VITE_DB_URL,
+    url: import.meta.env.VITE_TURSO_DB_URL,
+    authToken: import.meta.env.VITE_TURSO_DB_AUTH_TOKEN
   });
 
   // check if atleast one link was added

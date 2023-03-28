@@ -38,8 +38,8 @@ const translations = {
 };
 
 export default async (request: Request, context: Context) => {
-  const databaseUrl = Deno.env.get("TURSO_DB_URL") as string;
-  const databaseAuthToken = Deno.env.get("TURSO_DB_AUTH_TOKEN") as string;
+  const databaseUrl = Deno.env.get("VITE_TURSO_DB_URL") as string;
+  const databaseAuthToken = Deno.env.get("VITE_TURSO_DB_AUTH_TOKEN") as string;
   const {username} = await request.json();
   let userData: any;
 

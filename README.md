@@ -73,7 +73,7 @@ create table users(
 	email varchar(255) not null,
 	full_name varchar(100) not null,
 	username varchar(50) not null,
-	created_at integer default (cast(iunixepoch() as int))
+	created_at integer default (cast(unixepoch() as int))
 );
 ```
 
@@ -85,7 +85,7 @@ create table links(
 	user_id integer not null,
 	website varchar(100) not null,
 	link text not null,
-	created_at integer default (cast(iunixepoch() as int)),
+	created_at integer default (cast(unixepoch() as int)),
 
 	foreign key(user_id) references users(id)
 );
@@ -130,8 +130,8 @@ turso db tokens create [DATABASE-NAME]
 Add a `.env` file at the root of the project and inside it add the values obtained above as the database url and authentication token for your Turso database. Also, for some features of this project to function properly, add the base URL to your hosted app when in production, or the local url when developing locally.
 
 ```txt
-TURSO_DB_URL=
-TURSO_DB_AUTH_TOKEN=
+VITE_TURSO_DB_URL=
+VITE_TURSO_DB_AUTH_TOKEN=
 VITE_BASE_URL=
 ```
 
