@@ -1,18 +1,11 @@
 import { component$ } from "@builder.io/qwik";
 import { type DocumentHead, globalAction$, Form } from "@builder.io/qwik-city";
-import { createClient } from "@libsql/client";
 import { LoadingAnimation } from "~/components/loading/loading";
 import { Noty } from "~/components/notification/notification";
-import { responseDataAdapter } from "./utils";
 
 export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const useFormAction = globalAction$(async (form) => {
-  const db = createClient({
-    url: import.meta.env.VITE_TURSO_DB_URL,
-    authToken: import.meta.env.VITE_TURSO_DB_AUTH_TOKEN
-  });
-
   // check if atleast one link was added
   if (
     !(form.twitter as string).includes("twitter.com/") &&
@@ -27,50 +20,46 @@ export const useFormAction = globalAction$(async (form) => {
     };
   }
 
-  // add account
-  await db.execute(
-    "insert into users(email, username, full_name) values(?, ?, ?)",
-    [form.email as string, form.username as string, form.fullname as string]
-  );
+  // populate user
+  const {username, email, fullname} = form;
+  const user = {username, email, fullname};
+  const links: {website: string, url: string}[] = [];
 
-  const response = await db.execute("select * from users where email = ?", [
-    form.email as string,
-  ]);
-  const userData = responseDataAdapter(response);
-  const { id, username } = userData[0];
-
-  // add links
+  // populate links
   if ((form.twitter as string).includes("twitter.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "Twitter", form.twitter]
-    );
+    links.push({website: "Twitter", url: form.twitter as string});
   if ((form.linkedin as string).includes("linkedin.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "Linkedin", form.linkedin]
-    );
+    links.push({website: "Linkedin", url: form.linkedin as string});
   if ((form.facebook as string).includes("facebook.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "Facebook", form.facebook]
-    );
+    links.push({website: "Facebook", url: form.facebook as string});
   if ((form.github as string).includes("github.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "GitHub", form.github]
-    );
+    links.push({website: "GitHub", url: form.github as string});
   if ((form.youtube as string).includes("youtube.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "Youtube", form.youtube]
-    );
+    links.push({website: "Youtube", url: form.youtube as string});
 
-  return {
-    success: true,
-    message: "Links added!",
-    username: username,
-  };
+  const response = await fetch(`${import.meta.env.VITE_BASE_URL}/submit-user-data`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      user, links
+    }, null, 2)
+  });
+  
+
+  const dataSubmissionResponse = await response.json();
+
+  if (!dataSubmissionResponse) {
+    // status(404);
+    return {
+      user: null,
+      links: null,
+      greeting: null
+    };
+  }
+
+  return dataSubmissionResponse;
 });
 
 export default component$(() => {
