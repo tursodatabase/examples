@@ -98,10 +98,10 @@ For the `users` table we need the `username` to be both a unique and an indexed 
 So create unique indexes of these two colums as follows.
 
 ```sql
--- unique index for the email row
+-- unique index for the email column
 create unique index idx_users_email on users(email);
 
--- unique index for the username row
+-- unique index for the username column
 create unique index idx_users_username on users(username);
 ```
 
