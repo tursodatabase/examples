@@ -61,7 +61,7 @@ export default async (request: Request, context: Context) => {
 
   userData = responseDataAdapter(userJsonResponse[0]["results"]);
   if (!userData.length) {
-    return jsonResponse({
+    return Response.json({
       user: null,
       links: null,
     });
@@ -81,15 +81,11 @@ export default async (request: Request, context: Context) => {
   const countryCode = context.geo?.country?.code;
   const translation = translations[countryCode] || translations["UNKNOWN"];
 
-  return jsonResponse({
+  return Response.json({
     user: userData[0],
     links: responseDataAdapter(listJsonData[0]["results"]),
     greeting: `${translation}`
   });
 };
-
-export const jsonResponse =  (data: object) => new Response(JSON.stringify(data), {
-  headers: { "content-type": "application/json" },
-});
 
 export const config: Config = {path: "/get-user-links"}
