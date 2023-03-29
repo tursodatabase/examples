@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/web-manifest-combined.json",
-  "name": "mylinks",
-  "short_name": "Mylinks",
+  "name": "findmeon",
+  "short_name": "Findmeon",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#97f7e4",

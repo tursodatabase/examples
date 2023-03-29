@@ -24,7 +24,7 @@
     @apply text-teal-800 visited:text-teal-400;
   }
 
-  a[title="Mylinks"] {
+  a[title="Findmeon"] {
     @apply text-teal-800;
   }
 

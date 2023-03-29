@@ -67,7 +67,7 @@ export default component$(() => {
 
   return (
     <div class="p-8 mx-auto max-w-xl">
-      <h1 class="p-2 text-center font-bold text-xl text-teal-700">Mylinks</h1>
+      <h1 class="p-2 text-center font-bold text-xl text-teal-700">Findmeon</h1>
 
       <div>
         {formAction.isRunning && (
@@ -144,7 +144,7 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Mylinks",
+  title: "Findmeon",
   meta: [
     {
       name: "description",

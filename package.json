@@ -1,5 +1,5 @@
 {
-  "name": "mylinks",
+  "name": "findmeon",
   "description": "A social links listing app built with Qwik and Turso",
   "engines": {
     "node": ">=15.0.0"

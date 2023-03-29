@@ -1,4 +1,4 @@
-# Mylinks ⚡️
+# Findmeon ⚡️
 
 A social links listing app built with [Qwik] and [Turso].
 

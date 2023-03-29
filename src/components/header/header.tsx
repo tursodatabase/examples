@@ -7,15 +7,15 @@ export default component$(() => {
   return (
     <header class="flex justify-between">
       <div class="logo">
-        <a class="text-2xl font-bold" href="/" title="Mylinks" rel="noopener">
-          Mylinks
+        <a class="text-2xl font-bold" href="/" title="Findmeon" rel="noopener">
+          Findmeon
         </a>
       </div>
       <ul>
         <li>
           <a
             class="flex"
-            href="https://github.com/xinnks/mylinks"
+            href="https://github.com/turso-extended/findmeon"
             target="_blank"
             rel="noopener"
             title="View on GitHub"
