@@ -23,7 +23,7 @@ interface UserData {
 interface UserLinksResponse {
   user: UserData | null;
   links: SocialLinks[] | null;
-  greeting: string | null
+  greeting: string | null;
 }
 
 export const ICON_COLOR_STYLE = "fill-teal-700";
@@ -66,14 +66,14 @@ export const useLinksLoader = routeLoader$(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-      }
+      },
     });
     let { greeting } = await response.json();
-    greeting = greeting || "Hello"
-    
+    greeting = greeting || "Hello";
+
     const db = createClient({
       url: import.meta.env.VITE_TURSO_DB_URL,
-      authToken: import.meta.env.VITE_TURSO_DB_TOKEN
+      authToken: import.meta.env.VITE_TURSO_DB_TOKEN,
     });
     const userResponse = await db.execute(
       "select full_name, username, id from users where username = ?;",
@@ -85,7 +85,7 @@ export const useLinksLoader = routeLoader$(
       return {
         user: null,
         links: null,
-        greeting
+        greeting,
       };
     }
 
@@ -99,7 +99,7 @@ export const useLinksLoader = routeLoader$(
     return {
       user: userData[0],
       links: linksData,
-      greeting
+      greeting,
     };
   }
 );
@@ -121,9 +121,11 @@ export default component$(() => {
         {" "}
         <User /> <span>{links.value.user.full_name}</span>
       </h1>
-      {
-        links.value.greeting && <p class="text-center text-gray-400"><i>{links.value.greeting}</i></p>
-      }
+      {links.value.greeting && (
+        <p class="text-center text-gray-400">
+          <i>{links.value.greeting}</i>
+        </p>
+      )}
       <div class="p-4 flex flex-col space-y-3">
         {links.value.links!.map((item: SocialLinks) => (
           <div key={item.id}>
