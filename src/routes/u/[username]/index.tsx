@@ -6,6 +6,8 @@ import { LinkedIn } from "~/components/icons/linkedin";
 import { Twitter } from "~/components/icons/twitter";
 import { User } from "~/components/icons/user";
 import { Youtube } from "~/components/icons/youtube";
+import { responseDataAdapter } from "~/routes/utils";
+import { createClient } from "@libsql/client";
 
 interface SocialLinks {
   website: string;
@@ -64,24 +66,41 @@ export const useLinksLoader = routeLoader$(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: params.username
-      }, null, 2)
+      }
     });
-
-    const userData = await response.json();
-
-    if (!userData) {
+    let { greeting } = await response.json();
+    greeting = greeting || "Hello"
+    
+    const db = createClient({
+      url: import.meta.env.VITE_TURSO_DB_URL,
+      authToken: import.meta.env.VITE_TURSO_DB_TOKEN
+    });
+    const userResponse = await db.execute(
+      "select full_name, username, id from users where username = ?;",
+      [params.username]
+    );
+    const userData = responseDataAdapter(userResponse);
+    if (!userData.length) {
       status(404);
       return {
         user: null,
         links: null,
-        greeting: null
+        greeting
       };
     }
 
-    return userData;
+    const { id } = userData[0];
+    const linksResponse = await db.execute(
+      "select website, link from links where user_id = ?;",
+      [id]
+    );
+    const linksData = responseDataAdapter(linksResponse);
+
+    return {
+      user: userData[0],
+      links: linksData,
+      greeting
+    };
   }
 );
 
