@@ -1,9 +1,9 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead, globalAction$, Form } from "@builder.io/qwik-city";
 import { LoadingAnimation } from "~/components/loading/loading";
 import { Noty } from "~/components/notification/notification";
-
-export const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { createClient } from "@libsql/client";
+import { responseDataAdapter } from "./utils";
 
 export const useFormAction = globalAction$(async (form) => {
   // check if atleast one link was added
@@ -64,6 +64,11 @@ export const useFormAction = globalAction$(async (form) => {
 
 export default component$(() => {
   const formAction = useFormAction();
+  const baseUrl = useSignal("");
+
+  useVisibleTask$(() => {
+    baseUrl.value = window.location.href;
+  })
 
   return (
     <div class="p-8 mx-auto max-w-xl">
@@ -84,9 +89,9 @@ export default component$(() => {
             <p class="p-2 text-center">
               You social links are now available at{" "}
               <a
-                href={`${BASE_URL}/u/${formAction.value?.username}`}
+                href={`${baseUrl}/u/${formAction.value?.username}`}
                 target="_blank"
-              >{`${BASE_URL}/u/${formAction.value?.username}`}</a>
+              >{`${baseUrl}/u/${formAction.value?.username}`}</a>
             </p>
           </div>
         )}

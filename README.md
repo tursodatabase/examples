@@ -132,7 +132,6 @@ Add a `.env` file at the root of the project and inside it add the values obtain
 ```txt
 VITE_TURSO_DB_URL=
 VITE_TURSO_DB_AUTH_TOKEN=
-VITE_BASE_URL=
 ```
 
 [Qwik Docs]: https://qwik.builder.io/

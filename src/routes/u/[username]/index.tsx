@@ -58,8 +58,9 @@ export const SocialLink = (props: SocialLinks) => {
 };
 
 export const useLinksLoader = routeLoader$(
-  async ({ params, status }): Promise<UserLinksResponse> => {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/get-user-links`, {
+  async ({ params, status, url }): Promise<UserLinksResponse> => {
+    // get local greeting
+    const response = await fetch(`${url.origin}/get-local-greeting`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
