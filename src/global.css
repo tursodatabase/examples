@@ -24,7 +24,7 @@
     @apply text-teal-800 visited:text-teal-400;
   }
 
-  a[title="Findmeon"] {
+  a[title="FindMeOn"] {
     @apply text-teal-800;
   }
 

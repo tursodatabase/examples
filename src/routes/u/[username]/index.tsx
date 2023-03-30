@@ -117,6 +117,6 @@ export default component$(() => {
 
 export const head: DocumentHead = ({ params }) => {
   return {
-    title: params.username + " - Findmeon",
+    title: params.username + " - FindMeOn",
   };
 };

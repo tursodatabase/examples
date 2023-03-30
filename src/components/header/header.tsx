@@ -7,8 +7,8 @@ export default component$(() => {
   return (
     <header class="flex justify-between">
       <div class="logo">
-        <a class="text-2xl font-bold" href="/" title="Findmeon" rel="noopener">
-          Findmeon
+        <a class="text-2xl font-bold" href="/" title="FindMeOn" rel="noopener">
+          FindMeOn
         </a>
       </div>
       <ul>
