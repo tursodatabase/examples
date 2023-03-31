@@ -75,10 +75,10 @@ export const useLinksLoader = routeLoader$(
       url: import.meta.env.VITE_TURSO_DB_URL,
       authToken: import.meta.env.VITE_TURSO_DB_TOKEN,
     });
-    const userResponse = await db.execute(
-      "select full_name, username, id from users where username = ?;",
-      [params.username]
-    );
+    const userResponse = await db.execute({
+      sql: "select full_name, username, id from users where username = ?;",
+      args: [params.username],
+    });
     const userData = responseDataAdapter(userResponse);
     if (!userData.length) {
       status(404);
@@ -90,10 +90,10 @@ export const useLinksLoader = routeLoader$(
     }
 
     const { id } = userData[0];
-    const linksResponse = await db.execute(
-      "select website, link from links where user_id = ?;",
-      [id]
-    );
+    const linksResponse = await db.execute({
+      sql: "select website, link from links where user_id = ?;",
+      args: [id],
+    });
     const linksData = responseDataAdapter(linksResponse);
 
     return {

@@ -26,43 +26,48 @@ export const useFormAction = globalAction$(async (form) => {
   }
 
   // add account
-  await db.execute(
-    "insert into users(email, username, full_name) values(?, ?, ?)",
-    [form.email as string, form.username as string, form.fullname as string]
-  );
+  await db.execute({
+    sql: "insert into users(email, username, full_name) values(?, ?, ?)",
+    args: [
+      form.email as string,
+      form.username as string,
+      form.fullname as string,
+    ],
+  });
 
-  const response = await db.execute("select * from users where email = ?", [
-    form.email as string,
-  ]);
+  const response = await db.execute({
+    sql: "select * from users where email = ?",
+    args: [form.email as string],
+  });
   const userData = responseDataAdapter(response);
   const { id, username } = userData[0];
 
   // add links
   if ((form.twitter as string).includes("twitter.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "Twitter", form.twitter]
-    );
+    await db.execute({
+      sql: "insert into links(user_id, website, link) values(?, ?, ?)",
+      args: [id, "Twitter", form.twitter],
+    });
   if ((form.linkedin as string).includes("linkedin.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "Linkedin", form.linkedin]
-    );
+    await db.execute({
+      sql: "insert into links(user_id, website, link) values(?, ?, ?)",
+      args: [id, "Linkedin", form.linkedin],
+    });
   if ((form.facebook as string).includes("facebook.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "Facebook", form.facebook]
-    );
+    await db.execute({
+      sql: "insert into links(user_id, website, link) values(?, ?, ?)",
+      args: [id, "Facebook", form.facebook],
+    });
   if ((form.github as string).includes("github.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "GitHub", form.github]
-    );
+    await db.execute({
+      sql: "insert into links(user_id, website, link) values(?, ?, ?)",
+      args: [id, "GitHub", form.github],
+    });
   if ((form.youtube as string).includes("youtube.com/"))
-    await db.execute(
-      "insert into links(user_id, website, link) values(?, ?, ?)",
-      [id, "Youtube", form.youtube]
-    );
+    await db.execute({
+      sql: "insert into links(user_id, website, link) values(?, ?, ?)",
+      args: [id, "Youtube", form.youtube],
+    });
 
   return {
     success: true,
