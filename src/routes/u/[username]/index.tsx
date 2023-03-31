@@ -73,7 +73,7 @@ export const useLinksLoader = routeLoader$(
 
     const db = createClient({
       url: import.meta.env.VITE_TURSO_DB_URL,
-      authToken: import.meta.env.VITE_TURSO_DB_TOKEN,
+      authToken: import.meta.env.VITE_TURSO_DB_AUTH_TOKEN,
     });
     const userResponse = await db.execute({
       sql: "select full_name, username, id from users where username = ?;",
