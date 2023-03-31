@@ -103,7 +103,7 @@ export default component$(() => {
             <p class="p-2 text-center">
               You social links are now available at{" "}
               <a
-                href={`${baseUrl}/u/${formAction.value?.username}`}
+                href={`${baseUrl.value}/u/${formAction.value?.username}`}
                 target="_blank"
               >{`${baseUrl}/u/${formAction.value?.username}`}</a>
             </p>
