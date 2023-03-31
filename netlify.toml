@@ -1,6 +1,10 @@
 [build]
-publish = "dist"
-command = "npm run build"
+  publish = "dist"
+  command = "npm run build"
 
 [dev]
-targetPort = 3000
+  targetPort = 3000
+
+[template.environment]
+  VITE_TURSO_DB_URL = "VITE_TURSO_DB_URL"
+  VITE_TURSO_DB_AUTH_TOKEN = "VITE_TURSO_DB_AUTH_TOKEN"
