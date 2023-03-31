@@ -76,7 +76,7 @@ export const useLinksLoader = routeLoader$(
       authToken: import.meta.env.VITE_TURSO_DB_AUTH_TOKEN,
     });
     const userResponse = await db.execute({
-      sql: "select full_name, username, id from users where username = ?;",
+      sql: "select users.full_name, links.id, links.website, links.link from users left join links on users.id = links.user_id where users.username = ?;",
       args: [params.username],
     });
     const userData = responseDataAdapter(userResponse);
@@ -88,17 +88,16 @@ export const useLinksLoader = routeLoader$(
         greeting,
       };
     }
-
-    const { id } = userData[0];
-    const linksResponse = await db.execute({
-      sql: "select website, link from links where user_id = ?;",
-      args: [id],
-    });
-    const linksData = responseDataAdapter(linksResponse);
+    const { full_name, username } = userData[0];
+    const links = userData.map((link) => ({
+      id: link.id,
+      link: link.link,
+      website: link.website,
+    }));
 
     return {
-      user: userData[0],
-      links: linksData,
+      user: { full_name, username },
+      links,
       greeting,
     };
   }
