@@ -2,7 +2,7 @@ import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead, globalAction$, Form } from "@builder.io/qwik-city";
 import { LoadingAnimation } from "~/components/loading/loading";
 import { Noty } from "~/components/notification/notification";
-import { createClient } from "@libsql/client";
+import { createClient } from "@libsql/client/web";
 import { responseDataAdapter } from "./utils";
 
 export const useFormAction = globalAction$(async (form) => {

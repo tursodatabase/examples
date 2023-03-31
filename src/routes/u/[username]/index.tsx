@@ -7,7 +7,7 @@ import { Twitter } from "~/components/icons/twitter";
 import { User } from "~/components/icons/user";
 import { Youtube } from "~/components/icons/youtube";
 import { responseDataAdapter } from "~/routes/utils";
-import { createClient } from "@libsql/client";
+import { createClient } from "@libsql/client/web";
 
 interface SocialLinks {
   website: string;
