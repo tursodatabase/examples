@@ -1,4 +1,4 @@
-import { type ResultSet, type SqlValue } from "@libsql/client";
+import { type ResultSet } from "@libsql/client";
 
 export function responseDataAdapter(data: ResultSet): any[] {
   if (!data?.columns || !data?.rows) {
@@ -9,7 +9,7 @@ export function responseDataAdapter(data: ResultSet): any[] {
   const formattedData: any[] = [];
 
   for (const row of rows) {
-    const rowData: { [k: string]: SqlValue } = {};
+    const rowData: { [k: string]: any } = {};
     for (let i = 0; i < columns.length; i++) {
       rowData[columns[i]] = row[i];
     }
