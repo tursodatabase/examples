@@ -1,6 +1,6 @@
 <script setup>
 useHead({
-    title: "2 The abput page"
+    title: "2 The about page"
 })
 </script>
 
