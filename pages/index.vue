@@ -1,77 +1,56 @@
 <script setup>
-import axios from "axios"
-axios.defaults.headers["Authorization"] = `Bearer ${import.meta.env.VITE_TURSO_DB_TOKEN}`
+const { data } = await useFetch('/api/frameworks');
+const { data: frameworks, message } = data.value;
 
-/** 
- * @description Turso data response formatter
- * @param {Object} data - Turso http results objecy
- */
-function responseDataAdapter(data) {
-  if (!data?.columns || !data?.rows) {
-    throw new Error("Malformed response from turso");
-  }
-
-  const { columns, rows } = data;
-  const formattedData = [];
-
-  for (const row of rows) {
-    const rowData = {};
-    for (let i = 0; i < columns.length; i++) {
-      rowData[columns[i]] = row[i];
-    }
-    formattedData.push(rowData);
-  }
-
-  return formattedData;
-}
-
-const statements = ["select * from frameworks order by stars desc"];
-
-const frameworks = ref([]);
-
-/**
- * @description Loads frameworks list from database
- */
-async function loadFrameworks() {
-  try{
-    const {data} = await axios.post(import.meta.env.VITE_TURSO_DB_URL, {
-      statements
-    });
-    const formatedData = responseDataAdapter(data[0].results);
-    frameworks.value = formatedData;
-  } catch (error) {
-    console.log(error)
-  }
-
-}
-
-// Lifecycle hook called when the component is mounted to the DOM (https://vuejs.org/api/composition-api-lifecycle.html#onmounted)
-onMounted(() => {
-  loadFrameworks();
-})
-
-// Async data fetch using Nuxt's useAsyncData composable (https://nuxt.com/docs/api/composables/use-async-data)
-const {data: frameworksList} = await useAsyncData('dishes', async () => await axios.post(import.meta.env.VITE_TURSO_DB_URL, { statements }), {
-    transform: (result) => responseDataAdapter(result.data[0].results)
-})
-
+const formatNumber = (val) => new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format(val);
 
 </script>
 
 <template>
   
-  <h1>Top frameworks for the Web</h1>
+  <h1 class="text-2xl font-bold text-center">Top Web Frameworks</h1>
 
-  <h3>(Fetched using a regular async function)</h3>
-  <ul v-if="frameworks">
-    <li v-for="framework of frameworks"> {{ framework.name }} | {{ framework.stars }} ⭐️ </li>
-  </ul>
+  <div class="overflow-x-auto rounded-lg border border-gray-200">
+    <table class="min-w-full divide-y-2 divide-gray-200 text-sm">
+      <caption class="py-2">The list of top web frameworks</caption>
+      <thead>
+        <tr>
+          <th
+            class="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900"
+          >
+            Name
+          </th>
+          <th
+            class="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900"
+          >
+            Language
+          </th>
+          <th
+            class="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900"
+          >
+            GitHub Stars
+          </th>
+          <th
+            class="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900"
+          >
+            Repo
+          </th>
+        </tr>
+      </thead>
 
-  <hr>
-
-  <h3>(Fetched using <a href="https://nuxt.com/docs/api/composables/use-async-data">useAsyncData</a>)</h3>
-  <ul v-if="frameworksList">
-    <li v-for="framework of frameworksList"> {{ framework.name }} | {{ framework.stars }} ⭐️ </li>
-  </ul>
+      <tbody class="divide-y divide-gray-200" v-if="frameworks">
+        <tr v-for="framework of frameworks">
+          <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+            {{ framework.name }} 
+          </td>
+          <td class="whitespace-nowrap px-4 py-2 text-gray-700"> {{ framework.language }} </td>
+          <td class="whitespace-nowrap px-4 py-2 text-gray-700"> {{ formatNumber(framework.stars) }} ⭐️ </td>
+          <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+            <a :href="framework.url" target="_blank" class="p-1 text-center px-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-white rounded-md">Visit</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
 </template>
