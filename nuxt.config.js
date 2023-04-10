@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     tursoDbUrl: '',
-    tursoDbToken: ''
+    tursoDbAuthToken: ''
   },
   postcss: {
     plugins: {

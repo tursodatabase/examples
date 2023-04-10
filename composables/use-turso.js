@@ -5,7 +5,7 @@ export default function () {
 
   const config = {
     url: vars.tursoDbUrl,
-    authToken: vars.tursoDbToken,
+    authToken: vars.tursoDbAuthToken,
   };
 
   return createClient(config);
