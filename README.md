@@ -124,10 +124,10 @@ turso db show [DATABASE-NAME] --url
 And, to create an authentication token for your database, run:
 
 ```sh
-turso db tokens create [DATABASE-NAME]
+turso db tokens create [DATABASE-NAME] --expiration none
 ```
 
-Add a `.env` file at the root of the project and inside it add the values obtained above as the database url and authentication token for your Turso database. Also, for some features of this project to function properly, add the base URL to your hosted app when in production, or the local url when developing locally.
+Add a `.env` file at the root of the project and inside it add the values obtained above as the database url and authentication token for your Turso database.
 
 ```txt
 VITE_TURSO_DB_URL=
