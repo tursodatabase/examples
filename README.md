@@ -44,11 +44,11 @@ pnpm qwik add # or `yarn qwik add`
 Install the Turso CLI.
 
 ```sh
-# On Mac
+# On macOS or Linux with Homebrew
 brew install chiselstrike/tap/turso
 
-# linux script
-curl -sSfL https://get.tur.so/install.sh | bash
+# Manual scripted installation
+curl -sSfL <https://get.tur.so/install.sh> | bash
 ```
 
 Create a new turso database.
