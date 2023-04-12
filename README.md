@@ -113,7 +113,7 @@ create table frameworks (
 	name varchar (50) not null,
 	language varchar (50) not null,
 	url text not null,
-	stars integer not nulld
+	stars integer not null
 );
 ```
 
@@ -131,21 +131,35 @@ Seed the database with some data.
 
 ```sql
 insert into frameworks(name, language, url, stars) 
-values("Vue".js , "JavaScript", "https://github.com/vuejs/vue", 203000),
-("React", "JavaScript", "https://github.com/facebook/react", 206000),
-("Angular", "TypeScript", "https://github.com/angular/angular", 87400),
-("ASP.NET Core", "C#", "https://github.com/dotnet/aspnetcore", 31400),
-("Express", "JavaScript", "https://github.com/expressjs/express", 60500),
-("Django", "Python", "https://github.com/django/django", 69800),
-("Ruby on Rails", "Ruby", "https://github.com/rails/rails", 52600),
-("Spring", "Java", "https://github.com/spring-projects/spring-framework", 51400),
-("Laravel", "PHP", "https://github.com/laravel/laravel", 73100),
-("Flask", "Python", "https://github.com/pallets/flask", 62500),
-("Ruby", "Ruby", "https://github.com/ruby/ruby", 41000),
-("Symfony", "PHP", "https://github.com/symfony/symfony", 28200),
-("CodeIgniter", "PHP", "https://github.com/bcit-ci/CodeIgniter", 18200),
-("CakePHP", "PHP", "https://github.com/cakephp/cakephp", 8600),
-("Qwik", "TypeScript", "https://github.com/BuilderIO/qwik", 16400);
+zvalues("Vue".js , "JavaScript", "https://github.com/vuejs/vue", 203000);
+insert into frameworks(name, language, url, stars) 
+values("React", "JavaScript", "https://github.com/facebook/react", 206000);
+insert into frameworks(name, language, url, stars) 
+values("Angular", "TypeScript", "https://github.com/angular/angular", 87400);
+insert into frameworks(name, language, url, stars) 
+values("ASP.NET Core", "C#", "https://github.com/dotnet/aspnetcore", 31400);
+insert into frameworks(name, language, url, stars) 
+values("Express", "JavaScript", "https://github.com/expressjs/express", 60500);
+insert into frameworks(name, language, url, stars) 
+values("Django", "Python", "https://github.com/django/django", 69800);
+insert into frameworks(name, language, url, stars) 
+values("Ruby on Rails", "Ruby", "https://github.com/rails/rails", 52600);
+insert into frameworks(name, language, url, stars) 
+values("Spring", "Java", "https://github.com/spring-projects/spring-framework", 51400);
+insert into frameworks(name, language, url, stars) 
+values("Laravel", "PHP", "https://github.com/laravel/laravel", 73100);
+insert into frameworks(name, language, url, stars) 
+values("Flask", "Python", "https://github.com/pallets/flask", 62500);
+insert into frameworks(name, language, url, stars) 
+values("Ruby", "Ruby", "https://github.com/ruby/ruby", 41000);
+insert into frameworks(name, language, url, stars) 
+values("Symfony", "PHP", "https://github.com/symfony/symfony", 28200);
+insert into frameworks(name, language, url, stars) 
+values("CodeIgniter", "PHP", "https://github.com/bcit-ci/CodeIgniter", 18200);
+insert into frameworks(name, language, url, stars) 
+values("CakePHP", "PHP", "https://github.com/cakephp/cakephp", 8600);
+insert into frameworks(name, language, url, stars) 
+values("Qwik", "TypeScript", "https://github.com/BuilderIO/qwik", 16400);
 ```
 
 ### Set up Turso on the project
