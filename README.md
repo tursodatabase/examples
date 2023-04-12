@@ -178,6 +178,12 @@ NUXT_TURSO_DB_URL=
 NUXT_TURSO_DB_AUTH_TOKEN=
 ```
 
+---
+
+To clone and deploy this project to Vercel, click on the button below.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fturso-extended%2Fapp-top-web-frameworks&env=NUXT_TURSO_DB_URL,NUXT_TURSO_DB_AUTH_TOKEN)
+
 [Nuxt]: https://nuxt.com/
 [Nuxt 3]: https://nuxt.com/
 [Turso]: https://chiselstrike.com
