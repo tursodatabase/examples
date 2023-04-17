@@ -15,7 +15,7 @@ export default component$(() => {
         <li>
           <a
             class="flex"
-            href="https://github.com/turso-extended/findmeon"
+            href="https://github.com/turso-extended/app-find-me-on"
             target="_blank"
             rel="noopener"
             title="View on GitHub"
