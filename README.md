@@ -1,4 +1,4 @@
-# Astro Starter Kit: Blog
+# Astro + Turso Starter Kit: SSR Blog
 
 ```
 npm create astro@latest -- --template blog
@@ -18,6 +18,10 @@ Features:
 - ✅ Sitemap support
 - ✅ RSS Feed support
 - ✅ Markdown & MDX support
+
+## SSR configuration
+
+This blog comes with the Netlify SSR adapter, if you want to deploy with other services, please install [make the required changes].
 
 ## 🚀 Project Structure
 
@@ -179,6 +183,7 @@ When working remotely, the database is accessed through HTTP and WebSockets, as 
 
 This theme is based off of the lovely [Bear Blog].
 
+[make the required changes]: https://docs.astro.build/en/guides/server-side-rendering/#enabling-ssr-in-your-project
 [Astro documentation]: https://docs.astro.build
 [Astro Discord server]: https://astro.build/chat
 [Turso documentation]: https://docs.turso.tech
