@@ -1,17 +1,25 @@
 ---
 export interface Props {
-	date: Date;
+	date: number;
 }
 
 const { date } = Astro.props;
+
+const dateFormat = (datetime: number) => {
+  const dateTime = new Date(datetime * 1000);
+
+  const date = dateTime.toLocaleDateString([], {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  return date;
+};
 ---
 
-<time datetime={date.toISOString()}>
+<time datetime={dateFormat(date)}>
 	{
-		date.toLocaleDateString('en-us', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-		})
+		dateFormat(date)
 	}
 </time>
