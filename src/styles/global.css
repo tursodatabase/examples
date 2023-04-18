@@ -65,3 +65,8 @@ blockquote {
 	margin: 0px;
 	font-style: italic;
 }
+
+.author{
+	font-weight: 600;
+	color: teal;
+}
