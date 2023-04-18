@@ -4,7 +4,7 @@
 npm create astro@latest -- --template blog
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)]
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
 [![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/turso-extended/app-tustro-blog)
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/turso-extended/app-tustro-blog?devcontainer_path=.devcontainer/blog/devcontainer.json)
 
@@ -21,7 +21,8 @@ Features:
 
 ## SSR configuration
 
-This blog comes with the Netlify SSR adapter, if you want to deploy with other services, please install [make the required changes].
+This blog comes with the Netlify SSR adapter, if you want to deploy with other
+services, please install [make the required changes].
 
 ## 🚀 Project Structure
 
