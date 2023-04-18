@@ -1,0 +1,66 @@
+---
+import { Markdown } from "@astropub/md"
+import BlogPost from '../../layouts/BlogPost.astro';
+import { client, responseDataAdapter } from '../../lib/tursoDb';
+import type { InValue } from '@libsql/client';
+import type { Blog } from '../../lib/types';
+
+const { slug } = Astro.params;
+let post: Blog | null = null;
+console.log({slug})
+
+if(!slug){
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found'
+  });
+}
+
+try {
+  const postResponse = await client.execute({
+    sql: "select posts.content, posts.published, posts.title, posts.description, posts.slug, posts.hero, posts.created_at, authors.first_name, authors.last_name, authors.slug, authors.avatar, authors.twitter from posts left join authors on authors.id = posts.author_id where posts.slug = ?;",
+    args: [slug as InValue],
+  });
+  if(!postResponse){
+    return new Response(null, {
+      status: 404,
+      statusText: 'Not found'
+    });
+  }
+  const convertedData = responseDataAdapter(postResponse);
+  const blogPostData = convertedData[0];
+  if(!blogPostData){
+    return new Response(null, {
+      status: 404,
+      statusText: 'Not found'
+    });
+  }
+
+  post = {
+    content: blogPostData.content,
+    published: blogPostData.published,
+    title: blogPostData.title,
+    description: blogPostData.description,
+    slug: blogPostData.slug,
+    hero: blogPostData.hero,
+    created_at: blogPostData.created_at,
+    author: {
+      first_name: blogPostData.first_name,
+      last_name: blogPostData.last_name,
+      slug: blogPostData.slug,
+      avatar: blogPostData.avatar,
+      email: blogPostData.email,
+      socials: {
+        twitter: blogPostData.twitter
+      },
+      created_at: blogPostData.created_at
+    }
+  };
+} catch (error) {
+  console.log(error)
+}
+---
+
+<BlogPost {...post}>
+  <Markdown of={post?.content || ""} />
+</BlogPost>
