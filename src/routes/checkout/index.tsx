@@ -49,6 +49,10 @@ const placeOrder = server$(async (appState: AppState,  contactInformation: {firs
       sql: "insert into order_items(order_id, product_id, count) values(?, ?, ?);",
       args: [order.id, item.product.id, item.count]
     })
+    await client.execute({
+      sql: "delete from cart_items where id = ?;",
+      args: [item.id]
+    })
   }
   return {
     status: "success",
