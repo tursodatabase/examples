@@ -1,17 +1,85 @@
-import { $, component$, useContext, useStylesScoped$, useTask$ } from '@builder.io/qwik';
+import { component$, useContext, useSignal, useStore, useStylesScoped$, useTask$, useVisibleTask$ } from '@builder.io/qwik';
 import styles from "./checkout.css?inline"
 import { APP_STATE, DEFAULT_USER } from '~/utils/constants';
-import type { CartItem } from '~/utils/types';
+import type { AppState, CartItem, User } from '~/utils/types';
 import { server$ } from '@builder.io/qwik-city';
 import { responseDataAdapter } from '~/utils/response-adapter';
 import cartDataAdapter from '~/utils/cartDataAdapter';
 import { client } from '~/utils/turso-db';
+
+
+const placeOrder = server$(async (appState: AppState,  contactInformation: {firstName: string, lastName: string, email: string, phone: number}, shippingAddress: {zipCode: number, country: string}, authenticatedUser: User ) => {
+  // * After having checked that the  payment was successfull using your payment client
+    
+  // check for missing input
+  if(!contactInformation.firstName || !contactInformation.lastName || !contactInformation.email || !contactInformation.phone){
+    return {
+      status: "error",
+      message: "Some contact fields are missing!",
+      data: null
+    }
+  }
+
+  if(!shippingAddress.country || !shippingAddress.zipCode){
+    return {
+      status: "error",
+      message: "Some address fields are missing!",
+      data: null
+    }
+  }
+
+  const amount = appState.cart.items.reduce((accumulator, currentVal) => accumulator + (currentVal.count * currentVal.product.price), 0);
+  const calculatedShippingFees = 0;
+  const discountAmount = 0;
+  const finalAmount = amount + calculatedShippingFees - discountAmount;
+  await client.execute({
+    sql: "insert into orders(user_id, customer_name, amount, shipping_fees, discount_amt, final_amount, shipping_address, paid) values(?, ?, ?, ?, ?, ?, ?, ?)",
+    args: [authenticatedUser.id, `${authenticatedUser.first_name} ${authenticatedUser.last_name}`, amount, calculatedShippingFees, discountAmount, finalAmount, `${shippingAddress.zipCode} ${shippingAddress.country}`, true]
+  });
+
+  const orderDetails = await client.execute({
+    sql: "select id from orders where user_id = ?",
+    args: [authenticatedUser.id]
+  });
+  const order = responseDataAdapter(orderDetails)[0];
+
+  // Add order items to placed order
+  for(const item of appState.cart.items){
+    await client.execute({
+      sql: "insert into order_items(order_id, product_id, count) values(?, ?, ?);",
+      args: [order.id, item.product.id, item.count]
+    })
+  }
+  return {
+    status: "success",
+    message: "Order placed!",
+    data: true
+  }
+})
 
 export default component$(() => {
   useStylesScoped$(styles);
 
   const appState = useContext(APP_STATE);
   const authenticatedUser = DEFAULT_USER;
+  const shippingAddress = useStore({
+    country: "",
+    zipCode: 0
+  })
+  const contactInformation = useStore({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: 0
+  })
+  const submissionError = useSignal("");
+
+  useVisibleTask$(() => {
+    contactInformation.email = authenticatedUser.email;
+    contactInformation.lastName = authenticatedUser.last_name;
+    contactInformation.firstName = authenticatedUser.first_name;
+    shippingAddress.country = "England";
+  })
 
   const totalPrice = appState.cart.items.reduce((accumulator, currentVal) => accumulator + (currentVal.count * currentVal.product.price), 0)
 
@@ -78,6 +146,9 @@ export default component$(() => {
 
         <div class="bg-white py-12 md:py-24">
           <div class="mx-auto max-w-lg px-4 lg:px-8">
+
+            {submissionError.value && <p class="text-red-600 font-semibold">{submissionError.value}</p>}
+
             <form class="grid grid-cols-6 gap-4">
               <legend class="col-span-6">Contact Information</legend>
               <div class="col-span-3">
@@ -92,7 +163,10 @@ export default component$(() => {
                   type="text"
                   id="FirstName"
                   class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-                  value={authenticatedUser.first_name}
+                  value={contactInformation.firstName}
+                  onInput$={(e) => {
+                    contactInformation.firstName = (e.target as HTMLInputElement).value;
+                  }}
                 />
               </div>
 
@@ -108,7 +182,10 @@ export default component$(() => {
                   type="text"
                   id="LastName"
                   class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-                  value={authenticatedUser.last_name}
+                  value={contactInformation.lastName}
+                  onInput$={(e) => {
+                    contactInformation.lastName = (e.target as HTMLInputElement).value;
+                  }}
                 />
               </div>
 
@@ -121,7 +198,10 @@ export default component$(() => {
                   type="email"
                   id="Email"
                   class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-                  value={authenticatedUser.email}
+                  value={contactInformation.email}
+                  onInput$={(e) => {
+                    contactInformation.email = (e.target as HTMLInputElement).value;
+                  }}
                 />
               </div>
 
@@ -134,6 +214,13 @@ export default component$(() => {
                   type="tel"
                   id="Phone"
                   class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+                  value={contactInformation.phone}
+                  onInput$={(e) => {
+                    const typedVal = (e.target as HTMLInputElement).value;
+                    if(!isNaN(parseInt(typedVal))){
+                      contactInformation.phone = parseInt(typedVal);
+                    }
+                  }}
                 />
               </div>
 
@@ -192,6 +279,9 @@ export default component$(() => {
                     <select
                       id="Country"
                       class="relative w-full rounded-t-md border-gray-200 focus:z-10 sm:text-sm"
+                      onChange$={(e) => {
+                        shippingAddress.country = (e.target as HTMLSelectElement).value;
+                      }}
                     >
                       <option>England</option>
                       <option>Wales</option>
@@ -210,6 +300,9 @@ export default component$(() => {
                       id="PostalCode"
                       placeholder="ZIP/Post Code"
                       class="relative w-full rounded-b-md border-gray-200 focus:z-10 sm:text-sm"
+                      onInput$={(e) => {
+                        shippingAddress.zipCode = parseInt((e.target as HTMLInputElement).value);
+                      }}
                     />
                   </div>
                 </div>
@@ -218,6 +311,18 @@ export default component$(() => {
               <div class="col-span-6">
                 <button
                   class="block w-full rounded-md bg-black p-2.5 text-sm text-white transition hover:shadow-lg"
+                  preventdefault:submit
+                  preventdefault:click
+                  onClick$={async () => {
+                    submissionError.value = "";
+                    const response = await placeOrder(appState, contactInformation, shippingAddress, authenticatedUser);
+                    if(response.status === "error"){
+                      submissionError.value = response.message;
+                    }
+                    if(response.status === "success"){
+                      alert("Order successfully placed!");
+                    }
+                  }}
                 >
                   Pay Now
                 </button>
