@@ -52,13 +52,11 @@ Check out the [deployment documentation] for more information.
 
 ## Project Structure
 
-This project is using [Nuxt], the intuitive web framework.
+This project is using [Nuxt](https://nuxt.com), the intuitive Vue framework.
 
 Inside your project, you'll see the following directory structure:
 
 ```
-├── composables
-│   └── use-turso.js
 ├── layouts
 │   └── default.vue
 └── pages/
@@ -70,6 +68,7 @@ Inside your project, you'll see the following directory structure:
 │   │   ├── add.js
 │   │   └── frameworks.js
 │   └── utils
+│   	└── use-turso.js
 │       └── responseDataAdapter.js
 ```
 
