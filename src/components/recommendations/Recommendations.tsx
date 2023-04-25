@@ -45,7 +45,7 @@ export const Recommendations = component$(() => {
     }
 
     const response = await client.execute({
-      sql: "select * from products where " + createSql + " limit 4",
+      sql: "select * from products where " + createSql + " order by random() limit 4",
       args: argsList
     });
   
