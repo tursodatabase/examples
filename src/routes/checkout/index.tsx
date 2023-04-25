@@ -1,7 +1,11 @@
-import { $, component$, useContext, useStylesScoped$ } from '@builder.io/qwik';
+import { $, component$, useContext, useStylesScoped$, useTask$ } from '@builder.io/qwik';
 import styles from "./checkout.css?inline"
 import { APP_STATE, DEFAULT_USER } from '~/utils/constants';
 import type { CartItem } from '~/utils/types';
+import { server$ } from '@builder.io/qwik-city';
+import { responseDataAdapter } from '~/utils/response-adapter';
+import cartDataAdapter from '~/utils/cartDataAdapter';
+import { client } from '~/utils/turso-db';
 
 export default component$(() => {
   useStylesScoped$(styles);
@@ -11,6 +15,17 @@ export default component$(() => {
 
   const totalPrice = appState.cart.items.reduce((accumulator, currentVal) => accumulator + (currentVal.count * currentVal.product.price), 0)
 
+  // will run atleast once
+  useTask$(async () => {
+    const storedCartItems = await client.execute({
+      sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
+      args: [authenticatedUser.id]
+    });
+    if(storedCartItems){
+      const formattedCartData = responseDataAdapter(storedCartItems);
+      appState.cart.items = cartDataAdapter(formattedCartData);
+    }
+  });
 
   return (
     <section>
@@ -36,8 +51,7 @@ export default component$(() => {
             <div>
               <div class="flow-root">
               <ul class="-my-4 divide-y divide-gray-100">
-                { !!appState.cart.items?.length && 
-                  !!appState.cart.items?.map((item: CartItem) => 
+                { appState.cart.items?.map((item: CartItem) => 
                     <li key={item.id} class="flex items-center gap-4 py-4">
                       <img
                         src={item.product.image}
@@ -46,17 +60,11 @@ export default component$(() => {
                       />
 
                       <div>
-                        <h3 class="text-sm text-gray-900">{item.product.name}</h3>
+                        <h3 class="text-sm text-gray-900">{item.product.name} X {item.count}</h3>
 
                         <dl class="mt-0.5 space-y-px text-[10px] text-gray-600">
                           <div>
-                            <dt class="inline">Size:</dt>
-                            <dd class="inline">XXS</dd>
-                          </div>
-
-                          <div>
-                            <dt class="inline">Color:</dt>
-                            <dd class="inline">White</dd>
+                            <dt class="inline">${item.product.price}:</dt>
                           </div>
                         </dl>
                       </div>
