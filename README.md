@@ -90,7 +90,7 @@ pnpm build # or `yarn build`
 
 Install the Turso CLI.
 
-# On macOS or Linux with Homebrew
+### On macOS or Linux with Homebrew
 
 ```sh
 brew install chiselstrike/tap/turso
