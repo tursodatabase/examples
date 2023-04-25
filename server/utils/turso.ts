@@ -1,13 +1,13 @@
 import { createClient } from '@libsql/client/web';
 
 export function useTurso () {
-  const config = useRuntimeConfig();
+  const tursoConfig = useRuntimeConfig().turso;
 
-  if (!config.tursoDbUrl || !config.tursoDbAuthToken) {
+  if (!tursoConfig.dbUrl || !tursoConfig.dbAuthToken) {
     throw new Error('Please fill the NUXT_TURSO_DB_URL and NUXT_TURSO_DB_AUTH_TOKEN env variables')
   }
   return createClient({
-    url: config.tursoDbUrl,
-    authToken: config.tursoDbAuthToken,
+    url: tursoConfig.dbUrl,
+    authToken: tursoConfig.dbAuthToken,
   });
 }

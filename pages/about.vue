@@ -1,6 +1,6 @@
 <script setup>
-useHead({
-    title: "2 The about page"
+useSeoMeta({
+    title: "The about page"
 })
 </script>
 
