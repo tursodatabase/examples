@@ -22,34 +22,30 @@
 }
 
 body {
-  background: linear-gradient(90deg, rgba(24, 182, 246, 0.3) 0%, rgba(172, 127, 244, 0.3) 100%);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 200;
-  padding: 10px 0px;
+  @apply font-extralight py-3 bg-gradient-to-r from-secondary-50 to-tertiary-50;
+  padding: 0;
+  line-height: inherit;
 }
 
 ::selection {
-  background: rgb(8, 2, 61);
-  color: white;
+  @apply bg-tertiary-800 text-secondary-500;
 }
 
 h1,
 h2,
 h3 {
-  font-weight: 100;
+  @apply font-thin;
 }
 
 h1 b,
 h2 b,
 h3 b {
-  font-weight: 300;
+  @apply font-light;
 }
 
 h1 {
-  color: white;
-  font-size: 2rem;
-  padding: 0;
-  margin: 0;
+  @apply text-primary-800 text-4xl;
 }
 
 h1.hero {
@@ -58,36 +54,6 @@ h1.hero {
 
 h2 {
   color: var(--qwik-dark-purple);
-}
-
-input[type='text'],
-button {
-  background-color: transparent;
-  color: white;
-  border: 1px solid white;
-  border-radius: 12px;
-  font-size: 1rem;
-  padding: 10px 20px;
-}
-
-button {
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: white;
-  color: var(--qwik-dark-purple);
-}
-
-button.small {
-  border-radius: 6px;
-  font-size: 0.8rem;
-  padding: 5px 10px;
-}
-
-button.gray {
-  border-color: #aaa;
-  color: #aaa;
 }
 
 a,
@@ -119,12 +85,7 @@ ul {
 }
 
 .page {
-  width: 90vw;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: linear-gradient(90deg, rgba(24, 182, 246, 0.6) 0%, rgba(172, 127, 244, 0.6) 100%);
-  overflow: hidden;
-  border-radius: 6px;
+  @apply overflow-hidden w-full max-w-[1200px] bg-gray-50 mx-auto
 }
 
 .container {
@@ -176,10 +137,6 @@ ul {
     font-size: 3rem;
   }
 
-  .page {
-    width: 70vw;
-  }
-
   .container {
     padding: 30px 70px;
   }
@@ -206,9 +163,4 @@ html {
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
-}
-
-body {
-  padding: 0;
-  line-height: inherit;
 }

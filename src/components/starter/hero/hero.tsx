@@ -4,7 +4,7 @@ import styles from './hero.module.css';
 export default component$(() => {
   return (
     <div class={styles.hero}>
-      <h1>Welcome to qwik</h1>
+      <h1>TurQw Store</h1>
       <button
         onClick$={async () => {
           const defaults = {
