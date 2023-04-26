@@ -9,17 +9,21 @@ import { client } from "~/utils/turso-db";
 import type { CartItem } from "~/utils/types";
 
 export const useRouteLoader = routeLoader$(async (): Promise<CartItem[]> => {
-  const storedCartItems = await client.execute({
-    sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
-    args: [DEFAULT_USER.id]
-  });
   let cartItems: CartItem[] = []
-  if(storedCartItems){
+  try {
+    const storedCartItems = await client.execute({
+      sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
+      args: [DEFAULT_USER.id]
+    });
     const formattedCartData = responseDataAdapter(storedCartItems);
+    console.log({formattedCartData});
     cartItems = cartDataAdapter(formattedCartData);
+  
+    return cartItems;
+  } catch (error) {
+    console.log(error)
+    return cartItems;
   }
-
-  return cartItems;
 });
 
 export default component$(() => {

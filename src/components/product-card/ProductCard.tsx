@@ -22,24 +22,26 @@ export const ProductCard = component$((props: ProductCartProps) => {
   });
 
   const addToCart = $(async () => {
-    await client.execute({
-      sql: "insert into cart_items(product_id, user_id) values(?, ?)",
-      args: [props.product.id, authenticatedUser.value.id]
-    });
-    const cartItem = await client.execute({
-      sql: "select * from cart_items where product_id = ? and user_id = ?",
-      args: [props.product.id, authenticatedUser.value.id]
-    });
-    if(!cartItem){
+    try {
+      await client.execute({
+        sql: "insert into cart_items(product_id, user_id) values(?, ?)",
+        args: [props.product.id, authenticatedUser.value.id]
+      });
+      const cartItem = await client.execute({
+        sql: "select * from cart_items where product_id = ? and user_id = ?",
+        args: [props.product.id, authenticatedUser.value.id]
+      });
       appState.cart.items.push({
         id: (100 * Math.random()) - 9,
         count: 1,
         product: props.product
       })
+      const formattedResponse = responseDataAdapter(cartItem);
+      appState.cart.items.push(cartDataAdapter(formattedResponse)[0])
+    } catch (error) {
+      console.log(error);
       return;
     }
-    const formattedResponse = responseDataAdapter(cartItem);
-    appState.cart.items.push(cartDataAdapter(formattedResponse)[0])
   })
 
   return (

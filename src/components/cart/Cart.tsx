@@ -13,13 +13,15 @@ export const Cart = component$(() => {
 
   // will run atleast once
   useTask$(async () => {
-    const storedCartItems = await client.execute({
-      sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
-      args: [authenticatedUser.value.id]
-    });
-    if(storedCartItems){
+    try {
+      const storedCartItems = await client.execute({
+        sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
+        args: [authenticatedUser.value.id]
+      });
       const formattedCartData = responseDataAdapter(storedCartItems);
       appState.cart.items = cartDataAdapter(formattedCartData);
+    } catch (error) {
+      console.log(error);
     }
   })
 

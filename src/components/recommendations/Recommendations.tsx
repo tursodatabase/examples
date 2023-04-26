@@ -7,23 +7,24 @@ import type { Product } from '~/utils/types';
 import { ProductCard } from '../product-card/ProductCard';
 
 export const fetchProductRecommendations = server$(async (sql: string, args: string[]) => {
-  const response = await client.execute({
-    sql: "select * from products where " + sql,
-    args
+  console.log([sql, args])
+  try {
+    const response = await client.execute({
+      sql: "select * from products where " + sql,
+      args
     });
-
-  if(!response){
+  
+    const sortedData = responseDataAdapter(response);
+  
+    return {
+      status: "",
+      items: sortedData
+    }
+  } catch (error) {
     return {
       status: "",
       items: []
     }
-  }
-
-  const sortedData = responseDataAdapter(response);
-
-  return {
-    status: "",
-    items: sortedData
   }
 })
 
@@ -44,21 +45,17 @@ export const Recommendations = component$(() => {
       argsList.push(appState.cart.items[i].product.id);
     }
 
-    const response = await client.execute({
-      sql: "select * from products where " + createSql + " order by random() limit 4",
-      args: argsList
-    });
-  
-    if(!response){
-      return {
-        status: "",
-        items: []
-      }
-    }
-  
-    const sortedData = responseDataAdapter(response);
+    try {
+      const response = await client.execute({
+        sql: "select * from products where " + createSql + " order by random() limit 4",
+        args: argsList
+      });
     
-    recommendations.value = sortedData;
+      const sortedData = responseDataAdapter(response);
+      recommendations.value = sortedData;
+    } catch (error) {
+      recommendations.value = [];
+    }
   });
 
   return (
