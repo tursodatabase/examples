@@ -1,4 +1,4 @@
-import { $, component$, useContext, useSignal, useTask$ } from "@builder.io/qwik";
+import { component$, useContext, useTask$ } from "@builder.io/qwik";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { CartPageItem } from "~/components/cart/CartPageItem";
 import { Recommendations } from "~/components/recommendations/Recommendations";

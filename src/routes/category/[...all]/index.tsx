@@ -1,8 +1,8 @@
-import { component$, useContext } from '@builder.io/qwik';
+import { component$ } from '@builder.io/qwik';
 import { routeLoader$ } from '@builder.io/qwik-city';
 import { Pagination, type PaginationProps } from '~/components/pagination/Pagination';
 import { ProductCard } from '~/components/product-card/ProductCard';
-import { APP_STATE, ITEMS_PER_PAGE } from '~/utils/constants';
+import { ITEMS_PER_PAGE } from '~/utils/constants';
 import { responseDataAdapter } from '~/utils/response-adapter';
 import { client } from '~/utils/turso-db';
 import type { Product } from '~/utils/types';
@@ -66,7 +66,6 @@ export const useCategoryLoader = routeLoader$(async ({params}): Promise<Category
 
 export default component$(() => {
   const pageData = useCategoryLoader();
-  const appState = useContext(APP_STATE);
   
   return (
     <>
