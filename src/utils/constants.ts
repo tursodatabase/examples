@@ -7,7 +7,7 @@ export const DEFAULT_USER: User = {
   id: 1,
   first_name: "Iku",
   last_name: "Turso",
-  email: "turso.iku.mail",
+  email: "turso@iku.mail",
   address: "Salt water swamp",
   created_at: 1682339296,
   avatar: "https://res.cloudinary.com/djx5h4cjt/image/upload/chiselstrike-assets/Turso-Symbol-Blue.jpg"
