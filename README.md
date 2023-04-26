@@ -44,13 +44,13 @@ docs] for more info.
 
 ## Add Integrations and deployment
 
-Use the `pnpm qwik add` command to add additional integrations. Some examples of
+Use the `npm run qwik add` command to add additional integrations. Some examples of
 integrations include: Cloudflare, Netlify or Express server, and the [Static
 Site Generator
 (SSG)].
 
 ```shell
-pnpm qwik add # or `yarn qwik add`
+npm run qwik add # or `yarn qwik add`
 ```
 
 ## Development
@@ -73,7 +73,7 @@ server is only for convenience to locally preview a production build, and it
 should not be used as a production server.
 
 ```shell
-pnpm preview # or `yarn preview`
+npm run preview # or `yarn preview`
 ```
 
 ## Production
@@ -83,32 +83,26 @@ client and server build commands. Additionally, the build command will use
 Typescript to run a type check on the source code.
 
 ```shell
-pnpm build # or `yarn build`
+npm run build # or `yarn build`
 ```
 
-## Database
+## Set up the database
 
-Install the Turso CLI.
-
-### On macOS or Linux with Homebrew
-
-```sh
-brew install chiselstrike/tap/turso
-
-# Manual scripted installation
-curl -sSfL <https://get.tur.so/install.sh> | bash
-```
+[Install the Turso CLI].
 
 Create a new turso database.
 
 ```sh
-turso db create [DATABASE-NAME]
+turso db create app-turqw-store
 ```
+
+> We use `app-turqw-store` as the database name in this command, but you can
+> give it any name.
 
 Access the database through the Turso CLI shell.
 
 ```sh
-turso db shell [DATABASE-NAME]
+turso db shell app-turqw-store
 ```
 
 Issue the following statements to prepate the database's tables, indexes, and
@@ -218,20 +212,28 @@ create index idx_order_items_product_id on order_items(product_id);
 insert into users(first_name, last_name, email, address, avatar) values("Iku", "Turso", "turso@iku.mail", "Salt water swamp", "https://res.cloudinary.com/djx5h4cjt/image/upload/chiselstrike-assets/Turso-Symbol-Blue.jpg");
 ```
 
+### Seeding data
+
+The project contains some seeding files under the `/seed` directory. You can opt to delete them afterwards.
+
+Run `node ./seed/index.js` to seed some categories and products data into the
+database.
+
 ### Set up Turso on the project
+
 To access the data stored inside your database, you need the Turso database url
 and an authentication token.
 
 To obtain the database url, run the following command:
 
 ```sh
-turso db show [DATABASE-NAME] --url
+turso db show app-turqw-store --url
 ```
 
 And, to create an authentication token for your database, run:
 
 ```sh
-turso db tokens create [DATABASE-NAME] --expiration none
+turso db tokens create app-turqw-store --expiration none
 ```
 
 When the –expiration flag is set to none we are creating non-expiring tokens.
@@ -256,3 +258,4 @@ VITE_TURSO_DB_AUTH_TOKEN=
 [Vite public directory]:https://vitejs.dev/guide/assets.html#the-public-directory
 [Static Site Generator (SSG)]:https://qwik.builder.io/qwikcity/guides/static-site-generation/
 [Vite's development server]:https://vitejs.dev/
+[Install the Turso CLI]:https://docs.turso.tech/reference/turso-cli#installation
