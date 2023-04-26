@@ -30,7 +30,7 @@ export const Cart = component$(() => {
   });
 
   // * hide cart when esc key is clicked
-  useOn("keydown", $((event: unknown) => {
+  useOn("keydown", $((event: Event) => {
     if((event as KeyboardEvent).key === "Escape") {
       appState.cart.show = false;
     }
