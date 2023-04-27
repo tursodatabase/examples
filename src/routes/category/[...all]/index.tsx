@@ -14,12 +14,14 @@ export interface CategoryPageResponse {
   categoryName: string;
 }
 
-export const useCategoryLoader = routeLoader$(async ({params}): Promise<CategoryPageResponse> => {
+export const useCategoryLoader = routeLoader$(async ({params, fail}): Promise<CategoryPageResponse> => {
   const [categoryId, pageNum] = params.all.split("/");
   let currentPage = 1, offset = 0;
 
   if(!categoryId){
-    // return status(404);
+    fail(404, {
+      errorMessage: "Category id not provided"
+    })
   }
 
   if(pageNum !== undefined){
@@ -27,40 +29,51 @@ export const useCategoryLoader = routeLoader$(async ({params}): Promise<Category
     offset = currentPage > 1 ? currentPage * ITEMS_PER_PAGE : 0;
   }
 
-  const categoryData = await client.execute({
-    sql: "select name from categories where id = ?",
-    args: [categoryId]}
-  )
-  if(!categoryData){
+  try {
+    const categoryData = await client.execute({
+      sql: "select name from categories where id = ?",
+      args: [categoryId]}
+    )
+    if(categoryData.rows.length === 0){
+      fail(404, {
+        errorMessage: "Category does not exist"
+      })
+    }
+  
+    const totalItems = await client.execute({
+      sql: "select count (*) from products where category_id = ?",
+      args: [categoryId]
+    });
+  
+    const itemsCount = totalItems["rows"][0]["count (*)"];
+    const totalPages = Math.ceil(itemsCount as number / ITEMS_PER_PAGE)
+  
+    // get data from db
+    const categoryResults = await client.execute({
+      sql: "select * from products where category_id = ? limit ? offset ?",
+      args: [categoryId, ITEMS_PER_PAGE, offset]
+    })
+  
+    return {
+      status: "success",
+      products: responseDataAdapter(categoryResults),
+      pageInfo: {
+        totalPages,
+        currentPage, 
+        categoryId
+      },
+      categoryName: responseDataAdapter(categoryData)[0]["name"]
+    }
+  } catch (error) {
+    console.log(error)
   }
-
-  const totalItems = await client.execute({
-    sql: "select count (*) from products where category_id = ?",
-    args: [categoryId]
-  });
-  if(!totalItems){
-  }
-
-  const itemsCount = totalItems["rows"][0]["count (*)"];
-  const totalPages = Math.ceil(itemsCount as number / ITEMS_PER_PAGE)
-
-  // get data from db
-  const categoryResults = await client.execute({
-    sql: "select * from products where category_id = ? limit ? offset ?",
-    args: [categoryId, ITEMS_PER_PAGE, offset]
-  })
-  if(!categoryResults){
-  }
-
   return {
-    status: "success",
-    products: responseDataAdapter(categoryResults),
     pageInfo: {
-      totalPages,
-      currentPage, 
-      categoryId
+      totalPages: 0,
+      categoryId: "",
+      currentPage: 0
     },
-    categoryName: responseDataAdapter(categoryData)[0]["name"]
+    categoryName: ""
   }
 });
 
