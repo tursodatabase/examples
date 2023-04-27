@@ -2,7 +2,7 @@ import { component$, useContext, useSignal, useStore, useStylesScoped$, useTask$
 import styles from "./checkout.css?inline"
 import { APP_STATE, DEFAULT_USER } from '~/utils/constants';
 import type { AppState, CartItem, User } from '~/utils/types';
-import { server$ } from '@builder.io/qwik-city';
+import { server$, useNavigate } from '@builder.io/qwik-city';
 import { responseDataAdapter } from '~/utils/response-adapter';
 import cartDataAdapter from '~/utils/cartDataAdapter';
 import { client } from '~/utils/turso-db';
@@ -12,18 +12,10 @@ const placeOrder = server$(async (appState: AppState,  contactInformation: {firs
   // * After having checked that the  payment was successfull using your payment client
     
   // check for missing input
-  if(!contactInformation.firstName || !contactInformation.lastName || !contactInformation.email || !contactInformation.phone){
+  if(!contactInformation.firstName || !contactInformation.lastName || !contactInformation.email || !contactInformation.phone || !shippingAddress.country || !shippingAddress.zipCode){
     return {
       status: "error",
-      message: "Some contact fields are missing!",
-      data: null
-    }
-  }
-
-  if(!shippingAddress.country || !shippingAddress.zipCode){
-    return {
-      status: "error",
-      message: "Some address fields are missing!",
+      message: "Some fields are missing!",
       data: null
     }
   }
@@ -32,38 +24,50 @@ const placeOrder = server$(async (appState: AppState,  contactInformation: {firs
   const calculatedShippingFees = 0;
   const discountAmount = 0;
   const finalAmount = amount + calculatedShippingFees - discountAmount;
-  await client.execute({
-    sql: "insert into orders(user_id, customer_name, amount, shipping_fees, discount_amt, final_amount, shipping_address, paid) values(?, ?, ?, ?, ?, ?, ?, ?)",
-    args: [authenticatedUser.id, `${authenticatedUser.first_name} ${authenticatedUser.last_name}`, amount, calculatedShippingFees, discountAmount, finalAmount, `${shippingAddress.zipCode} ${shippingAddress.country}`, true]
-  });
-
-  const orderDetails = await client.execute({
-    sql: "select id from orders where user_id = ?",
-    args: [authenticatedUser.id]
-  });
-  const order = responseDataAdapter(orderDetails)[0];
-
-  // Add order items to placed order
-  for(const item of appState.cart.items){
-    await client.execute({
-      sql: "insert into order_items(order_id, product_id, count) values(?, ?, ?);",
-      args: [order.id, item.product.id, item.count]
-    })
-    await client.execute({
-      sql: "delete from cart_items where id = ?;",
-      args: [item.id]
-    })
+  try {
+    const newOrder = await client.execute({
+      sql: "insert into orders(user_id, customer_name, amount, shipping_fees, discount_amt, final_amount, shipping_address, paid) values(?, ?, ?, ?, ?, ?, ?, ?)",
+      args: [authenticatedUser.id, `${authenticatedUser.first_name} ${authenticatedUser.last_name}`, amount, calculatedShippingFees, discountAmount, finalAmount, `${shippingAddress.zipCode} ${shippingAddress.country}`, true]
+    });
+    
+    if(newOrder.lastInsertRowid !== undefined){
+  
+      // Add items to created order
+      for(const item of appState.cart.items){
+        const transaction = await client.transaction();
+        const itemAddedToOrder = await transaction.execute({
+          sql: "insert into order_items(order_id, product_id, count) values(?, ?, ?);",
+          args: [newOrder.lastInsertRowid, item.product.id, item.count]
+        })
+        if(itemAddedToOrder.rowsAffected > 0){
+          const cartItemDeleted = await transaction.execute({
+            sql: "delete from cart_items where id = ?;",
+            args: [item.id]
+          })
+          if(cartItemDeleted.rowsAffected > 0){
+            transaction.commit();
+          }
+        }
+      }
+      return {
+        status: "success",
+        message: "Order placed!",
+        data: true
+      }
+    }
+  } catch (error) {
+    console.log({error});
   }
   return {
-    status: "success",
-    message: "Order placed!",
-    data: true
+    status: "failure",
+    message: "Could not create an order!",
+    data: null
   }
 })
 
 export default component$(() => {
   useStylesScoped$(styles);
-
+  const nav = useNavigate();
   const appState = useContext(APP_STATE);
   const authenticatedUser = DEFAULT_USER;
   const shippingAddress = useStore({
@@ -85,7 +89,7 @@ export default component$(() => {
     shippingAddress.country = "England";
   })
 
-  const totalPrice = appState.cart.items.reduce((accumulator, currentVal) => accumulator + (currentVal.count * currentVal.product.price), 0)
+  const totalPrice = appState.cart.items.reduce((accumulator, currentVal) => accumulator + (currentVal.count * currentVal.product.price), 0).toFixed(2);
 
   // will run atleast once
   useTask$(async () => {
