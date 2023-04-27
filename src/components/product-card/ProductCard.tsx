@@ -64,16 +64,10 @@ export const ProductCard = component$((props: ProductCartProps) => {
         sql: "select * from cart_items where product_id = ? and user_id = ?",
         args: [props.product.id, authenticatedUser.value.id]
       });
-      const formattedResponse = [];
-      if(cartItem.rows.length){
-        for(const row of cartItem.rows){
-          formattedResponse.push({...row})
-        }
-      }
-      appState.cart.items.push(cartDataAdapter(formattedResponse)[0])
+      
+      appState.cart.items.push(cartDataAdapter(cartItem.rows)[0])
     } catch (error) {
-      console.log(error);
-      return;
+      // TODO: Catch error and notify user
     }
   })
 

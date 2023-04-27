@@ -51,18 +51,11 @@ export const useCategoryLoader = routeLoader$(async ({params, fail}): Promise<Ca
     const categoryResults = await client.execute({
       sql: "select * from products where category_id = ? limit ? offset ?",
       args: [categoryId, ITEMS_PER_PAGE, offset]
-    })
-
-    const products: Product[] = [];
-    if(categoryResults.rows.length){
-      for(const row of categoryResults.rows){
-        products.push({...row} as unknown as Product)
-      }
-    }
+    });
   
     return {
       status: "success",
-      products: products,
+      products: categoryResults.rows as unknown as Product[],
       pageInfo: {
         totalPages,
         currentPage, 
@@ -71,7 +64,7 @@ export const useCategoryLoader = routeLoader$(async ({params, fail}): Promise<Ca
       categoryName: categoryData.rows[0].name as string
     }
   } catch (error) {
-    console.log(error)
+    // TODO: Catch error and notify user
   }
   return {
     pageInfo: {

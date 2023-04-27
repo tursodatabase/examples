@@ -96,15 +96,7 @@ export default component$(() => {
       sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
       args: [authenticatedUser.id]
     });
-    if(storedCartItems){
-      const formattedCartData = [];
-      if(storedCartItems.rows.length){
-        for(const row of storedCartItems.rows){
-          formattedCartData.push({...row})
-        }
-      }
-      appState.cart.items = cartDataAdapter(formattedCartData);
-    }
+    appState.cart.items = cartDataAdapter(storedCartItems.rows as unknown as CartItem[]);
   });
 
   return (

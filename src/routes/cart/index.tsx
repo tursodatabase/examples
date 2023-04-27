@@ -14,20 +14,14 @@ export const useRouteLoader = routeLoader$(async (): Promise<CartItem[]> => {
       sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
       args: [DEFAULT_USER.id]
     });
-    const formattedCartData = [];
-    if(storedCartItems.rows.length){
-      for(const row of storedCartItems.rows){
-        formattedCartData.push({...row})
-      }
-    }
-    console.log({formattedCartData});
-    cartItems = cartDataAdapter(formattedCartData);
+
+    cartItems = cartDataAdapter(storedCartItems.rows);
   
     return cartItems;
   } catch (error) {
-    console.log(error)
-    return cartItems;
+    // TODO: Catch error and notify user
   }
+  return cartItems;
 });
 
 export default component$(() => {

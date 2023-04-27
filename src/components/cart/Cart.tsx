@@ -17,15 +17,10 @@ export const Cart = component$(() => {
         sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
         args: [authenticatedUser.value.id]
       });
-      const formattedCartData = [];
-      if(storedCartItems.rows.length){
-        for(const row of storedCartItems.rows){
-          formattedCartData.push({...row})
-        }
-      }
-      appState.cart.items = cartDataAdapter(formattedCartData);
+      
+      appState.cart.items = cartDataAdapter(storedCartItems.rows);
     } catch (error) {
-      console.log(error);
+      // TODO: Catch error and notify user
     }
   })
 

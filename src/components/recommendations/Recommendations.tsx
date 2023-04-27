@@ -1,36 +1,8 @@
 import { component$, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
-import { server$ } from '@builder.io/qwik-city';
 import { APP_STATE } from '~/utils/constants';
 import { client } from '~/utils/turso-db';
 import type { Product } from '~/utils/types';
 import { ProductCard } from '../product-card/ProductCard';
-
-export const fetchProductRecommendations = server$(async (sql: string, args: string[]) => {
-  console.log([sql, args])
-  try {
-    const response = await client.execute({
-      sql: "select * from products where " + sql,
-      args
-    });
-    
-    const sortedData = [];
-    if(response.rows.length){
-      for(const row of response.rows){
-        sortedData.push({...row})
-      }
-    }
-  
-    return {
-      status: "",
-      items: sortedData
-    }
-  } catch (error) {
-    return {
-      status: "",
-      items: []
-    }
-  }
-})
 
 export const Recommendations = component$(() => {
   const appState = useContext(APP_STATE);
@@ -50,16 +22,10 @@ export const Recommendations = component$(() => {
         sql: `select * from products where id not in (${placeholders}) order by random() limit 4`,
         args: values
       });
-    
-      const sortedData: Product[] = [];
-      if(response.rows.length){
-        for(const row of response.rows){
-          sortedData.push(({...row}) as unknown as Product)
-        }
-      }
-      recommendedProducts.value = sortedData;
+      
+      recommendedProducts.value = response.rows as unknown as Product[];
     } catch (error) {
-      recommendedProducts.value = [];
+      // TODO: Catch error and notify user
     }
   });
 
