@@ -34,21 +34,25 @@ export const Recommendations = component$(() => {
   const recommendations = useSignal<Product[]>([]);
 
   useVisibleTask$(async () => {
-    let createSql = "";
-    const argsList = [];
-    for(let i = 0; i < appState.cart.items.length; i++){
-      if(i + 1 !== appState.cart.items.length){
-        createSql += "id <> ? and ";
+    console.log({aaaa: appState.cart.items})
+    let count: number = 0, notToIncludePlaceholders: string = "";
+    const notToInclude: string[] = [];
+    appState.cart.items.forEach((item) => {
+      count++;
+      if(count === 1){
+        notToIncludePlaceholders += "( ?,";
+      } else if(count === appState.cart.items.length){
+        notToIncludePlaceholders += " ?)";
       } else {
-        createSql += "id <> ?";
+        notToIncludePlaceholders += "? ,"
       }
-      argsList.push(appState.cart.items[i].product.id);
-    }
-
+      notToInclude.push(item.product.id);
+    });
+    
     try {
       const response = await client.execute({
-        sql: "select * from products where " + createSql + " order by random() limit 4",
-        args: argsList
+        sql: "select * from products where id not in " + notToIncludePlaceholders + " order by random() limit 4",
+        args: notToInclude
       });
     
       const sortedData = responseDataAdapter(response);
@@ -58,7 +62,7 @@ export const Recommendations = component$(() => {
     }
   });
 
-  return (
+  return recommendations.value.length &&
     <>
       <h3 class="text-xl">Recommended</h3>
       <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -67,5 +71,4 @@ export const Recommendations = component$(() => {
         }
       </ul>
     </>
-  )
 });
