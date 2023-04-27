@@ -1,25 +1,59 @@
-import { $, component$, useContext, useSignal } from '@builder.io/qwik';
+import { $, component$, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { server$ } from '@builder.io/qwik-city';
 import cartDataAdapter from '~/utils/cartDataAdapter';
 import { APP_STATE, DEFAULT_USER } from '~/utils/constants';
 import { responseDataAdapter } from '~/utils/response-adapter';
 import { client } from '~/utils/turso-db';
-import type { Product } from '~/utils/types';
+import type { Product, User } from '~/utils/types';
 
 export interface ProductCartProps{
   product: Product
 }
 
+export const udpateWishlist = server$(async (isInWishlist: boolean, authenticatedUser: User, product: Product) => {
+  try {
+    if(!isInWishlist){
+      const response = await client.execute({
+        sql: "insert into wishlists(product_id, user_id) values(?, ?)",
+        args: [product.id, authenticatedUser.id]
+      })
+      isInWishlist = response.rowsAffected === 1;
+    } else {
+      const response = await client.execute({
+        sql: "delete from wishlists where product_id = ? and user_id = ?",
+        args: [product.id, authenticatedUser.id]
+      })
+      isInWishlist = response.rowsAffected === 0;
+    }
+
+    return {
+      isInWishlist
+    }
+  } catch (error) {
+    console.log({error})
+    return {
+      isInWishlist
+    }
+  }
+});
+
 export const ProductCard = component$((props: ProductCartProps) => {
   const authenticatedUser = useSignal(DEFAULT_USER);
   const appState = useContext(APP_STATE);
+  const isInWishlist = useSignal(false);
 
-  const addToWishlist = server$(async () => {
-    const response = await client.execute({
-      sql: "insert into wishlists(product_id, user_id) values(?, ?)",
-      args: [props.product.id, authenticatedUser.value.id]
-    })
-  });
+  useVisibleTask$(async () => {
+    if(authenticatedUser.value.id){
+      try {
+        const checkWishlist = await client.execute({
+          sql: "select count(*) from wishlists where user_id = ? and product_id = ?",
+          args: [authenticatedUser.value.id, props.product.id]
+        });
+        isInWishlist.value = checkWishlist.rows[0]["count (*)"] === 1
+      } catch (error) {
+      }
+    }
+  })
 
   const addToCart = $(async () => {
     try {
@@ -47,8 +81,12 @@ export const ProductCard = component$((props: ProductCartProps) => {
   return (
     <div class="group relative block overflow-hidden">
       <button
-        class="absolute right-4 top-4 z-10 rounded-full bg-white p-1.5 text-gray-900 transition hover:text-gray-900/75"
-        onClick$={addToWishlist}
+        class={`absolute right-4 top-4 z-10 rounded-full ${isInWishlist.value ? 'bg-red-600':'bg-white'} p-1.5 text-gray-900 transition hover:text-gray-900/75`}
+        onClick$={async () =>{
+          const response = await udpateWishlist(isInWishlist.value, authenticatedUser.value, props.product);
+          isInWishlist.value = response.isInWishlist;
+        }}
+        title={isInWishlist.value ? "Add to wishlist":"Remove from wishlist"}
       >
         <span class="sr-only">Wishlist</span>
 
@@ -60,6 +98,7 @@ export const ProductCard = component$((props: ProductCartProps) => {
           stroke="currentColor"
           class="h-4 w-4"
         >
+
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
