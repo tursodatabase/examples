@@ -31,10 +31,10 @@ export const fetchProductRecommendations = server$(async (sql: string, args: str
 export const Recommendations = component$(() => {
   const appState = useContext(APP_STATE);
 
-  const recommendations = useSignal<Product[]>([]);
+  const recommendedProducts = useSignal<Product[]>([]);
 
   useVisibleTask$(async () => {
-    const placeholders = appState.cart.items.map(item => {
+    const placeholders = appState.cart.items.map(() => {
       return "?"
     }).join(",")
     const values = appState.cart.items.map(item => {
@@ -48,19 +48,23 @@ export const Recommendations = component$(() => {
       });
     
       const sortedData = responseDataAdapter(response);
-      recommendations.value = sortedData;
+      recommendedProducts.value = sortedData;
     } catch (error) {
-      recommendations.value = [];
+      recommendedProducts.value = [];
     }
   });
 
-  return recommendations.value.length &&
-    <>
-      <h3 class="text-xl">Recommended</h3>
-      <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {
-          recommendations.value?.map((product: Product) => (<ProductCard product={product} key={product.id} />))
-        }
-      </ul>
-    </>
+  return (
+    recommendedProducts.value.length
+      ? 
+      <>
+        <h3 class="text-xl">Recommended</h3>
+        <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {
+            recommendedProducts.value?.map((product: Product) => (<ProductCard product={product} key={product.id} />))
+          }
+        </ul>
+      </>
+      : <div></div>
+    )
 });
