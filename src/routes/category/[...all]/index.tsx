@@ -41,11 +41,11 @@ export const useCategoryLoader = routeLoader$(async ({params, fail}): Promise<Ca
     }
   
     const totalItems = await client.execute({
-      sql: "select count (*) from products where category_id = ?",
+      sql: "select count (*) as total from products where category_id = ?",
       args: [categoryId]
     });
   
-    const itemsCount = totalItems["rows"][0]["count (*)"];
+    const itemsCount = totalItems.rows[0].total;
     const totalPages = Math.ceil(itemsCount as number / ITEMS_PER_PAGE)
   
     // get data from db
