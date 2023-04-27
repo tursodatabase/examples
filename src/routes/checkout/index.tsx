@@ -333,6 +333,7 @@ export default component$(() => {
                     }
                     if(response.status === "success"){
                       alert("Order successfully placed!");
+                      nav("/category/furniture");
                     }
                   }}
                 >
