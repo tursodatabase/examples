@@ -41,16 +41,16 @@ export const Cart = component$(() => {
   }))
 
   return (
-    <div class="z-20">
+    <div class="relative z-40">
       <button class="flex space-x-1 items-center" onClick$={closeCart}>
         <CartIcon color="#4ff8d2" />
         <span class="bg-secondary-400 text-black rounded-full p-1 h-5 w-5 flex items-center justify-center font-semibold">{appState.cart.items.length}</span>
       </button>
 
       {
-        appState.cart.show && <div class="fixed top-10 right-5 z-10">
+        appState.cart.show && <div class="fixed top-12 right-5 z-10">
           <div
-            class="relative w-screen max-w-sm border border-gray-600 bg-gray-100 px-4 py-8 sm:px-6 lg:px-8"
+            class="relative w-screen max-w-sm border border-gray-600 bg-gray-100 px-4 py-8 sm:px-6 lg:px-8 drop-shadow-md"
             aria-modal="true"
             role="dialog"
             tabIndex={-1}
