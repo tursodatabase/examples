@@ -1,71 +1,8 @@
 import { component$ } from '@builder.io/qwik';
-import { type DocumentHead, routeLoader$ } from '@builder.io/qwik-city';
-import { responseDataAdapter } from '~/utils/response-adapter';
-import { client } from '~/utils/turso-db';
+import { type DocumentHead } from '@builder.io/qwik-city';
 
-
-interface Product {
-  name: string;
-  image: string;
-  id: string;
-  description: string;
-  price: number;
-  category_id: string;
-  created_at: number;
-}
-
-interface ProductsResponse {
-  products: Product[];
-}
-
-export const useProductsLoader = routeLoader$<ProductsResponse>(async () => {
-  const response = await client.execute("select * from products limit 10");
-  const allProducts = responseDataAdapter(response);
-
-  if(!response){
-    return {
-      products: [],
-    }
-  }
-  return {
-    products: allProducts as Product[]
-  }
-})
-
-const ProductCard = (props: {product: Product}) => {
-  const otherImages = (categoryId: string) => categoryId === "clothing" ? "/clothing.jpeg" : "/furniture.jpeg"
-  return (
-    <li>
-      <a href="#" class="group block overflow-hidden">
-        <img
-          src={
-            props.product.category_id === "electronics" ? "/clothing.jpeg" : otherImages(props.product.category_id)
-          }
-          alt=""
-          class="h-[350px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-        />
-
-        <div class="relative bg-white pt-3">
-          <h3
-            class="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4"
-          >
-            {props.product.name}
-          </h3>
-
-          <p class="mt-2">
-            <span class="sr-only"> Regular Price </span>
-
-            <span class="tracking-wider text-gray-900"> ${props.product.price} USD </span>
-          </p>
-        </div>
-      </a>
-    </li>
-  )
-}
 
 export default component$(() => {
-  const products = useProductsLoader();
-
   return (
     <section>
       <div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 sm:px-6 lg:px-8">
@@ -128,6 +65,26 @@ export default component$(() => {
                     </h3>
 
                     <p class="mt-1 text-sm text-gray-700">Gadgets to automate your life</p>
+                  </div>
+                </a>
+              </li>
+
+              <li class="col-span-2">
+                <a href="/category/clothing" class="block group">
+                  <img
+                    src="/clothing.jpeg"
+                    alt=""
+                    class="object-cover w-full rounded aspect-square"
+                  />
+
+                  <div class="mt-3">
+                    <h3
+                      class="font-medium text-gray-900 group-hover:underline group-hover:underline-offset-4"
+                    >
+                      Clothes
+                    </h3>
+
+                    <p class="mt-1 text-sm text-gray-700">Look stylist wearing top fashion brands</p>
                   </div>
                 </a>
               </li>
