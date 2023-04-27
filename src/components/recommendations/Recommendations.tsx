@@ -34,25 +34,17 @@ export const Recommendations = component$(() => {
   const recommendations = useSignal<Product[]>([]);
 
   useVisibleTask$(async () => {
-    console.log({aaaa: appState.cart.items})
-    let count: number = 0, notToIncludePlaceholders: string = "";
-    const notToInclude: string[] = [];
-    appState.cart.items.forEach((item) => {
-      count++;
-      if(count === 1){
-        notToIncludePlaceholders += "( ?,";
-      } else if(count === appState.cart.items.length){
-        notToIncludePlaceholders += " ?)";
-      } else {
-        notToIncludePlaceholders += "? ,"
-      }
-      notToInclude.push(item.product.id);
-    });
+    const placeholders = appState.cart.items.map(item => {
+      return "?"
+    }).join(",")
+    const values = appState.cart.items.map(item => {
+      return item.product.id;
+    })
     
     try {
       const response = await client.execute({
-        sql: "select * from products where id not in " + notToIncludePlaceholders + " order by random() limit 4",
-        args: notToInclude
+        sql: `select * from products where id not in (${placeholders}) order by random() limit 4`,
+        args: values
       });
     
       const sortedData = responseDataAdapter(response);
