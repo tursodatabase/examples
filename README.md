@@ -233,10 +233,8 @@ turso db show app-turqw-store --url
 And, to create an authentication token for your database, run:
 
 ```sh
-turso db tokens create app-turqw-store --expiration none
+turso db tokens create app-turqw-store
 ```
-
-When the –expiration flag is set to none we are creating non-expiring tokens.
 
 Add a .env file at the root of the project and inside it add the values obtained
 above as the database url and authentication token for your Turso database.
