@@ -1,7 +1,6 @@
 import { component$, useContext, useSignal, useVisibleTask$ } from '@builder.io/qwik';
 import { server$ } from '@builder.io/qwik-city';
 import { APP_STATE } from '~/utils/constants';
-import { responseDataAdapter } from '~/utils/response-adapter';
 import { client } from '~/utils/turso-db';
 import type { Product } from '~/utils/types';
 import { ProductCard } from '../product-card/ProductCard';
@@ -13,8 +12,13 @@ export const fetchProductRecommendations = server$(async (sql: string, args: str
       sql: "select * from products where " + sql,
       args
     });
-  
-    const sortedData = responseDataAdapter(response);
+    
+    const sortedData = [];
+    if(response.rows.length){
+      for(const row of response.rows){
+        sortedData.push({...row})
+      }
+    }
   
     return {
       status: "",
@@ -47,7 +51,12 @@ export const Recommendations = component$(() => {
         args: values
       });
     
-      const sortedData = responseDataAdapter(response);
+      const sortedData: Product[] = [];
+      if(response.rows.length){
+        for(const row of response.rows){
+          sortedData.push(({...row}) as unknown as Product)
+        }
+      }
       recommendedProducts.value = sortedData;
     } catch (error) {
       recommendedProducts.value = [];

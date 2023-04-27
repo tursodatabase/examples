@@ -3,7 +3,6 @@ import { CartIcon } from '../starter/icons/cart';
 import { APP_STATE, DEFAULT_USER } from '~/utils/constants';
 import type { CartItem } from '~/utils/types';
 import { client } from '~/utils/turso-db';
-import { responseDataAdapter } from '~/utils/response-adapter';
 import cartDataAdapter from '~/utils/cartDataAdapter';
 import { CartListItem } from './CartListItem';
 
@@ -18,7 +17,12 @@ export const Cart = component$(() => {
         sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
         args: [authenticatedUser.value.id]
       });
-      const formattedCartData = responseDataAdapter(storedCartItems);
+      const formattedCartData = [];
+      if(storedCartItems.rows.length){
+        for(const row of storedCartItems.rows){
+          formattedCartData.push({...row})
+        }
+      }
       appState.cart.items = cartDataAdapter(formattedCartData);
     } catch (error) {
       console.log(error);

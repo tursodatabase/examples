@@ -3,7 +3,6 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 import { Pagination, type PaginationProps } from '~/components/pagination/Pagination';
 import { ProductCard } from '~/components/product-card/ProductCard';
 import { ITEMS_PER_PAGE } from '~/utils/constants';
-import { responseDataAdapter } from '~/utils/response-adapter';
 import { client } from '~/utils/turso-db';
 import type { Product } from '~/utils/types';
 
@@ -53,16 +52,23 @@ export const useCategoryLoader = routeLoader$(async ({params, fail}): Promise<Ca
       sql: "select * from products where category_id = ? limit ? offset ?",
       args: [categoryId, ITEMS_PER_PAGE, offset]
     })
+
+    const products: Product[] = [];
+    if(categoryResults.rows.length){
+      for(const row of categoryResults.rows){
+        products.push({...row} as unknown as Product)
+      }
+    }
   
     return {
       status: "success",
-      products: categoryResults.rows ? responseDataAdapter(categoryResults) : [],
+      products: products,
       pageInfo: {
         totalPages,
         currentPage, 
         categoryId
       },
-      categoryName: responseDataAdapter(categoryData)[0].name
+      categoryName: categoryData.rows[0].name as string
     }
   } catch (error) {
     console.log(error)

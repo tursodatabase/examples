@@ -4,7 +4,6 @@ import { CartPageItem } from "~/components/cart/CartPageItem";
 import { Recommendations } from "~/components/recommendations/Recommendations";
 import cartDataAdapter from "~/utils/cartDataAdapter";
 import { APP_STATE, DEFAULT_USER } from "~/utils/constants";
-import { responseDataAdapter } from "~/utils/response-adapter";
 import { client } from "~/utils/turso-db";
 import type { CartItem } from "~/utils/types";
 
@@ -15,7 +14,12 @@ export const useRouteLoader = routeLoader$(async (): Promise<CartItem[]> => {
       sql: "select cart_items.count, cart_items.id as cart_item_id, products.* from cart_items left join products on products.id = cart_items.product_id where user_id = ?",
       args: [DEFAULT_USER.id]
     });
-    const formattedCartData = responseDataAdapter(storedCartItems);
+    const formattedCartData = [];
+    if(storedCartItems.rows.length){
+      for(const row of storedCartItems.rows){
+        formattedCartData.push({...row})
+      }
+    }
     console.log({formattedCartData});
     cartItems = cartDataAdapter(formattedCartData);
   

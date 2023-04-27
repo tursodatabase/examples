@@ -3,7 +3,6 @@ import styles from "./checkout.css?inline"
 import { APP_STATE, DEFAULT_USER } from '~/utils/constants';
 import type { AppState, CartItem, User } from '~/utils/types';
 import { server$, useNavigate } from '@builder.io/qwik-city';
-import { responseDataAdapter } from '~/utils/response-adapter';
 import cartDataAdapter from '~/utils/cartDataAdapter';
 import { client } from '~/utils/turso-db';
 
@@ -98,7 +97,12 @@ export default component$(() => {
       args: [authenticatedUser.id]
     });
     if(storedCartItems){
-      const formattedCartData = responseDataAdapter(storedCartItems);
+      const formattedCartData = [];
+      if(storedCartItems.rows.length){
+        for(const row of storedCartItems.rows){
+          formattedCartData.push({...row})
+        }
+      }
       appState.cart.items = cartDataAdapter(formattedCartData);
     }
   });

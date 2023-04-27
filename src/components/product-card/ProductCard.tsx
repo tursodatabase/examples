@@ -2,7 +2,6 @@ import { $, component$, useContext, useSignal, useVisibleTask$ } from '@builder.
 import { server$ } from '@builder.io/qwik-city';
 import cartDataAdapter from '~/utils/cartDataAdapter';
 import { APP_STATE, DEFAULT_USER } from '~/utils/constants';
-import { responseDataAdapter } from '~/utils/response-adapter';
 import { client } from '~/utils/turso-db';
 import type { Product, User } from '~/utils/types';
 
@@ -65,12 +64,12 @@ export const ProductCard = component$((props: ProductCartProps) => {
         sql: "select * from cart_items where product_id = ? and user_id = ?",
         args: [props.product.id, authenticatedUser.value.id]
       });
-      appState.cart.items.push({
-        id: (100 * Math.random()) - 9,
-        count: 1,
-        product: props.product
-      })
-      const formattedResponse = responseDataAdapter(cartItem);
+      const formattedResponse = [];
+      if(cartItem.rows.length){
+        for(const row of cartItem.rows){
+          formattedResponse.push({...row})
+        }
+      }
       appState.cart.items.push(cartDataAdapter(formattedResponse)[0])
     } catch (error) {
       console.log(error);
