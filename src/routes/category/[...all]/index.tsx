@@ -56,13 +56,13 @@ export const useCategoryLoader = routeLoader$(async ({params, fail}): Promise<Ca
   
     return {
       status: "success",
-      products: responseDataAdapter(categoryResults),
+      products: categoryResults.rows ? responseDataAdapter(categoryResults) : [],
       pageInfo: {
         totalPages,
         currentPage, 
         categoryId
       },
-      categoryName: responseDataAdapter(categoryData)[0]["name"]
+      categoryName: responseDataAdapter(categoryData)[0].name
     }
   } catch (error) {
     console.log(error)
