@@ -24,38 +24,30 @@ const placeOrder = server$(async (appState: AppState,  contactInformation: {firs
   const discountAmount = 0;
   const finalAmount = amount + calculatedShippingFees - discountAmount;
   try {
-    const newOrder = await client.execute({
+    const transaction = await client.transaction();
+    const newOrder = await transaction.execute({
       sql: "insert into orders(user_id, customer_name, amount, shipping_fees, discount_amt, final_amount, shipping_address, paid) values(?, ?, ?, ?, ?, ?, ?, ?)",
       args: [authenticatedUser.id, `${authenticatedUser.first_name} ${authenticatedUser.last_name}`, amount, calculatedShippingFees, discountAmount, finalAmount, `${shippingAddress.zipCode} ${shippingAddress.country}`, true]
     });
     
-    if(newOrder.lastInsertRowid !== undefined){
-  
-      // Add items to created order
-      for(const item of appState.cart.items){
-        const transaction = await client.transaction();
-        const itemAddedToOrder = await transaction.execute({
-          sql: "insert into order_items(order_id, product_id, count) values(?, ?, ?);",
-          args: [newOrder.lastInsertRowid, item.product.id, item.count]
-        })
-        if(itemAddedToOrder.rowsAffected > 0){
-          const cartItemDeleted = await transaction.execute({
-            sql: "delete from cart_items where id = ?;",
-            args: [item.id]
-          })
-          if(cartItemDeleted.rowsAffected > 0){
-            transaction.commit();
-          }
-        }
-      }
-      return {
-        status: "success",
-        message: "Order placed!",
-        data: true
-      }
+    for(const item of appState.cart.items){
+      transaction.execute({
+        sql: "insert into order_items(order_id, product_id, count) values(?, ?, ?);",
+        args: [newOrder.lastInsertRowid as unknown as number, item.product.id, item.count]
+      });
+      transaction.execute({ 
+        sql: "delete from cart_items where id = ?;",
+        args: [item.id]
+      }); 
+    }
+    await transaction.commit();
+    return {
+      status: "success",
+      message: "Order placed!",
+      data: true
     }
   } catch (error) {
-    console.log({error});
+    // TODO: Catch error and notify user
   }
   return {
     status: "failure",
