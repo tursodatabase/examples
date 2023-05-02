@@ -3,7 +3,6 @@ import { type DocumentHead, globalAction$, Form } from "@builder.io/qwik-city";
 import { LoadingAnimation } from "~/components/loading/loading";
 import { Noty } from "~/components/notification/notification";
 import { createClient } from "@libsql/client/web";
-import { responseDataAdapter } from "./utils";
 
 export const useFormAction = globalAction$(async (form) => {
   const db = createClient({
@@ -35,39 +34,40 @@ export const useFormAction = globalAction$(async (form) => {
     ],
   });
 
-  const response = await db.execute({
+  const transaction = await db.transaction();
+  const response = await transaction.execute({
     sql: "select * from users where email = ?",
     args: [form.email as string],
   });
-  const userData = responseDataAdapter(response);
-  const { id, username } = userData[0];
+  const { id, username } = response.rows[0];
 
   // add links
   if ((form.twitter as string).includes("twitter.com/"))
-    await db.execute({
+    await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "Twitter", form.twitter],
+      args: [id, "Twitter", form.twitter as string],
     });
   if ((form.linkedin as string).includes("linkedin.com/"))
-    await db.execute({
+    await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "Linkedin", form.linkedin],
+      args: [id, "Linkedin", form.linkedin as string],
     });
   if ((form.facebook as string).includes("facebook.com/"))
-    await db.execute({
+    await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "Facebook", form.facebook],
+      args: [id, "Facebook", form.facebook as string],
     });
   if ((form.github as string).includes("github.com/"))
-    await db.execute({
+    await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "GitHub", form.github],
+      args: [id, "GitHub", form.github as string],
     });
   if ((form.youtube as string).includes("youtube.com/"))
-    await db.execute({
+    await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "Youtube", form.youtube],
+      args: [id, "Youtube", form.youtube as string],
     });
+  await transaction.commit();
 
   return {
     success: true,

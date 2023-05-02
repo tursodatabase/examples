@@ -41,14 +41,7 @@ pnpm qwik add # or `yarn qwik add`
 
 ## Setting up the database
 
-Install the Turso CLI.
-
-```sh
-# On macOS or Linux with Homebrew
-brew install chiselstrike/tap/turso
-
-# Manual scripted installation
-curl -sSfL <https://get.tur.so/install.sh> | bash
+[Install the Turso CLI].
 ```
 
 Create a new turso database.
@@ -140,3 +133,4 @@ VITE_TURSO_DB_AUTH_TOKEN=
 [routing docs]: https://qwik.builder.io/qwikcity/routing/overview/
 [Vite public directory]: https://vitejs.dev/guide/assets.html#the-public-directory
 [Static Site Generator (SSG)]: https://qwik.builder.io/qwikcity/guides/static-site-generation/
+[Install the Turso CLI]:https://docs.turso.tech/reference/turso-cli#installation

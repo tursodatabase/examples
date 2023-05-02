@@ -6,7 +6,6 @@ import { LinkedIn } from "~/components/icons/linkedin";
 import { Twitter } from "~/components/icons/twitter";
 import { User } from "~/components/icons/user";
 import { Youtube } from "~/components/icons/youtube";
-import { responseDataAdapter } from "~/routes/utils";
 import { createClient } from "@libsql/client/web";
 
 interface SocialLinks {
@@ -79,8 +78,8 @@ export const useLinksLoader = routeLoader$(
       sql: "select users.full_name, links.id, links.website, links.link from users left join links on users.id = links.user_id where users.username = ?;",
       args: [params.username],
     });
-    const userData = responseDataAdapter(userResponse);
-    if (!userData.length) {
+    const userData = userResponse.rows;
+    if (!userResponse.rows.length) {
       status(404);
       return {
         user: null,
@@ -88,11 +87,11 @@ export const useLinksLoader = routeLoader$(
         greeting,
       };
     }
-    const { full_name, username } = userData[0];
-    const links = userData.map((link) => ({
-      id: link.id,
-      link: link.link,
-      website: link.website,
+    const { full_name, username } = userData[0] as unknown as UserData;
+    const links: SocialLinks[] = userData.map((link) => ({
+      id: link.id as number,
+      link: link.link as string,
+      website: link.website as string,
     }));
 
     return {
