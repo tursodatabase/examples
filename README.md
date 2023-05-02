@@ -61,7 +61,6 @@ Inside your project, you'll see the following directory structure:
 │   │   ├── add.post.ts
 │   │   └── frameworks.get.ts
 │   └── utils
-│     └── data.ts
 │   	└── turso.ts
 │── app.vue
 ```
@@ -75,15 +74,7 @@ files.
 
 ## Setting up the database
 
-Install the Turso CLI.
-
-```sh
-# On macOS or Linux with Homebrew
-brew install chiselstrike/tap/turso
-
-# Manual scripted installation
-curl -sSfL <https://get.tur.so/install.sh> | bash
-```
+[Install the Turso CLI].
 
 Create a new turso database.
 
@@ -181,3 +172,4 @@ To clone and deploy this project to Vercel, click on the button below.
 [Turso]: https://chiselstrike.com
 [TailwindCSS]: https://tailwindcss.com
 [deployment documentation]: https://nuxt.com/docs/getting-started/deployment
+[Install the Turso CLI]:https://docs.turso.tech/reference/turso-cli#installation

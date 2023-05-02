@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   return {
     message: "Frameworks fetched!",
     data: {
-      frameworks: responseDataAdapter(result),
+      frameworks: result.rows,
       city
     }
   };

@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
 
   return {
     message: "Framework added!",
-    data: responseDataAdapter(framework)
+    data: framework.rows
   };
 
 })
