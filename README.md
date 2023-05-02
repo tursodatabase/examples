@@ -4,8 +4,9 @@ A website listing top web frameworks made with [Nuxt] and [Turso].
 
 ## Technologies used
 
-- [Nuxt 3]
+- [Nuxt]
 - [Turso]
+- [TailwindCSS]
 
 ---
 
@@ -14,14 +15,8 @@ A website listing top web frameworks made with [Nuxt] and [Turso].
 Make sure to install the dependencies:
 
 ```bash
-# yarn
-yarn install
-
 # npm
 npm install
-
-# pnpm
-pnpm install
 ```
 
 ## Development Server
@@ -52,30 +47,28 @@ Check out the [deployment documentation] for more information.
 
 ## Project Structure
 
-This project is using [Nuxt], the intuitive web framework.
+This project is using [Nuxt](https://nuxt.com), the intuitive Vue framework.
 
 Inside your project, you'll see the following directory structure:
 
 ```
-├── composables
-│   └── use-turso.js
-├── layouts
-│   └── default.vue
 └── pages/
 │   ├── about.vue
 │   ├── add-new.vue
 │   └── index.vue
 ├── server
 │   ├── api
-│   │   ├── add.js
-│   │   └── frameworks.js
+│   │   ├── add.post.ts
+│   │   └── frameworks.get.ts
 │   └── utils
-│       └── responseDataAdapter.js
+│     └── data.ts
+│   	└── turso.ts
+│── app.vue
 ```
 
-- `src/pages`: Houses the file-based routing files, using the layout files under
-  `/layout`.
-- The files under `/server/api`  are endpoints.
+- `src/pages`: Houses the file-based routing files
+- `app.vue` is the main layout of the app
+- The files under `/server/api` are endpoints.
 
 The helper functions under `/server/utils` are auto-imported into the endpoint
 files.
@@ -185,6 +178,6 @@ To clone and deploy this project to Vercel, click on the button below.
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fturso-extended%2Fapp-top-web-frameworks&env=NUXT_TURSO_DB_URL,NUXT_TURSO_DB_AUTH_TOKEN)
 
 [Nuxt]: https://nuxt.com/
-[Nuxt 3]: https://nuxt.com/
 [Turso]: https://chiselstrike.com
+[TailwindCSS]: https://tailwindcss.com
 [deployment documentation]: https://nuxt.com/docs/getting-started/deployment

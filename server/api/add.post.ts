@@ -1,10 +1,11 @@
-import useTurso from "~~/composables/use-turso";
-
 export default defineEventHandler(async (event) => {
   const {name, language, url, stars} = await readBody(event);
 
   if(!name || !language || !url || !stars)
-    return {message: "Missing fields!", data: null}
+    throw createError({
+      message: "Missing fields!",
+      statusCode: 400
+    })
 
   const client = useTurso();
   

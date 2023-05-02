@@ -48,8 +48,8 @@ async function addNewFramework(){
     form.githubLink = ""
     form.githubStarsCount = 0
   }
-  if(error.value && error.value.data.message.includes("UNIQUE constraint")){
-    status.message = "Framework exists!";
+  if(error.value){
+    status.message = error.value.data.message.includes("UNIQUE constraint") ? "Framework exists!" : error.value.data.message;
     status.type = "error";
   }
   if(status.message)
@@ -59,7 +59,7 @@ async function addNewFramework(){
     }, 5000);
 }
 
-useHead({
+useSeoMeta({
   title: "Contribute to the frameworks list"
 })
 </script>
