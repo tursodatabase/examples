@@ -138,7 +138,7 @@ create table users(
 	first_name varchar (100) not null,
 	last_name varchar (100) not null,
 	email text not null,
-	address text,.
+	address text,
 	avatar text not null,
 	created_at integer default (cast (unixepoch () as int))
 );
