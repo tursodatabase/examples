@@ -64,7 +64,7 @@ All commands are run from the root of the project, from a terminal:
 
 ## Setting up the database
 
-Install the Turso CLI.
+[Install the Turso CLI].
 
 ```sh
 # On macOS or Linux with Homebrew
@@ -190,3 +190,4 @@ This theme is based off of the lovely [Bear Blog].
 [Turso documentation]: https://docs.turso.tech
 [Turso Discord server]: https://discord.com/invite/4B5D7hYwub
 [Bear Blog]: https://github.com/HermanMartinus/bearblog/
+[Install the Turso CLI]:https://docs.turso.tech/reference/turso-cli#installation
