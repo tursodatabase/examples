@@ -1,6 +1,7 @@
 import rss from '@astrojs/rss';
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_BASE_URL } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { client } from '../lib/tursoDb';
+import type { APIContext } from 'astro';
 
 let posts: any[] = [];
 try {
@@ -29,11 +30,11 @@ try {
   // TODO: Handle error and notify user
 }
 
-export async function get() {
+export async function get(context: APIContext) {
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,
-		site: SITE_BASE_URL,
+		site: context.site as unknown as string,
 		items: posts.map((post) => ({
 			title: post.title,
 			pubDate: post.publish_date || post.created_at,
