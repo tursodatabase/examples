@@ -62,7 +62,7 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`    | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro --help` | Get help using the Astro CLI                     |
 
-> Before deployment, make sure to change the `site` value in `astro.config.mjs` to that of your production domain .
+> N.B., before deployment, make sure to change the `site` value in `astro.config.mjs` to that of your production domain .
 
 ## Setting up the database
 
@@ -90,7 +90,7 @@ turso db shell [DATABASE-NAME]
 
 ### Create tables and indexes
 
-Here are the SQL statements set up Turso for the blog.
+Here are the SQL statements to set up Turso for the blog.
 
 ```sql
 -- create an authors table
