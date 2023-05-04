@@ -1,15 +1,14 @@
 import rss from '@astrojs/rss';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_BASE_URL } from '../consts';
-import { client, responseDataAdapter } from '../lib/tursoDb';
+import { client } from '../lib/tursoDb';
 
-let posts = [];
+let posts: any[] = [];
 try {
   const allPostsResponse = await client.execute({
     sql: "select posts.title, posts.description, posts.slug, posts.hero, authors.first_name, authors.last_name, authors.slug as author_slug, authors.avatar, posts.content, posts.created_at from posts left join authors on authors.id = posts.author_id order by posts.created_at desc;",
     args: [],
   });
-  const allPosts = responseDataAdapter(allPostsResponse);
-  posts = allPosts.map((post) => {
+  posts = allPostsResponse.rows.map((post) => {
     return {
       published: false,
       title: post.title,
@@ -27,10 +26,10 @@ try {
     }
   });
 } catch (error) {
-  console.log(error)
+  // TODO: Handle error and notify user
 }
 
-export async function get(context) {
+export async function get() {
 	return rss({
 		title: SITE_TITLE,
 		description: SITE_DESCRIPTION,

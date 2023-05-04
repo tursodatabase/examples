@@ -1,13 +1,11 @@
 ---
 import { Markdown } from "@astropub/md"
 import BlogPost from '../../layouts/BlogPost.astro';
-import { client, responseDataAdapter } from '../../lib/tursoDb';
-import type { InValue } from '@libsql/client';
+import { client } from '../../lib/tursoDb';
 import type { Blog } from '../../lib/types';
 
 const { slug } = Astro.params;
 let post: Blog | null = null;
-console.log({slug})
 
 if(!slug){
   return new Response(null, {
@@ -19,16 +17,15 @@ if(!slug){
 try {
   const postResponse = await client.execute({
     sql: "select posts.content, posts.published, posts.title, posts.description, posts.slug, posts.hero, posts.created_at, authors.first_name, authors.last_name, authors.slug, authors.avatar, authors.twitter from posts left join authors on authors.id = posts.author_id where posts.slug = ?;",
-    args: [slug as InValue],
+    args: [slug as string],
   });
-  if(!postResponse){
+  if(!postResponse.rows.length){
     return new Response(null, {
       status: 404,
       statusText: 'Not found'
     });
   }
-  const convertedData = responseDataAdapter(postResponse);
-  const blogPostData = convertedData[0];
+  const blogPostData = postResponse.rows[0] as any;
   if(!blogPostData){
     return new Response(null, {
       status: 404,
@@ -57,7 +54,7 @@ try {
     }
   };
 } catch (error) {
-  console.log(error)
+  // TODO: Handle error and notify user
 }
 ---
 

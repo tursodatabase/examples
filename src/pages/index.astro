@@ -4,16 +4,13 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import type { Blog } from '../lib/types';
-import { client, responseDataAdapter } from '../lib/tursoDb';
+import { client } from '../lib/tursoDb';
 import FormattedDate from "../components/FormattedDate.astro";
 
 let posts: Blog[] = [];
 try {
-  const allPostsResponse = await client.execute({
-    sql: "select posts.title, posts.description, posts.slug, posts.hero, authors.first_name, authors.last_name, authors.slug as author_slug, authors.avatar, posts.content, posts.created_at from posts left join authors on authors.id = posts.author_id order by posts.created_at desc;",
-    args: [],
-  });
-  const allPosts = responseDataAdapter(allPostsResponse);
+  const allPostsResponse = await client.execute("select posts.title, posts.description, posts.slug, posts.hero, authors.first_name, authors.last_name, authors.slug as author_slug, authors.avatar, posts.content, posts.created_at from posts left join authors on authors.id = posts.author_id order by posts.created_at desc;");
+  const allPosts = allPostsResponse.rows;
   posts = allPosts.map((post: any): Blog => {
     return {
       published: false,
@@ -31,7 +28,7 @@ try {
     }
   });
 } catch (error) {
-  console.log(error)
+  // TODO: Handle error and notify user
 }
 ---
 

@@ -15,7 +15,7 @@
     "@astrojs/rss": "^2.3.2",
     "@astrojs/sitemap": "^1.2.2",
     "@astropub/md": "^0.2.0",
-    "@libsql/client": "^0.1.2",
+    "@libsql/client": "^0.1.4",
     "astro": "^2.3.0"
   }
 }
