@@ -37,7 +37,7 @@ export async function get(context: APIContext) {
 		site: context.site as unknown as string,
 		items: posts.map((post) => ({
 			title: post.title,
-			pubDate: post.publish_date || post.created_at,
+			pubDate: new Date((post.publish_date || post.created_at) * 1000),
 			description: post.description,
 			link: `/post/${post.slug}/`,
 		})),
