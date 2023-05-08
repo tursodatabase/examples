@@ -111,36 +111,36 @@ seed some data.
 ```sql
 -- category table
 create table categories(
-	id varchar (30) primary key,
-	name varchar (100) not null
+    id varchar (30) primary key,
+    name varchar (100) not null
 );
 
 create unique index idx_categories_id on categories(id);
 
 -- products table
 create table products(
-	id varchar (30) primary key,
-	name varchar (100) not null,
-	description text, price integer not null,
-	category_id text not null,
-	image text not null,
-	created_at integer default (cast (unixepoch () as int)),
-	foreign key (category_id) references categories (id)
+    id varchar (30) primary key,
+    name varchar (100) not null,
+    description text, price integer not null,
+    category_id text not null,
+    image text not null,
+    created_at integer default (cast (unixepoch () as int)),
+    foreign key (category_id) references categories (id)
 );
 
 create unique index idx_products_id on products(id);
 create index idx_products_price on products(price);
 create index idx_products_category_id on products(category_id);
 
--- users table 
+-- users table
 create table users(
-	id integer primary key,
-	first_name varchar (100) not null,
-	last_name varchar (100) not null,
-	email text not null,
-	address text,
-	avatar text not null,
-	created_at integer default (cast (unixepoch () as int))
+    id integer primary key,
+    first_name varchar (100) not null,
+    last_name varchar (100) not null,
+    email text not null,
+    address text,
+    avatar text not null,
+    created_at integer default (cast (unixepoch () as int))
 );
 
 create unique index idx_users_email on users(email);
@@ -148,14 +148,14 @@ create index idx_users_first_name_last_name_address on users(first_name, last_na
 
 -- carts table
 create table cart_items(
-	id integer primary key,
-	user_id integer not null,
-	product_id varchar(30) not null,
-	count integer not null default 1,
-	created_at integer default (cast (unixepoch () as int)),
+    id integer primary key,
+    user_id integer not null,
+    product_id varchar(30) not null,
+    count integer not null default 1,
+    created_at integer default (cast (unixepoch () as int)),
 
-	foreign key (user_id) references users (id),
-	foreign key (product_id) references products (id)
+    foreign key (user_id) references users (id),
+    foreign key (product_id) references products (id)
 );
 
 create unique index idx_cart_items_user_id_product_id on cart_items(user_id, product_id);
@@ -163,14 +163,14 @@ create index idx_cart_items_product_id on cart_items(product_id);
 
 -- wishlists table
 create table wishlists(
-	id integer primary key,
-	user_id integer not null,
-	product_id varchar(30) not null,
-	count integer not null default 1,
-	created_at integer default (cast (unixepoch () as int)),
+    id integer primary key,
+    user_id integer not null,
+    product_id varchar(30) not null,
+    count integer not null default 1,
+    created_at integer default (cast (unixepoch () as int)),
 
-	foreign key (user_id) references users (id),
-	foreign key (product_id) references products (id)
+    foreign key (user_id) references users (id),
+    foreign key (product_id) references products (id)
 );
 
 create unique index idx_wishlists_user_id_product_id on wishlists(user_id, product_id);
@@ -178,16 +178,16 @@ create index idx_wishlists_product_id on wishlists(product_id);
 
 -- orders table
 create table orders(
-	id integer primary key,
-	user_id integer,
-	customer_name varchar(100) not null,
-	amount integer not null,
-	shipping_fees integer default 0 not null,
-	discount_amt integer default 0 not null,
-	final_amount integer not null,
-	shipping_address text not null,
-	paid boolean default false,
-	created_at integer default (cast (unixepoch () as int))
+    id integer primary key,
+    user_id integer,
+    customer_name varchar(100) not null,
+    amount integer not null,
+    shipping_fees integer default 0 not null,
+    discount_amt integer default 0 not null,
+    final_amount integer not null,
+    shipping_address text not null,
+    paid boolean default false,
+    created_at integer default (cast (unixepoch () as int))
 );
 
 create index idx_orders_user_id on orders(user_id);
@@ -195,14 +195,14 @@ create index idx_cartitems_paid on orders(paid);
 
 -- order items table
 create table order_items(
-	id integer primary key,
-	order_id integer not null,
-	product_id varchar(30) not null,
-	count integer default 1 not null,
-	created_at integer default (cast (unixepoch () as int)),
+    id integer primary key,
+    order_id integer not null,
+    product_id varchar(30) not null,
+    count integer default 1 not null,
+    created_at integer default (cast (unixepoch () as int)),
 
-	foreign key (order_id) references orders (id),
-	foreign key (product_id) references products (id)
+    foreign key (order_id) references orders (id),
+    foreign key (product_id) references products (id)
 );
 
 create unique index idx_order_items_order_id_product_id on order_items(order_id, product_id);
