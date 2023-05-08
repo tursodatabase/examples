@@ -31,15 +31,15 @@ try {
 }
 
 export async function get(context: APIContext) {
-	return rss({
-		title: SITE_TITLE,
-		description: SITE_DESCRIPTION,
-		site: context.site as unknown as string,
-		items: posts.map((post) => ({
-			title: post.title,
-			pubDate: new Date((post.publish_date || post.created_at) * 1000),
-			description: post.description,
-			link: `/post/${post.slug}/`,
-		})),
-	});
+  return rss({
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    site: context.site as unknown as string,
+    items: posts.map((post) => ({
+      title: post.title,
+      pubDate: new Date((post.publish_date || post.created_at) * 1000),
+      description: post.description,
+      link: `/post/${post.slug}/`,
+    })),
+  });
 }

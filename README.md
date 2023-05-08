@@ -95,15 +95,15 @@ Here are the SQL statements to set up Turso for the blog.
 ```sql
 -- create an authors table
 create table authors(
-	id integer primary key,
-	first_name varchar(20) not null,
-	last_name varchar(20) not null,
-	slug varchar(50) not null,
-	email text not null,
-	avatar text,
-	twitter text,
-	website text,
-	created_at integer default (cast(unixepoch() as int))
+  id integer primary key,
+  first_name varchar(20) not null,
+  last_name varchar(20) not null,
+  slug varchar(50) not null,
+  email text not null,
+  avatar text,
+  twitter text,
+  website text,
+  created_at integer default (cast(unixepoch() as int))
 );
 
 -- create indexes for the authors table
@@ -114,17 +114,17 @@ create unique index idx_authors_slug on authors(slug);
 create table posts(
   id integer primary key,
   title varchar(100),
-	description text,
+  description text,
   slug varchar(100),
   content text,
-	hero text,
+  hero text,
   author_id integer not null,
-	tags text,
+  tags text,
   created_at integer default (cast(unixepoch() as int)),
   published_date integer,
   published boolean default false,
 
-	foreign key (author_id) references authors(id)
+  foreign key (author_id) references authors(id)
 );
 
 -- create the posts table's indexes
@@ -139,16 +139,16 @@ Run these statements to seed some initial blog data into the database.
 ```sql
 -- seed some data
 insert into authors (
-	first_name, last_name, slug, email, twitter, avatar
+  first_name, last_name, slug, email, twitter, avatar
 ) values ( "Iku", "Turso", "iku-turso", "noreply@ikuturso.tech", "https://twitter.com/tursodatabase", "https://res.cloudinary.com/djx5h4cjt/image/upload/v1681753493/chiselstrike-assets/Turso-Symbol-Blue.jpg");
 
 insert into posts(
-	title, description, slug, content, hero, author_id, tags, published
+  title, description, slug, content, hero, author_id, tags, published
 ) values (
-	"Deploying a web app built with Qwik and Turso on Netlify",
-	"Unless we are tweaking around or playing with new tech for the sake of learning, most times we are working on products that we ultimately would like to share with the rest of the world. In such scenarios, services such as Netlify are among the household names when it comes to hosting projects for the web.",
-	"deploying-a-web-app-built-with-qwik-and-turso-on-netlify",
-	"# Why deploy apps
+  "Deploying a web app built with Qwik and Turso on Netlify",
+  "Unless we are tweaking around or playing with new tech for the sake of learning, most times we are working on products that we ultimately would like to share with the rest of the world. In such scenarios, services such as Netlify are among the household names when it comes to hosting projects for the web.",
+  "deploying-a-web-app-built-with-qwik-and-turso-on-netlify",
+  "# Why deploy apps
 Unless we are tweaking around or playing with new tech for the sake of learning, most times we are working on products that we ultimately would like to share with the rest of the world.
 In such scenarios, services such as Netlify are among the household names when it comes to hosting projects for the web.
 
@@ -159,12 +159,12 @@ Netlify lets developers skip DevOps and set up projects globally in a production
 
 );
 insert into posts(
-	title, description, slug, content, hero, author_id, tags, published
+  title, description, slug, content, hero, author_id, tags, published
 ) values (
-	"Turso CLI is now open source",
-	"Turso is an database for the edge, which is why it departs from how most databases operate. First and foremost, Turso works both locally and remotely by relying on libSQL, our fork of SQLite.",
-	"turso-cli-is-now-open-source",
-	"# Turso, the databse for the edge 
+  "Turso CLI is now open source",
+  "Turso is an database for the edge, which is why it departs from how most databases operate. First and foremost, Turso works both locally and remotely by relying on libSQL, our fork of SQLite.",
+  "turso-cli-is-now-open-source",
+  "# Turso, the databse for the edge
 Turso is an database for the edge, which is why it departs from how most databases operate.
 
 ## Turso works both locally and remotely
