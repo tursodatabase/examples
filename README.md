@@ -62,11 +62,11 @@ Here is the schema for the users table that we should create.
 
 ```sql
 create table users(
-	id integer primary key,
-	email varchar(255) not null,
-	full_name varchar(100) not null,
-	username varchar(50) not null,
-	created_at integer default (cast(unixepoch() as int))
+    id integer primary key,
+    email varchar(255) not null,
+    full_name varchar(100) not null,
+    username varchar(50) not null,
+    created_at integer default (cast(unixepoch() as int))
 );
 ```
 
@@ -74,13 +74,13 @@ And, the links table’s sql is as follows.
 
 ```sql
 create table links(
-	id integer primary key,
-	user_id integer not null,
-	website varchar(100) not null,
-	link text not null,
-	created_at integer default (cast(unixepoch() as int)),
+    id integer primary key,
+    user_id integer not null,
+    website varchar(100) not null,
+    link text not null,
+    created_at integer default (cast(unixepoch() as int)),
 
-	foreign key(user_id) references users(id)
+    foreign key(user_id) references users(id)
 );
 ```
 
