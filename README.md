@@ -61,7 +61,7 @@ Inside your project, you'll see the following directory structure:
 │   │   ├── add.post.ts
 │   │   └── frameworks.get.ts
 │   └── utils
-│   	└── turso.ts
+│       └── turso.ts
 │── app.vue
 ```
 
@@ -95,11 +95,11 @@ Here's the SQL statement to create the `frameworks` table.
 ```sql
 -- create the "frameworks" table
 create table frameworks (
-	id integer primary key,
-	name varchar (50) not null,
-	language varchar (50) not null,
-	url text not null,
-	stars integer not null
+    id integer primary key,
+    name varchar (50) not null,
+    language varchar (50) not null,
+    url text not null,
+    stars integer not null
 );
 ```
 
@@ -107,7 +107,7 @@ For unique column insertions, add accompanying unique indexes.
 
 ```sql
 -- name column unique index
-create unique index idx_frameworks_name ON frameworks (name);                                                                                             
+create unique index idx_frameworks_name ON frameworks (name);
 
 -- url column unique index
 create unique index idx_frameworks_url ON frameworks (url);
