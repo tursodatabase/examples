@@ -1,6 +1,6 @@
 ---
 export interface Props {
-	date: number;
+  date: number;
 }
 
 const { date } = Astro.props;
@@ -19,7 +19,7 @@ const dateFormat = (datetime: number) => {
 ---
 
 <time datetime={dateFormat(date)}>
-	{
-		dateFormat(date)
-	}
+  {
+    dateFormat(date)
+  }
 </time>
