@@ -125,6 +125,8 @@ Copy the resulting token from the previous Turso command and it when asked to
 
 ## Development
 
+Run `npm install` to install the project's dependencies.
+
 Run `npm run start` to authenticate this workers project with your Cloudflare
 account and initiate the dev server.
 
