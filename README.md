@@ -79,13 +79,16 @@ files.
 Create a new turso database.
 
 ```sh
-turso db create [DATABASE-NAME]
+turso db create web-frameworks
 ```
+
+> We use `web-frameworks` as the database name in this command, but you can give
+> it any name.
 
 Access the database through the Turso CLI shell.
 
 ```sh
-turso db shell [DATABASE-NAME]
+turso db shell web-frameworks
 ```
 
 ### Create tables and indexes
@@ -141,17 +144,14 @@ and an authentication token.
 To obtain the database url, run the following command:
 
 ```sh
-turso db show [DATABASE-NAME] --url
+turso db show web-frameworks --url
 ```
 
 And, to create an authentication token for your database, run:
 
 ```sh
-turso db tokens create [DATABASE-NAME] --expiration none
+turso db tokens create web-frameworks
 ```
-
-> When the `–expiration` flag is set to `none` we are creating non-expiring
-> tokens.
 
 Add a `.env` file at the root of the project and inside it add the values
 obtained above as the database url and authentication token for your Turso
