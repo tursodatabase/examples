@@ -1,4 +1,4 @@
-name = "cf-workers-turso-example"
+name = "app-workers-turso-ts-demo"
 compatibility_date = "2023-05-12"
 
 [vars]
