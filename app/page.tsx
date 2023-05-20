@@ -1,5 +1,7 @@
 import { tursoClient } from "@/utils/tursoClient";
 
+export const runtime = 'edge'
+
 export interface Framework {
   name: string;
   language: string;

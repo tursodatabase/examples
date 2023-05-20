@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+export const runtime = 'edge'
+
 export const metadata = {
   title: 'About Us',
   description: 'Top web frameworks about page',

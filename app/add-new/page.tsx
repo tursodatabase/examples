@@ -1,5 +1,7 @@
 import './form.css'
 
+export const runtime = 'edge'
+
 export const metadata = {
   title: 'Add New',
   description: 'Contribute to the frameworks list.',
