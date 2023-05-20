@@ -21,8 +21,6 @@ auto-updates as you edit the file.
 This project uses [`next/font`] to automatically optimize and load Inter, a
 custom Google Font.
 
-## Set up Turso
-
 ## Setting up the database
 
 [Install the Turso CLI].
@@ -49,11 +47,11 @@ Here's the SQL statement to create the `frameworks` table.
 ```sql
 -- create the "frameworks" table
 create table frameworks (
-    id integer primary key,
-    name varchar (50) not null,
-    language varchar (50) not null,
-    url text not null,
-    stars integer not null
+  id integer primary key,
+  name varchar (50) not null,
+  language varchar (50) not null,
+  url text not null,
+  stars integer not null
 );
 ```
 
@@ -121,7 +119,7 @@ following resources:
 - [Next.js Documentation] - learn about Next.js features and API.
 - [Turso Documentation] - learn about Next.js features and API.
 - [Turso Community] - Join the Turso community.
-- [libSQL] - The open-source open-contribution fork of SQLite Turso is based on.
+- [libSQL] - The open-source open-contribution fork of SQLite Turso is built on.
 
 ## Deploy on Vercel
 
