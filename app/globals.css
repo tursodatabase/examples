@@ -34,7 +34,7 @@ body {
     @apply text-3xl
   }
   tbody > tr > td:first-child{
-    @apply font-bold text-teal-900
+    @apply font-bold text-teal-900 dark:text-[#4FF8D2]
   }
   th{
     @apply whitespace-nowrap px-4 py-2 text-left font-medium
