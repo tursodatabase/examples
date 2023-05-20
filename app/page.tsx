@@ -12,17 +12,26 @@ export interface Framework {
 
 async function getData() {
   const res = await tursoClient.execute("select * from frameworks;")
-  return res.rows as unknown as Framework[];
+  return {
+    frameworks: res.rows as unknown as Framework[]
+  };
 }
 
-export default async function Home() {
-  const data = await getData();
+export default async function Home(page: any) {
+  const {frameworks} = await getData();
+  const {searchParams: {city}} = page;
 
   return (
     <>
       <h1 id="home">
         Top web frameworks
       </h1>
+
+      {
+        city && <p
+          className="text-center text-gray-400 italic"
+        >{ city }</p>
+      }
 
       <div className="mb-32 flex flex-col text-center lg:mb-0 lg:text-left">
         
@@ -38,7 +47,7 @@ export default async function Home() {
             </thead>
             <tbody className='divide-y divide-gray-200'>
               {
-                data.map(framework => (<tr key={framework.id}>
+                frameworks.map(framework => (<tr key={framework.id}>
                   <td>
                     {framework.name}
                   </td>
