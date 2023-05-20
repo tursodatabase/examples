@@ -5,7 +5,8 @@ export const metadata = {
   description: 'Contribute to the frameworks list.',
 }
 
-export default function AddNewPage() {
+export default function AddNewPage(request: { searchParams: any}) {
+  const {error, message} = request.searchParams;
 
   return (
     <>
@@ -13,7 +14,17 @@ export default function AddNewPage() {
         Submit a framework
       </h1>
 
-      <div className="mb-32 text-center lg:text-left w-[80vw] max-w-2xl">
+      <div className="mb-32 text-center lg:text-left w-[80vw] max-w-2xl flex flex-col">
+        {
+          message && <div className='bg-green-200 text-green-800 p-2 w-full'>
+            {message}
+          </div>
+        }
+        {
+          error && <div className='bg-red-200 text-red-800 p-2 w-full'>
+            {error}
+          </div>
+        }
         <form action="/api/add-framework" method="post" className="flex flex-col w-full">
           <div>
             <label htmlFor="framework-name">
@@ -38,7 +49,7 @@ export default function AddNewPage() {
               type="text"
               name="language"
               id='language'
-              placeholder="Programming language"
+              placeholder="JavaScript"
               required
             />
           </div>
@@ -52,7 +63,7 @@ export default function AddNewPage() {
               type="text"
               name="url"
               id="github-url"
-              placeholder="GitHub URL"
+              placeholder="https://github.com/user/repo"
               required
             />
           </div>
@@ -66,7 +77,7 @@ export default function AddNewPage() {
             type='number'
               id='stars-count'
               name='stars'
-              placeholder="GitHub stars count"
+              placeholder="2000"
               required
             />
           </div>
