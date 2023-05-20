@@ -56,5 +56,4 @@ async function getFramework(name: string, url: string): Promise<Framework|null> 
     return response.rows[0] as unknown as Framework
   }
   return null
-
 }

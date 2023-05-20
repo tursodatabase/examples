@@ -76,7 +76,7 @@ export default function AddNewPage(request: { searchParams: any}) {
             </label>
 
             <input
-            type='number'
+              type='number'
               id='stars-count'
               name='stars'
               placeholder="2000"
