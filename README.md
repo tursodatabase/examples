@@ -128,6 +128,8 @@ following resources:
 The easiest way to deploy your Next.js app is to use the [Vercel Platform] from
 the creators of Next.js.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fturso-extended%2Fapp-turso-nextjs-starter&env=NEXT_TURSO_DB_URL,NEXT_TURSO_DB_AUTH_TOKEN&envDescription=To%20access%20the%20data%20stored%20inside%20your%20database%2C%20you%20need%20the%20Turso%20database%20URL%20and%20an%20authentication%20token.&envLink=https%3A%2F%2Fgithub.com%2Fturso-extended%2Fapp-turso-nextjs-starter%23set-up-turso-on-the-project&repository-name=turso-nextjs-starter&demo-title=Turso%20Nextjs%20Starter&demo-description=This%20is%20a%20Next.js%20starter%20template%20that%20uses%20Turso%20to%20store%20data%20and%20Tailwindcss%20for%20styling%2C%20deployed%20at%20the%20edge.&demo-url=https%3A%2F%2Fturso-nextjs-starter.vercel.app%2F)
+
 Check out the [Next.js deployment documentation] or [Turso's Vercel setup guide]
 for more details.
 
