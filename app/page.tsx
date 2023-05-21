@@ -1,4 +1,5 @@
 import { tursoClient } from "@/utils/tursoClient";
+import { useSearchParams } from "next/navigation"
 
 export const runtime = 'edge'
 
@@ -19,7 +20,8 @@ async function getData() {
 
 export default async function Home(page: any) {
   const {frameworks} = await getData();
-  const {searchParams: {city}} = page;
+  let {searchParams: {city}} = page;
+  city = decodeURIComponent(city.replace(/\+/g, " "));
 
   return (
     <>
