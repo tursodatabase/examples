@@ -1,3 +1,5 @@
+# Turso Nextjs Starter
+
 This is a [Next.js] starter template that uses [Turso] to store data and
 [Tailwindcss] for styling.
 
