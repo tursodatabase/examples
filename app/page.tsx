@@ -3,6 +3,13 @@ import { useSearchParams } from "next/navigation"
 
 export const runtime = 'edge'
 
+export const metadata = {
+  title: {
+    absolute: "Top Web Frameworks"
+  },
+  description: 'A Next.js and Turso starter template',
+}
+
 export interface Framework {
   name: string;
   language: string;

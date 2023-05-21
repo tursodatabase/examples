@@ -6,8 +6,9 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Top Web Frameworks',
-  description: 'A Next.js and Turso starter template',
+  title: {
+    template: '%s | Top Web Frameworks'
+  }
 }
 
 export default function RootLayout({
