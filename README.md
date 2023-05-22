@@ -5,7 +5,13 @@ This is a [Next.js] starter template that uses [Turso] to store data and
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -33,6 +39,8 @@ Create a new turso database.
 turso db create web-frameworks
 ```
 
+> **Note**
+>
 > We use `web-frameworks` as the database name in this command, but you can give
 > it any name.
 
