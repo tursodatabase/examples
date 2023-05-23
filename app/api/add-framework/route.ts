@@ -12,18 +12,28 @@ export async function POST(req: NextRequest) {
   const addNewUrl = req.nextUrl.clone()
   addNewUrl.pathname = '/add-new'
 
+  const userId = req.cookies.get("userId")?.value;
+  if(!userId){
+    addNewUrl.searchParams.set("error", "Not authorized")
+    return NextResponse.redirect(addNewUrl)
+  }
+
   if(!name || !language || !url || !stars){
-    NextResponse.redirect(addNewUrl + "?error=Fill in all fields!", {status: 422})
+    addNewUrl.searchParams.set("error", "Fill in all fields!")
+    NextResponse.redirect(addNewUrl, {status: 422})
   }
   if(typeof name !== "string" || typeof language !== "string" || typeof url !== "string" || typeof stars !== "string"){
-    return NextResponse.redirect(addNewUrl + "?error=Wrong Types", {status: 422})
+    addNewUrl.searchParams.set("error", "Wrong Types!")
+    return NextResponse.redirect(addNewUrl, {status: 422})
   }
   const githubUrlRgx = /((?:https?:)?\/\/)?((?:www)\.)?((?:github\.com))(\/(?:[\w-]+))(\/(?:[\w-]+))(\/)?/gi
   if(!githubUrlRgx.test(url)){
-    return NextResponse.redirect(addNewUrl + "?error=Provide a valid GitHub url!", {status: 302})
+    addNewUrl.searchParams.set("error", "Provide a valid GitHub url!")
+    return NextResponse.redirect(addNewUrl, {status: 302})
   }
   if(typeof parseInt(stars) !== "number"){
-    return NextResponse.redirect(addNewUrl + "?error=Enter a valid number for stars", {status: 302})
+    addNewUrl.searchParams.set("error", "Enter a valid number for stars")
+    return NextResponse.redirect(addNewUrl, {status: 302})
   }
   
   const frameworkExists = await getFramework(name as string, url as string);
@@ -37,7 +47,15 @@ export async function POST(req: NextRequest) {
     args: [name, language, url, stars]
   });
 
-  return NextResponse.redirect(addNewUrl + "?message=Framework added!", {status: 302})
+  if(add.lastInsertRowid){
+    await tursoClient.execute({
+      sql: "insert into contributions(framework_id, user_id) values(?, ?)",
+      args: [add.lastInsertRowid, userId]
+    })
+  }
+
+  addNewUrl.searchParams.set("message", "Framework added")
+  return NextResponse.redirect(addNewUrl, {status: 302})
 }
 
 /**

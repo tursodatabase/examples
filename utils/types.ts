@@ -6,3 +6,10 @@ export interface Framework {
   stars: number;
   id: number;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  created_at: string;
+}
