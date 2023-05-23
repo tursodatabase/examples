@@ -1,3 +1,4 @@
+import { serialize } from "cookie"
 import { NextResponse, NextRequest } from "next/server";
 import { tursoClient } from "@/utils/tursoClient";
 import { User } from "@/utils/types";
@@ -10,6 +11,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const {_action, email, name, password} = Object.fromEntries(formData)
 
   const redirectUrl = req.nextUrl.clone()
+
+  // TODO: Implement SCRF token
 
   // * Validate email
   const emailRgx = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
@@ -77,6 +80,26 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
     redirectUrl.searchParams.set("error", "Account doesn't exist!")
     return NextResponse.redirect(redirectUrl, {status: 302})
+  }
+
+  if(_action === "logout"){
+    // Create redirect url
+    redirectUrl.pathname = '/log-in'
+    const userId = req.cookies.get("userId")
+
+    redirectUrl.pathname = '/log-in'
+    const cookieData = serialize("userId", String(userId), {
+      httpOnly: true,
+      path: "/",
+      maxAge: -1
+    })
+    return new Response("", {
+      status: 307,
+      headers: {
+        'Set-Cookie': cookieData,
+        'Refresh': "0;url=" + redirectUrl.href
+      },
+    })
   }
 }
 
