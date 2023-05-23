@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@growthbook/growthbook": "^0.26.0",
     "@libsql/client": "^0.1.6",
     "@types/node": "20.2.0",
     "@types/react": "18.2.6",
