@@ -47,6 +47,37 @@ export async function POST(req: NextRequest, res: NextResponse) {
       return NextResponse.redirect(redirectUrl, {status: 302})
     }
   }
+
+  if(_action === "login"){
+    // Create redirect url
+    redirectUrl.pathname = '/log-in'
+
+    if(!emailRgx.test(email as string)){
+      redirectUrl.searchParams.set("error", "Provide a valid email!")
+      return NextResponse.redirect(redirectUrl, {status: 302})
+    }
+
+    if(!email || !password){
+      redirectUrl.searchParams.set("error", "Fill in all fields!")
+      return NextResponse.redirect(redirectUrl, {status: 302})
+    }
+    if(userData){
+      redirectUrl.pathname = '/add-new'
+      const cookieData = serialize("userId", String(userData.id), {
+        httpOnly: true,
+        path: "/"
+      })
+      return new Response("", {
+        status: 307,
+        headers: {
+          'Set-Cookie': cookieData,
+          'Refresh': "0;url=" + redirectUrl.href
+        }
+      })
+    }
+    redirectUrl.searchParams.set("error", "Account doesn't exist!")
+    return NextResponse.redirect(redirectUrl, {status: 302})
+  }
 }
 
 /**
@@ -62,6 +93,7 @@ async function getUser(email: string): Promise<User|null> {
   
   return response.rows[0] as unknown as User || null;
 }
+
 /**
  * @description Gets user from the database by filtering the email
  * @param name Email of the user being queried
