@@ -26,26 +26,26 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-@layer base{
-  h1{
-    @apply py-2 px-4 font-semibold text-2xl
+@layer base {
+  h1 {
+    @apply py-2 px-4 font-semibold text-2xl;
   }
-  h1#home{
-    @apply text-3xl
+  h1#home {
+    @apply text-3xl;
   }
-  tbody > tr > td:first-child{
-    @apply font-bold text-teal-900 dark:text-[#4FF8D2]
+  tbody > tr > td:first-child {
+    @apply font-bold text-teal-900 dark:text-[#4FF8D2];
   }
-  th{
-    @apply whitespace-nowrap px-4 py-2 text-left font-medium
+  th {
+    @apply whitespace-nowrap px-4 py-2 text-left font-medium;
   }
-  td{
-    @apply whitespace-nowrap text-left px-4 py-2
+  td {
+    @apply whitespace-nowrap text-left px-4 py-2;
   }
-  td.stars::after{
-    content: "⭐️";
+  td.stars::after {
+    content: '⭐️';
   }
-  p{
-    @apply font-light
+  p {
+    @apply font-light;
   }
 }

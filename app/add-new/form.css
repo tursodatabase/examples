@@ -2,17 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-  input{
-    @apply mt-1 p-2 w-full rounded-md border-gray-200 shadow-sm sm:text-sm dark:text-black
+@layer base {
+  input {
+    @apply mt-1 p-2 w-full rounded-md border-gray-200 shadow-sm sm:text-sm dark:text-black;
   }
-  label{
-    @apply block text-xs font-medium text-gray-700 text-left pt-3 p-1
+  label {
+    @apply block text-xs font-medium text-gray-700 text-left pt-3 p-1;
   }
-  legend, h1{
-    @apply text-xl font-semibold
+  legend,
+  h1 {
+    @apply text-xl font-semibold;
   }
-  th{
-    @apply font-semibold
+  th {
+    @apply font-semibold;
   }
 }

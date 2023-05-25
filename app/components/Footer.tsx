@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -14,7 +14,7 @@ export default function Footer() {
           <Image
             src="/turso.svg"
             alt="Turso Logo"
-            className='block dark:hidden'
+            className="block dark:hidden"
             width={150}
             height={36}
             priority
@@ -22,7 +22,7 @@ export default function Footer() {
           <Image
             src="/turso-light.svg"
             alt="Turso Logo"
-            className='hidden dark:block'
+            className="hidden dark:block"
             width={150}
             height={36}
             priority
@@ -30,5 +30,5 @@ export default function Footer() {
         </a>
       </div>
     </footer>
-  )
+  );
 }

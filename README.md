@@ -146,7 +146,7 @@ for more details.
 [Tailwindcss]: https://tailwindcss.com
 [http://localhost:3000]: http://localhost:3000
 [`next/font`]: https://nextjs.org/docs/basic-features/font-optimization
-[Install the Turso CLI]:https://docs.turso.tech/reference/turso-cli#installation
+[Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
 [Next.js Documentation]: https://nextjs.org/docs
 [Turso Documentation]: https://docs.turso.tech/
 [Turso Community]: https://discord.com/invite/4B5D7hYwub
