@@ -33,6 +33,7 @@
     "@typescript-eslint/parser": "5.54.0",
     "autoprefixer": "^10.4.14",
     "eslint": "8.35.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-qwik": "0.21.0",
     "netlify-cli": "^12.14.0",
     "node-fetch": "3.3.0",

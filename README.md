@@ -42,7 +42,6 @@ pnpm qwik add # or `yarn qwik add`
 ## Setting up the database
 
 [Install the Turso CLI].
-```
 
 Create a new turso database.
 
@@ -62,11 +61,11 @@ Here is the schema for the users table that we should create.
 
 ```sql
 create table users(
-    id integer primary key,
-    email varchar(255) not null,
-    full_name varchar(100) not null,
-    username varchar(50) not null,
-    created_at integer default (cast(unixepoch() as int))
+  id integer primary key,
+  email varchar(255) not null,
+  full_name varchar(100) not null,
+  username varchar(50) not null,
+  created_at integer default (cast(unixepoch() as int))
 );
 ```
 
@@ -74,13 +73,13 @@ And, the links table’s sql is as follows.
 
 ```sql
 create table links(
-    id integer primary key,
-    user_id integer not null,
-    website varchar(100) not null,
-    link text not null,
-    created_at integer default (cast(unixepoch() as int)),
+  id integer primary key,
+  user_id integer not null,
+  website varchar(100) not null,
+  link text not null,
+  created_at integer default (cast(unixepoch() as int)),
 
-    foreign key(user_id) references users(id)
+  foreign key(user_id) references users(id)
 );
 ```
 
@@ -133,4 +132,4 @@ VITE_TURSO_DB_AUTH_TOKEN=
 [routing docs]: https://qwik.builder.io/qwikcity/routing/overview/
 [Vite public directory]: https://vitejs.dev/guide/assets.html#the-public-directory
 [Static Site Generator (SSG)]: https://qwik.builder.io/qwikcity/guides/static-site-generation/
-[Install the Turso CLI]:https://docs.turso.tech/reference/turso-cli#installation
+[Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
