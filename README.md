@@ -5,7 +5,7 @@ An e-commerce store built with [Remix], [Turso], [Drizzle], and [Hydrogen].
 - [Remix Docs]
 - [Turso Docs]
 - [Drizzle Docs]
-- [Remix Docs]
+- [Hydrogen Docs]
 
 ## Development
 
@@ -151,7 +151,7 @@ npm run deploy
 [Remix Docs]: https://remix.run/docs
 [Turso Docs]: https://docs.turso.tech/
 [Drizzle Docs]: https://orm.drizzle.team/
-[Remix Docs]: https://shopify.dev/docs/custom-storefronts/hydrogen
+[Hydrogen Docs]: https://shopify.dev/docs/custom-storefronts/hydrogen
 [Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
 [http://127.0.0.1:8787]: http://127.0.0.1:8787
 [create a cloudflare account here]: https://dash.cloudflare.com/sign-up
