@@ -48,14 +48,6 @@ turso db create the-mug-store
 > We use `the-mug-store` as the database name in this command, but you can give
 > it any name.
 
-Access the database through the Turso CLI shell.
-
-```sh
-turso db shell the-mug-store
-```
-
-## Set up Turso
-
 To access the data stored inside your database, you need the Turso database url
 and an authentication token.
 
