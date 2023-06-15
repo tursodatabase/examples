@@ -15,7 +15,7 @@ import {
   insertCategorySchema,
   insertMugsSchema,
   mugs,
-} from './../drizzle/schema';
+} from '../drizzle/schema';
 import { eq } from 'drizzle-orm';
 
 export interface Env {
@@ -249,6 +249,7 @@ export default {
     env: Env,
     ctx: ExecutionContext,
   ): Promise<Response> {
+    console.log(JSON.stringify(env));
     if (env.router === undefined) {
       env.router = buildIttyRouter(env);
     }

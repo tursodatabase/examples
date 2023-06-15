@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy src/index.ts",
+    "start": "wrangler dev src/worker.ts",
+    "deploy": "wrangler deploy src/worker.ts",
     "format": "prettier --write .",
     "generate": "npx drizzle-kit generate:sqlite --out ./drizzle/migrations --breakpoints --schema=./drizzle/schema.ts",
     "migrate": "tsx drizzle/migrate",
