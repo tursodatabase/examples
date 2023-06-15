@@ -1,0 +1,5 @@
+name = "the-mugs-store-api"
+compatibility_date = "2023-05-18"
+
+[vars]
+  TURSO_DB_URL = "libsql://mug-store-api-xinnks.turso.io"
