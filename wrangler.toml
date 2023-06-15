@@ -1,4 +1,5 @@
 name = "the-mugs-store-api"
+main = "src/worker.ts"
 compatibility_date = "2023-05-18"
 
 [vars]
