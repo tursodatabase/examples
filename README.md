@@ -42,23 +42,23 @@ TURSO_DB_AUTH_TOKEN=<AUTH-TOKEN>
 
 ## Generate database schema, run migrations, and seed data
 
-To generate the schema for the API database, run `pnpm generate` which will create a new `/migrations` directory under the `/drizzle` directory.
+To generate the schema for the API database, run `npm run generate` which will create a new `/migrations` directory under the `/drizzle` directory.
 
-Next, run `pnpm migrate` to apply the migrations on the created Turso database.
+Next, run `npm run migrate` to apply the migrations on the created Turso database.
 
-And lastly, seed the database with some data by running `pnpm seed`.
+And lastly, seed the database with some data by running `npm run seed`.
 
-Run `pnpm start` to start the development server.
+Run `npm run start` to start the development server.
 
 ## For the production environment
 
-Run `pnpm dlx wrangler secret put TURSO_DB_AUTH_TOKEN` and fill in the auth token acquired above when prompted to add it as a secret variable to your workers project and Cloudflare dashboard.
+Run `npx wrangler secret put TURSO_DB_AUTH_TOKEN` and fill in the auth token acquired above when prompted to add it as a secret variable to your workers project and Cloudflare dashboard.
 
 ## Deployment
 
-If you don't have an account, then [create a Cloudflare account here]. After verifying your email address, run `pnpm dlx wrangler login` on your project's workspace to authenticate it with Cloudflare workers.
+If you don't have an account, then [create a Cloudflare account here]. After verifying your email address, run `npx wrangler login` on your project's workspace to authenticate it with Cloudflare workers.
 
-Lastly, deploy your Cloudflare workers project by running `pnpm dlx wrangler deploy src/indes.ts`.
+Lastly, deploy your Cloudflare workers project by running `npx wrangler deploy src/indes.ts`.
 
 ## More information
 
