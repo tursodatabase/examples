@@ -46,35 +46,3 @@ export const mugs = sqliteTable(
 );
 export const insertMugsSchema = createInsertSchema(mugs);
 export const selectMugsSchema = createSelectSchema(mugs);
-
-export const users = sqliteTable(
-  'users',
-  {
-    id: text('id').primaryKey(),
-    name: text('firstName').notNull(),
-    email: text('email').notNull(),
-    avatar: text('avatar'),
-    createdAt: integer('created_at').default(sql`(strftime('%s', 'now'))`),
-    updatedAt: integer('updated_at').default(sql`(strftime('%s', 'now'))`),
-  },
-  (users) => ({
-    emailIdx: uniqueIndex('user_email_idx').on(users.email),
-  }),
-);
-export const insertUserSchema = createInsertSchema(users);
-export const selectUserSchema = createSelectSchema(users);
-
-export const passwords = sqliteTable(
-  'passwords',
-  {
-    hash: text('hash').notNull(),
-    userId: text('user_id')
-      .notNull()
-      .references(() => users.id),
-  },
-  (passwords) => ({
-    userIdx: uniqueIndex('user_id_idx').on(passwords.userId),
-  }),
-);
-export const insertPasswordSchema = createInsertSchema(passwords);
-export const selectPasswordSchema = createSelectSchema(passwords);
