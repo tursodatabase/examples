@@ -33,7 +33,7 @@ npm start
 Then refresh the same URL in your browser (no live reload for production
 builds).
 
-# Database Setup
+## Database Setup
 
 [Install the Turso CLI].
 
