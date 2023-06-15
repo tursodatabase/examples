@@ -92,9 +92,6 @@ function buildIttyRouter(env: Env): RouterType {
         { mug: newMug },
         {
           status: 201,
-          headers: {
-            'Content-Type': 'application/json',
-          },
         },
       );
     })
