@@ -246,7 +246,6 @@ export default {
     env: Env,
     ctx: ExecutionContext,
   ): Promise<Response> {
-    console.log(JSON.stringify(env));
     if (env.router === undefined) {
       env.router = buildIttyRouter(env);
     }
