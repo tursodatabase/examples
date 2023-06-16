@@ -18,7 +18,7 @@ import {
 } from '../drizzle/schema';
 import { eq } from 'drizzle-orm';
 
-export interface Env {
+interface Env {
   TURSO_DB_AUTH_TOKEN?: string;
   TURSO_DB_URL?: string;
   router?: RouterType;
@@ -57,6 +57,9 @@ function buildIttyRouter(env: Env): RouterType {
     })
 
     .get('/mug/:id', async ({ id }) => {
+      if (!id) {
+        return error(422, 'ID is required');
+      }
       const mugData = await db.select().from(mugs).where(eq(mugs.id, id)).get();
 
       return mugData
@@ -67,7 +70,7 @@ function buildIttyRouter(env: Env): RouterType {
     })
 
     .post('/mug', async (request: IRequest) => {
-      let {
+      const {
         category_id,
         ...jsonData
       }: {
@@ -77,16 +80,21 @@ function buildIttyRouter(env: Env): RouterType {
         category_id: string;
         image?: string;
       } = await request.json();
-      const mugData = insertMugsSchema.parse({
+      const mugData = insertMugsSchema.safeParse({
         id: uuidv4(),
         categoryId: category_id,
         ...(jsonData as object),
       });
-      if (!mugData) {
-        return error(422, 'Required data is missing!');
+      if (!mugData.success) {
+        const { message, path } = mugData.error.issues[0];
+        return error(path.length ? 422 : 400, `[${path}]: ${message}`);
       }
 
-      const newMug = await db.insert(mugs).values(mugData).returning().get();
+      const newMug = await db
+        .insert(mugs)
+        .values(mugData.data)
+        .returning()
+        .get();
 
       return json(
         { mug: newMug },
@@ -97,38 +105,29 @@ function buildIttyRouter(env: Env): RouterType {
     })
 
     .patch('/mug/:id', async (request) => {
-      let { id } = request.params;
+      const { id } = request.params;
       if (!id) {
         return error(422, 'ID is required');
       }
-      let jsonData: {
-        name?: string;
-        description?: string;
-        price?: number;
-        category_id?: string;
-        image?: string;
+      const jsonData: {
+        name?: string | undefined;
+        description?: string | undefined;
+        price?: number | undefined;
+        category_id?: string | undefined;
+        image?: string | undefined;
       } = await request.json();
-      let updatedMugData;
 
-      if (!Object.keys(jsonData).length) {
-        updatedMugData = await db
-          .select()
-          .from(mugs)
-          .where(eq(mugs.id, id))
-          .get();
-        return updatedMugData
-          ? json({ mug: updatedMugData })
-          : error(404, 'Mug not found!');
-      }
+      if (!Object.keys(jsonData).length)
+        return error(400, 'No data is being updated!');
 
-      updatedMugData = await db
+      const mug = await db
         .update(mugs)
         .set({ updatedAt: Number((Date.now() / 1000).toFixed(0)), ...jsonData })
         .where(eq(mugs.id, id))
         .returning()
         .get();
 
-      return json({ mug: updatedMugData });
+      return json({ mug });
     })
 
     .delete('/mug/:id', async ({ id }) => {
@@ -153,6 +152,9 @@ function buildIttyRouter(env: Env): RouterType {
     })
 
     .get('/category/:id', async ({ id }) => {
+      if (!id) {
+        return error(422, 'ID is required');
+      }
       const categoryData = await db
         .select()
         .from(categories)
@@ -166,18 +168,19 @@ function buildIttyRouter(env: Env): RouterType {
     })
 
     .post('/category', async (request: IRequest) => {
-      let jsonData = await request.json();
-      const categoryData = insertCategorySchema.parse({
+      const jsonData = await request.json();
+      const categoryData = insertCategorySchema.safeParse({
         id: uuidv4(),
         ...(jsonData as object),
       });
-      if (!categoryData) {
-        return error(422, 'Required data is missing!');
+      if (!categoryData.success) {
+        const { message, path } = categoryData.error.issues[0];
+        return error(path.length ? 422 : 400, `[${path}]: ${message}`);
       }
 
       const newCategory = await db
         .insert(categories)
-        .values(categoryData)
+        .values(categoryData.data)
         .returning()
         .get();
 
@@ -190,33 +193,24 @@ function buildIttyRouter(env: Env): RouterType {
     })
 
     .patch('/category/:id', async (request) => {
-      let { id } = request.params;
+      const { id } = request.params;
       if (!id) {
         return error(422, 'ID is required');
       }
 
-      let jsonData: { name: string } = await request.json();
-      let updatedCategoryData;
+      const jsonData: { name: string } = await request.json();
 
       if (!Object.keys(jsonData).length) {
-        updatedCategoryData = await db
-          .select()
-          .from(categories)
-          .where(eq(categories.id, id))
-          .get();
-        return updatedCategoryData
-          ? json({ category: updatedCategoryData })
-          : error(404, 'Category not found!');
+        return error(400, 'No data is being updated!');
       }
-
-      updatedCategoryData = await db
+      const category = await db
         .update(categories)
         .set(jsonData)
         .where(eq(categories.id, id))
         .returning()
         .get();
 
-      return json({ mug: updatedCategoryData });
+      return json({ category });
     })
 
     .delete('/category/:id', async ({ id }) => {
