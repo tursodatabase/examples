@@ -13,7 +13,7 @@ export const categories = sqliteTable(
   'categories',
   {
     id: text('id').primaryKey(),
-    name: text('name'),
+    name: text('name').notNull(),
   },
   (categories) => ({
     nameIdx: uniqueIndex('name_idx').on(categories.name),
