@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { createClient } from '@libsql/client/http';
+import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
 
@@ -19,9 +19,11 @@ async function main() {
 main()
   .then((res) => {
     console.log('Tables migrated!');
+    client.close();
     process.exit(0);
   })
   .catch((err) => {
     console.error('Error performing migration: ', err);
+    client.close();
     process.exit(1);
   });
