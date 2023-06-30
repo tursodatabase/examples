@@ -6,10 +6,21 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "format": "prettier --check .",
+    "lint": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
+    "lint:format": "yarn lint && yarn format",
+    "lintfix": "prettier --write --list-different . && yarn lint --fix"
   },
   "devDependencies": {
-    "nuxt": "^3.5.3"
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@typescript-eslint/parser": "^5.60.1",
+    "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nuxt": "^3.5.3",
+    "prettier": "^2.8.8",
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "@libsql/client": "^0.2.1",
