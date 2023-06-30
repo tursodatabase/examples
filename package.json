@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-app",
+  "name": "app-top-web-frameworks",
   "private": true,
   "scripts": {
     "build": "NITRO_PRESET=vercel-edge && nuxt build",
@@ -9,11 +9,11 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "^3.4.2"
+    "nuxt": "^3.5.3"
   },
   "dependencies": {
-    "@libsql/client": "^0.1.4",
-    "@nuxtjs/tailwindcss": "^6.6.6",
+    "@libsql/client": "^0.2.1",
+    "@nuxtjs/tailwindcss": "^6.8.0",
     "@tailwindcss/forms": "^0.5.3"
   }
 }
