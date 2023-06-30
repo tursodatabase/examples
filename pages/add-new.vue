@@ -3,56 +3,54 @@ const form = reactive({
   name: "",
   language: "",
   githubLink: "",
-  githubStarsCount: 0
+  githubStarsCount: 0,
 });
 const loading = ref(false);
 const status = reactive({
   message: "",
-  type: ""
+  type: "",
 });
 
 /**
  * @description Submits new frameworks to the database
  */
-async function addNewFramework(){
+async function addNewFramework() {
   const { name, language, githubLink: url, githubStarsCount: stars } = form;
 
-  let message = ""
-  if(!name)
-    message += " 'name'"
-  if(!language)
-    message += " 'language'"
-  if(!url)
-    message += " 'Github link'"  
-  if(!stars)
-    message += " 'stars count'"
-  if(message){
+  let message = "";
+  if (!name) message += " 'name'";
+  if (!language) message += " 'language'";
+  if (!url) message += " 'Github link'";
+  if (!stars) message += " 'stars count'";
+  if (message) {
     status.message = "Fill in the:" + message;
     status.type = "success";
     return;
   }
-  
+
   loading.value = true;
-  
-  const { error } = await useFetch('/api/add', {
-    method: 'post',
-    body: {name, language, url, stars}
+
+  const { error } = await useFetch("/api/add", {
+    method: "post",
+    body: { name, language, url, stars },
   });
   loading.value = false;
-  
-  if(!error.value){
+
+  if (!error.value) {
     status.message = "Thanks for your contribution";
     status.type = "success";
-    form.name = ""
-    form.language = ""
-    form.githubLink = ""
-    form.githubStarsCount = 0
+    form.name = "";
+    form.language = "";
+    form.githubLink = "";
+    form.githubStarsCount = 0;
   }
-  if(error.value){
-    status.message = error.value.data.message.includes("UNIQUE constraint") ? "Framework exists!" : error.value.data.message;
+  if (error.value) {
+    status.message = error.value.data.message.includes("UNIQUE constraint")
+      ? "Framework exists!"
+      : error.value.data.message;
     status.type = "error";
   }
-  if(status.message)
+  if (status.message)
     setTimeout(() => {
       status.message = "";
       status.type = "";
@@ -60,18 +58,21 @@ async function addNewFramework(){
 }
 
 useSeoMeta({
-  title: "Contribute to the frameworks list"
-})
+  title: "Contribute to the frameworks list",
+});
 </script>
 
 <template>
-
   <h1>Submit a framework</h1>
 
   <div class="px-4 md:px-8 lg:px-12">
-    <div v-show="status.message"
+    <div
+      v-show="status.message"
       class="p-2 px-4"
-      :class="{'text-green-800 bg-green-300': status.type === 'success', 'text-red-800 bg-red-200': status.type === 'error'}"  
+      :class="{
+        'text-green-800 bg-green-300': status.type === 'success',
+        'text-red-800 bg-red-200': status.type === 'error',
+      }"
     >
       {{ status.message }}
     </div>
@@ -82,9 +83,9 @@ useSeoMeta({
         </label>
 
         <input
+          v-model="form.name"
           type="text"
           name="name"
-          v-model="form.name"
           placeholder="Framework name"
           class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
         />
@@ -96,9 +97,9 @@ useSeoMeta({
         </label>
 
         <input
+          v-model="form.language"
           type="text"
           name="language"
-          v-model="form.language"
           placeholder="Programming Language"
           class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
         />
@@ -110,9 +111,9 @@ useSeoMeta({
         </label>
 
         <input
+          v-model="form.githubLink"
           type="text"
           name="github_link"
-          v-model="form.githubLink"
           placeholder="GitHub link"
           class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
         />
@@ -124,14 +125,14 @@ useSeoMeta({
         </label>
 
         <input
+          v-model="form.githubStarsCount"
           type="text"
           name="github_stars_count"
-          v-model="form.githubStarsCount"
           placeholder="GitHub stars count"
           class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
         />
       </div>
-      
+
       <div class="flex justify-center p-2">
         <button
           type="submit"
@@ -146,7 +147,9 @@ useSeoMeta({
             class="w-4 h-4 animate-spin fill-white"
           >
             <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M18.364 5.636L16.95 7.05A7 7 0 1 0 19 12h2a9 9 0 1 1-2.636-6.364z" />
+            <path
+              d="M18.364 5.636L16.95 7.05A7 7 0 1 0 19 12h2a9 9 0 1 1-2.636-6.364z"
+            />
           </svg>
         </button>
       </div>

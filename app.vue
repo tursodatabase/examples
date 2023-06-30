@@ -1,14 +1,12 @@
 <script setup>
 useSeoMeta({
-  title: 'A simple Nuxt app listing popular web development frameworks',
-  description: 'A simple Nuxt app that lists items from a Turso database'
-})
+  title: "A simple Nuxt app listing popular web development frameworks",
+  description: "A simple Nuxt app that lists items from a Turso database",
+});
 </script>
 
 <template>
-  <nav
-    class="py-2 px-4 flex space-x-2"
-  >
+  <nav class="py-2 px-4 flex space-x-2">
     <NuxtLink to="/" class="font-semibold">Home</NuxtLink>
     <NuxtLink to="/add-new" class="font-semibold">Add New</NuxtLink>
     <NuxtLink to="/about" class="font-semibold">About</NuxtLink>
@@ -17,16 +15,17 @@ useSeoMeta({
     <NuxtPage />
 
     <div class="text-gray-400 text-center pt-6">
-      Built with <a href="https://nuxt.com">Nuxt</a> and <a href="https://turso.tech">Turso</a>.
+      Built with <a href="https://nuxt.com">Nuxt</a> and
+      <a href="https://turso.tech">Turso</a>.
     </div>
   </main>
 </template>
 
 <style lang="postcss">
-a{
+a {
   @apply text-blue-600 hover:text-blue-700;
 }
-h1{
+h1 {
   @apply text-2xl font-bold text-center text-gray-700;
 }
 </style>
