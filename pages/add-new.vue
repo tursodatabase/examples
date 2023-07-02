@@ -3,7 +3,7 @@ const form = reactive({
   name: "",
   language: "",
   githubLink: "",
-  githubStarsCount: 0,
+  githubStarsCount: "",
 });
 const loading = ref(false);
 const status = reactive({
@@ -20,7 +20,7 @@ async function addNewFramework() {
   let message = "";
   if (!name) message += " 'name'";
   if (!language) message += " 'language'";
-  if (!url) message += " 'Github link'";
+  if (!url) message += " 'GitHub link'";
   if (!stars) message += " 'stars count'";
   if (message) {
     status.message = "Fill in the:" + message;
@@ -68,6 +68,7 @@ useSeoMeta({
   <div class="px-4 md:px-8 lg:px-12">
     <div
       v-show="status.message"
+      id="submission-status-message"
       class="p-2 px-4"
       :class="{
         'text-green-800 bg-green-300': status.type === 'success',
@@ -88,6 +89,7 @@ useSeoMeta({
           name="name"
           placeholder="Framework name"
           class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+          data-cy="name"
         />
       </div>
 
@@ -102,6 +104,7 @@ useSeoMeta({
           name="language"
           placeholder="Programming Language"
           class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+          data-cy="programming-language"
         />
       </div>
 
@@ -116,6 +119,7 @@ useSeoMeta({
           name="github_link"
           placeholder="GitHub link"
           class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+          data-cy="github-link"
         />
       </div>
 
@@ -130,6 +134,7 @@ useSeoMeta({
           name="github_stars_count"
           placeholder="GitHub stars count"
           class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
+          data-cy="github-stars-count"
         />
       </div>
 
@@ -138,6 +143,7 @@ useSeoMeta({
           type="submit"
           class="py-2 px-4 text-white font-semibold bg-blue-600 rounded-md hover:bg-blue-700 focus:relative flex space-x-2 justify-between items-center"
           title="View Orders"
+          data-cy="submit"
         >
           <span>Submit</span>
           <svg

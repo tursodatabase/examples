@@ -12,3 +12,7 @@ dist
 # Local Netlify folder
 .netlify
 .vercel
+
+# Cypress media directories
+cypress/screenshots
+cypress/videos
