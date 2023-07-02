@@ -53,4 +53,4 @@ async function main() {
   console.log("Seeded db");
 }
 
-main().catch((err) => console.log);
+main().catch(console.log);
