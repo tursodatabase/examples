@@ -12,8 +12,8 @@
     "lint:format": "yarn lint && yarn format",
     "lintfix": "prettier --write --list-different . && yarn lint --fix",
     "dev:migrate": "export NUXT_TURSO_DB_URL=file:web-frameworks.db NUXT_TURSO_DB_AUTH_TOKEN=none && rm -f web-frameworks.db && sqlite3 web-frameworks.db '.quit' && tsx ./migrate",
-    "cypress:open": "./node_modules/.bin/cypress open",
-    "cypress:run": "./node_modules/.bin/cypress run"
+    "cypress:open": "export LOCAL_SITE_URL=http://localhost:3000 && ./node_modules/.bin/cypress open",
+    "cypress:run": "export LOCAL_SITE_URL=http://localhost:3000 && ./node_modules/.bin/cypress run"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
