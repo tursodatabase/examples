@@ -11,7 +11,7 @@ const formatNumber = (val) =>
 <template>
   <h1 class="text-2xl font-bold text-center">Top Web Frameworks</h1>
 
-  <p class="text-center text-gray-400 italic">{{ city }}</p>
+  <p id="city-name" class="text-center text-gray-400 italic">{{ city }}</p>
 
   <div class="overflow-x-auto rounded-lg border border-gray-200">
     <table class="min-w-full divide-y-2 divide-gray-200 text-sm">
@@ -57,16 +57,12 @@ const formatNumber = (val) =>
           <td class="whitespace-nowrap px-4 py-2 text-gray-700">
             <a
               :href="framework.url"
+              title="GitHub link"
               target="_blank"
               class="p-1 text-center px-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-white rounded-md"
               >Visit</a
             >
           </td>
-        </tr>
-      </tbody>
-      <tbody v-else>
-        <tr>
-          <td colspan="4" class="text-center">No frameworks in list</td>
         </tr>
       </tbody>
     </table>
