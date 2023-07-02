@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "NITRO_PRESET=vercel-edge && nuxt build",
-    "dev": "nuxt dev",
+    "dev": "export NUXT_TURSO_DB_URL=file:web-frameworks.db NUXT_TURSO_DB_AUTH_TOKEN=none && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
