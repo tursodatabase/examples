@@ -1,4 +1,4 @@
-import { randomBetween } from "./../support/commands";
+import { randomBetween } from "../support/commands";
 
 describe("Home page", () => {
   context("Given that we access the `/` page", () => {
