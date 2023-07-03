@@ -17,6 +17,7 @@ jobs:
       - run: node -v
       - name: Checkout
         uses: actions/checkout@v3
+      - run: sqlite3 web-frameworks.db ".read frameworks.sql"
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
         uses: cypress-io/github-action@v5
