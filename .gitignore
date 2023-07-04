@@ -16,3 +16,6 @@ dist
 # Cypress media directories
 cypress/screenshots
 cypress/videos
+
+# File databases
+*.db

@@ -17,12 +17,13 @@ jobs:
       - run: node -v
       - name: Checkout
         uses: actions/checkout@v3
+      - run: sqlite3 web-frameworks.db ".read frameworks.sql"
       - name: Cypress run
         # Uses the official Cypress GitHub action https://github.com/cypress-io/github-action
         uses: cypress-io/github-action@v5
         with:
           # Starts web server for E2E tests - replace with your own server invocation
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
-          start: npm run dev
+          start: npm run tests:dev
           wait-on: 'http://localhost:3000'
           command: npm run cypress:run
