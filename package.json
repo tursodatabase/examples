@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "NITRO_PRESET=vercel-edge && nuxt build",
-    "dev": "export NUXT_TURSO_DB_URL=file:web-frameworks.db NUXT_TURSO_DB_AUTH_TOKEN=none && nuxt dev",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -11,7 +11,8 @@
     "lint": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
     "lint:format": "yarn lint && yarn format",
     "lintfix": "prettier --write --list-different . && yarn lint --fix",
-    "dev:migrate": "export NUXT_TURSO_DB_URL=file:web-frameworks.db NUXT_TURSO_DB_AUTH_TOKEN=none && rm -f web-frameworks.db && sqlite3 web-frameworks.db '.quit' && tsx ./migrate",
+    "dev:migrate": "tsx ./migrate",
+    "tests:dev": "NUXT_TURSO_DB_URL=file:web-frameworks.db NUXT_TURSO_DB_AUTH_TOKEN=none nuxt dev",
     "cypress:open": "LOCAL_SITE_URL=http://localhost:3000 cypress open",
     "cypress:run": "LOCAL_SITE_URL=http://localhost:3000 cypress run"
   },
