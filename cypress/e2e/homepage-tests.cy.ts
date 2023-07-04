@@ -1,5 +1,3 @@
-import { randomBetween } from "../support/commands";
-
 describe("Home page", () => {
   context("Given that we access the `/` page", () => {
     beforeEach(() => {
@@ -18,13 +16,17 @@ describe("Home page", () => {
     context("The `Visit` link of a framework listing", () => {
       const githubUrlRgx =
         /((?:https?:)?\/\/)?((?:www)\.)?((?:github\.com))(\/(?:[\w-]+))(\/(?:[\w-]+))(\/)?/gi;
-      it("Should contain a link to a GitHub repository", () => {
-        const frameworksCount = Cypress.$("tbody > tr").length;
-        const rowNo = randomBetween(1, frameworksCount);
-        cy.get(`tbody > tr:nth-child(${rowNo}) > :nth-child(4)`)
-          .contains("Visit")
-          .and("have.attr", "href")
-          .should("match", githubUrlRgx);
+      it("All listings should contain a link to a GitHub repository", () => {
+        cy.get("tbody > tr").each((_$el, index, _$list) => {
+          cy.get(
+            `tbody > :nth-child(${
+              index + 1
+            }) > :last-child > a[title="GitHub link"]`
+          )
+            .contains("Visit")
+            .and("have.attr", "href")
+            .should("match", githubUrlRgx);
+        });
       });
     });
   });
