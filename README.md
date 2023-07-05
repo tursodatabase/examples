@@ -82,18 +82,46 @@ Create a new turso database.
 turso db create web-frameworks
 ```
 
-> We use `web-frameworks` as the database name in this command, but you can give
-> it any name.
+### Set up Turso on the project
 
-Access the database through the Turso CLI shell.
+To access the data stored inside your database, you need the Turso database url
+and an authentication token.
+
+To obtain the database url, run the following command:
+
+```sh
+turso db show web-frameworks --url
+```
+
+And, to create an authentication token for your database, run:
+
+```sh
+turso db tokens create web-frameworks
+```
+
+Add a `.env` file at the root of the project and inside it add the values
+obtained above as the database url and authentication token for your Turso
+database.
+
+```txt
+NUXT_TURSO_DB_URL=
+NUXT_TURSO_DB_AUTH_TOKEN=
+```
+
+### Create tables and indexes
+
+> **Note**
+>
+> You can run `npm run migrate:dev` and skip this step. Otherwise, proceed to
+> experience working within the Turso CLI shell.
+
+First, access the database through the Turso CLI shell.
 
 ```sh
 turso db shell web-frameworks
 ```
 
-### Create tables and indexes
-
-Here's the SQL statement to create the `frameworks` table.
+Next, run the following SQL statement to create the `frameworks` table.
 
 ```sql
 -- create the "frameworks" table
@@ -134,32 +162,6 @@ insert into frameworks(name, language, url, stars) values("Symfony", "PHP", "htt
 insert into frameworks(name, language, url, stars) values("CodeIgniter", "PHP", "https://github.com/bcit-ci/CodeIgniter", 18200);
 insert into frameworks(name, language, url, stars) values("CakePHP", "PHP", "https://github.com/cakephp/cakephp", 8600);
 insert into frameworks(name, language, url, stars) values("Qwik", "TypeScript", "https://github.com/BuilderIO/qwik", 16400);
-```
-
-### Set up Turso on the project
-
-To access the data stored inside your database, you need the Turso database url
-and an authentication token.
-
-To obtain the database url, run the following command:
-
-```sh
-turso db show web-frameworks --url
-```
-
-And, to create an authentication token for your database, run:
-
-```sh
-turso db tokens create web-frameworks
-```
-
-Add a `.env` file at the root of the project and inside it add the values
-obtained above as the database url and authentication token for your Turso
-database.
-
-```txt
-NUXT_TURSO_DB_URL=
-NUXT_TURSO_DB_AUTH_TOKEN=
 ```
 
 ---
