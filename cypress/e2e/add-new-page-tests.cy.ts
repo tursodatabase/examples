@@ -1,4 +1,4 @@
-import { randomBetween } from "../support/commands";
+import { randomBetween } from "../support";
 
 describe('"Add New" page', () => {
   let demoFramework: {
