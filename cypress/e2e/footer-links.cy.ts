@@ -1,4 +1,4 @@
-import { randomBetween } from "../support";
+import { randomBetween } from "../support/utils";
 
 describe("Footer links", () => {
   context("Given that we are on any page of the website", () => {
