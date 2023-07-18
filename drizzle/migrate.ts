@@ -11,17 +11,16 @@ export const client = createClient({
 export const db = drizzle(client);
 
 async function main() {
-  await migrate(db, {
-    migrationsFolder: "./drizzle/migrations",
-  });
-}
-
-main()
-  .then((res) => {
+  try {
+    await migrate(db, {
+      migrationsFolder: "drizzle/migrations",
+    });
     console.log("Tables migrated!");
     process.exit(0);
-  })
-  .catch((err) => {
-    console.error("Error performing migration: ", err);
+  } catch (error) {
+    console.error("Error performing migration: ", error);
     process.exit(1);
-  });
+  }
+}
+
+main();

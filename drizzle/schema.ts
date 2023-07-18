@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
@@ -7,20 +7,22 @@ import {
   text,
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const categories = sqliteTable(
   "categories",
   {
     id: text("id").primaryKey(),
     name: text("name"),
+    image: text("image"),
   },
   (categories) => ({
     nameIdx: index("name_idx").on(categories.name),
   })
 );
-export const insertCategorySchema = createInsertSchema(categories);
-export const selectCategorySchema = createSelectSchema(categories);
+
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  products: many(products),
+}));
 
 export const products = sqliteTable(
   "products",
@@ -42,8 +44,13 @@ export const products = sqliteTable(
     categoryIdIdx: index("category_id_idx").on(products.categoryId),
   })
 );
-export const insertProductSchema = createInsertSchema(products);
-export const selectProductSchema = createSelectSchema(products);
+
+export const productsRelations = relations(products, ({ one }) => ({
+  user: one(categories, {
+    fields: [products.categoryId],
+    references: [categories.id],
+  }),
+}));
 
 export const users = sqliteTable(
   "users",
@@ -67,8 +74,15 @@ export const users = sqliteTable(
     ),
   })
 );
-export const insertUserSchema = createInsertSchema(users);
-export const selectUserSchema = createSelectSchema(users);
+
+export const usersRelations = relations(users, ({ one, many }) => ({
+  password: one(passwords, {
+    fields: [users.id],
+    references: [passwords.userId],
+  }),
+  cartItems: many(cartItems),
+  orders: many(orders),
+}));
 
 export const passwords = sqliteTable("passwords", {
   hash: text("hash").notNull(),
@@ -76,6 +90,13 @@ export const passwords = sqliteTable("passwords", {
     .notNull()
     .references(() => users.id),
 });
+
+export const passwordsRelations = relations(passwords, ({ one }) => ({
+  user: one(users, {
+    fields: [passwords.userId],
+    references: [users.id],
+  }),
+}));
 
 export const cartItems = sqliteTable(
   "cart_items",
@@ -98,8 +119,17 @@ export const cartItems = sqliteTable(
     productIdx: index("cart_items_product_id_idx").on(cartItems.productId),
   })
 );
-export const insertCartItemSchema = createInsertSchema(cartItems);
-export const selectCartItemSchema = createSelectSchema(cartItems);
+
+export const cartItemsRelations = relations(cartItems, ({ one }) => ({
+  user: one(users, {
+    fields: [cartItems.userId],
+    references: [users.id],
+  }),
+  product: one(products, {
+    fields: [cartItems.productId],
+    references: [products.id],
+  }),
+}));
 
 export const orders = sqliteTable("orders", {
   id: text("id").primaryKey(),
@@ -114,8 +144,14 @@ export const orders = sqliteTable("orders", {
   createdAt: integer("created_at").default(sql`(strftime('%s', 'now'))`),
   updatedAt: integer("updated_at").default(sql`(strftime('%s', 'now'))`),
 });
-export const selectOrderSchema = createSelectSchema(orders);
-export const insertOrderSchema = createInsertSchema(orders);
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.userId],
+    references: [users.id],
+  }),
+  items: many(orderItems),
+}));
 
 export const orderItems = sqliteTable(
   "order_items",
@@ -139,5 +175,14 @@ export const orderItems = sqliteTable(
     productIdx: index("order_items_product_id_idx").on(orderItems.productId),
   })
 );
-export const insertOrderItemSchema = createInsertSchema(orderItems);
-export const selectOrderItemSchema = createSelectSchema(orderItems);
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderItems.orderId],
+    references: [orders.id],
+  }),
+  product: one(products, {
+    fields: [orderItems.productId],
+    references: [products.id],
+  }),
+}));

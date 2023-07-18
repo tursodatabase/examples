@@ -1,10 +1,19 @@
+import "dotenv/config";
+import { createClient } from "@libsql/client";
+import { drizzle } from "drizzle-orm/libsql";
 import { v4 as uuidv4 } from "uuid";
 import { loremIpsum } from "lorem-ipsum";
 
 import { categories, products } from "drizzle/schema";
-
 import type { Category, Product } from "../app/lib/types";
-import { db } from "../app/lib/client";
+
+const client = createClient({
+  url: process.env.TURSO_DB_URL as string,
+  authToken: process.env.TURSO_DB_AUTH_TOKEN as string,
+});
+
+const db = drizzle(client);
+
 const price = () => Math.floor(Math.random() * 80) + 20;
 const getIndex = Math.random() > 0.5 ? 1 : 0;
 
@@ -13,10 +22,14 @@ async function seed() {
     {
       name: "Cool Mugs",
       id: uuidv4(),
+      image:
+        "https://res.cloudinary.com/djx5h4cjt/image/upload/v1686305552/twitpics/mug-club/cool-mugs.jpg",
     },
     {
       name: "Lame Mugs",
       id: uuidv4(),
+      image:
+        "https://res.cloudinary.com/djx5h4cjt/image/upload/v1686305552/twitpics/mug-club/lame-mugs.jpg",
     },
   ];
 
