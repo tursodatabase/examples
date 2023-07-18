@@ -1,18 +1,17 @@
-import { type ActionArgs, json, redirect } from "@remix-run/cloudflare";
+import { type ActionArgs, json, redirect, type ActionFunction, V2_MetaFunction } from "@remix-run/cloudflare";
 import { useFetcher } from "@remix-run/react";
-
 import { register } from "~/lib/session.server";
 
-export async function action({ request }: ActionArgs) {
 export const meta: V2_MetaFunction = () => {
   return [
     { title: "Register - The Mug Store" },
     { name: "description", content: "Create an account" },
   ];
 };
+
+export const action: ActionFunction = async ({ request, context }: ActionArgs) => {
   const formData = await request.formData();
   const { ...values } = Object.fromEntries(formData);
-
 
   if (
     !values.email ||
@@ -58,7 +57,7 @@ export const meta: V2_MetaFunction = () => {
     email: values.email,
     password: values.password,
     phone: values.phone,
-  });
+  }, context);
 
   if (accountCreation.user) {
     return redirect("/account/login");
@@ -77,6 +76,9 @@ export default function Register() {
     <div className="flex justify-center my-24 px-4">
       <div className="max-w-md w-full">
         <h1 className="text-4xl">Create an Account.</h1>
+        <code>
+          {JSON.stringify(registerFetcher.data)}
+        </code>
         {registerFetcher.state === "idle" && registerFetcher.data && (
           <div className="flex items-center justify-center my-3 bg-red-100">
             <p className="p-2 text-red-700">{registerFetcher.data.message}</p>

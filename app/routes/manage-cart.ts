@@ -7,43 +7,48 @@ import {
 } from "@remix-run/cloudflare";
 import { and, eq } from "drizzle-orm";
 
-import cartDataAdapter from "~/lib/cart-data-adapter";
-import { products, cartItems } from "drizzle/schema";
-import { db } from "~/lib/client";
+import { cartItems } from "drizzle/schema";
 import { requireUserId } from "~/lib/session.server";
+import { buildDbClient } from "~/lib/client";
 
-export async function loader({ params, request }: LoaderArgs) {
-  const userId = await requireUserId({ request, redirectTo: "/account/login" });
+export async function loader({ request, context }: LoaderArgs) {
+  const db = buildDbClient(context);
+  const userId = await requireUserId(
+    { request, redirectTo: "/account/login" },
+    context
+  );
 
   if (!userId) {
-    return [];
+    return {
+      cartItems: [],
+    };
   }
 
-  const storedCartItems = await db
-    .select({
-      count: cartItems.count,
-      cart_item_id: cartItems.id,
-      products,
-    })
-    .from(cartItems)
-    .leftJoin(products, eq(products.id, cartItems.productId))
-    .where(eq(cartItems.userId, userId))
-    .all();
-
-  const cartItemsData = cartDataAdapter(storedCartItems);
-
+  const cartItems = await db.query.cartItems.findMany({
+    where: (cartItems, { eq }) => eq(cartItems.userId, userId),
+    columns: {
+      count: true,
+      id: true,
+    },
+    with: {
+      product: true,
+    },
+  });
 
   return {
-    cartItems: cartItemsData,
+    cartItems,
   };
 }
 
-export async function action({ request }: ActionArgs): Promise<any> {
+export async function action({ request, context }: ActionArgs): Promise<any> {
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
 
-  const userId = await requireUserId({ request, redirectTo: "/account/login" });
-  if (!userId || typeof userId !== "string") {
+  const userId = await requireUserId(
+    { request, redirectTo: "/account/login" },
+    context
+  );
+  if (userId === undefined) {
     const searchParams = new URLSearchParams([
       ["error", "Log in to add items to cart"],
     ]);
@@ -52,17 +57,14 @@ export async function action({ request }: ActionArgs): Promise<any> {
 
   const productId = values.product_id as string;
   const quantity = values.quantity;
+  const db = buildDbClient(context);
 
   if (_action === "addToCart") {
-    const cartItem = await db
-      .select()
-      .from(cartItems)
-      .where(
-        and(eq(cartItems.productId, productId), eq(cartItems.userId, userId))
-      )
-      .get();
+    const cartItem = await db.query.cartItems.findFirst({
+      where: (cartItems, { eq, and }) =>
+        and(eq(cartItems.productId, productId), eq(cartItems.userId, userId)),
+    });
 
-    // append cart item count if exists
     if (cartItem) {
       const append = await db
         .update(cartItems)

@@ -1,33 +1,14 @@
 import { useLoaderData } from "@remix-run/react";
-import { eq, notInArray } from "drizzle-orm";
-import { type LoaderArgs, redirect } from "@remix-run/cloudflare";
+import { notInArray } from "drizzle-orm";
+import { type LoaderArgs, redirect, V2_MetaFunction } from "@remix-run/cloudflare";
 
 import { Recommendations } from "~/components/Recommendations";
-import cartDataAdapter from "~/lib/cart-data-adapter";
 import type { CartItem, Product } from "~/lib/types";
 import { CartPageItem } from "~/components/CartPageItem";
-import { db } from "~/lib/client";
-import { products, cartItems } from "drizzle/schema";
+import { buildDbClient } from "~/lib/client";
+import { products } from "drizzle/schema";
 import { requireUserId } from "~/lib/session.server";
 
-export async function loader({ request }: LoaderArgs): Promise<any> {
-  const userId = await requireUserId({ request, redirectTo: "/account/login" });
-  if (!userId || typeof userId !== "string") {
-    return redirect("/account/login");
-  } else {
-    let cartItemsData: CartItem[] = [],
-      recommendations: Product[] = [];
-    try {
-      const storedCartItems: any = await db
-        .select({
-          count: cartItems.count,
-          cart_item_id: cartItems.id,
-          products,
-        })
-        .from(cartItems)
-        .leftJoin(products, eq(products.id, cartItems.productId))
-        .where(eq(cartItems.userId, userId))
-        .all();
 export const meta: V2_MetaFunction = () => {
   return [
     { title: "Cart - The Mug Store" },
@@ -35,42 +16,53 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
-      cartItemsData = cartDataAdapter(storedCartItems);
+export async function loader({ request, context }: LoaderArgs): Promise<any> {
+  const db = buildDbClient(context);
+  const userId = await requireUserId({ request, redirectTo: "/account/login" }, context);
 
-      const cartItemsIds = storedCartItems.map((item: any) => {
-        return item.id;
-      });
+  if (userId === undefined) {
+    return redirect("/account/login");
+  } else {
+    let recommendations: Product[] = [];
+    const cartItems = await db.query.cartItems.findMany({
+      where: (cartItems, { eq }) => eq(cartItems.userId, userId),
+      columns: {
+        count: true,
+        id: true,
+      },
+      with: {
+        product: true,
+      },
+    });
 
-      let recommendationsResponse;
-      if (cartItemsIds.length) {
-        // console.log("... HERE");
-        recommendationsResponse = await db
-          .select()
-          .from(products)
-          .where(notInArray(products.id, cartItemsIds))
-          .limit(4)
-          .all();
-      } else {
-        recommendationsResponse = await db
-          .select()
-          .from(products)
-          .limit(4)
-          .all();
-      }
+    const cartItemsIds = cartItems.map((item) => {
+      return item.product.id;
+    });
 
-      recommendations = recommendationsResponse as unknown as Product[];
-    } catch (error) {
-      // TODO: Catch error and notify user
+    let recommendationsResponse;
+    if (cartItemsIds.length) {
+      recommendationsResponse = await db
+        .select()
+        .from(products)
+        .where(notInArray(products.id, cartItemsIds))
+        .limit(4)
+        .all();
+    } else {
+      recommendationsResponse = await db.query.products.findMany({
+        limit: 4
+      })
     }
+
+    recommendations = recommendationsResponse as unknown as Product[];
     return {
-      cartItems: cartItemsData,
+      cartItems,
       recommendations,
     };
   }
 }
 
-export default function () {
-  const cartData = useLoaderData<typeof loader>();
+export default function CartPage() {
+  const { cartItems, recommendations } = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -83,8 +75,8 @@ export default function () {
         >
           <div className="mt-4 space-y-6">
             <div className="flex flex-col space-y-4">
-              {cartData.cartItems.length ? (
-                cartData.cartItems?.map((item: CartItem) => (
+              {cartItems.length ? (
+                cartItems?.map((item: CartItem) => (
                   <CartPageItem key={item.id} {...item} />
                 ))
               ) : (
@@ -103,7 +95,7 @@ export default function () {
               </a>
 
               <a
-                href="/category/furniture"
+                href="/"
                 className="text-sm text-gray-500 underline underline-offset-4 transition hover:text-gray-600"
               >
                 Continue shopping
@@ -111,7 +103,7 @@ export default function () {
             </div>
 
             <Recommendations
-              {...{ recommendations: cartData.recommendations }}
+              {...{ recommendations: recommendations }}
             />
           </div>
         </div>

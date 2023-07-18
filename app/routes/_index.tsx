@@ -1,11 +1,10 @@
-import type { V2_MetaFunction } from "@remix-run/cloudflare";
-import { useLoaderData, useLocation } from "@remix-run/react";
-
-import { categories, products } from "drizzle/schema";
-import { ProductCard } from "~/components/ProductCard";
-import { db } from "~/lib/client";
-import { resizeImage } from "~/lib/resizeImage";
+import type { LoaderArgs, LoaderFunction, V2_MetaFunction } from "@remix-run/cloudflare";
 import type { Category, Product } from "~/lib/types";
+
+import { useLoaderData } from "@remix-run/react";
+import { buildDbClient } from "~/lib/client";
+import { ProductCard } from "~/components/ProductCard";
+import { resizeImage } from "~/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -14,26 +13,26 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
-export async function loader() {
-  const featuredProducts = await db.select().from(products).limit(6).all();
+export const loader: LoaderFunction = async ({ context }: LoaderArgs) => {
+  const db = buildDbClient(context);
 
-  const featuredCategories = await db.select().from(categories).limit(4).all();
+  const featuredProducts = await db.query.products.findMany({
+    columns: {
+      description: false,
+      categoryId: false,
+    }
+  });
+  const featuredCategories = await db.query.categories.findMany();
 
   return {
     featuredProducts: featuredProducts as unknown as Product[],
     featuredCategories: featuredCategories as unknown as Category[],
-  };
-}
-
-export function getCategoryImage(category: string) {
-  const imageUrl = `https://res.cloudinary.com/djx5h4cjt/image/upload/v1686305552/twitpics/mug-club/${category}-mugs.jpg`;
-  return resizeImage(imageUrl, 400, 400);
+  }
 }
 
 export default function Index() {
   const { featuredCategories, featuredProducts } =
     useLoaderData<typeof loader>();
-  const location = useLocation();
   return (
     <div className="flex flex-col min-h-screen space-y-8">
       <section className="relative justify-end flex flex-col -mt-nav">
@@ -58,18 +57,20 @@ export default function Index() {
       <div className="flex flex-col space-x-4 space-y-4 px-4">
         <h3 className="font-semibold">Featured Products</h3>
 
-        <ul className="mt-4 grid gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
-          {featuredProducts && featuredProducts.length ? (
-            featuredProducts.map((product: Product) => (
-              <ProductCard
-                {...{ product, actionPath: location.pathname }}
-                key={product.id}
-              />
-            ))
-          ) : (
-            <div className="p-8">No items</div>
-          )}
-        </ul>
+        {featuredProducts.length ? (
+          <ul className="mt-4 grid gap-5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
+            {
+              featuredProducts.map((product: Product) => (
+                <ProductCard
+                  {...{ product }}
+                  key={product.id}
+                />
+              ))
+            }
+          </ul>
+        ) : (
+          <div className="p-4 flex justify-center">There are no available products, please check back later!</div>
+        )}
       </div>
 
       <section className="relative justify-end flex flex-col -mt-nav">
@@ -97,33 +98,33 @@ export default function Index() {
       <div className="flex flex-col space-x-4 mt-0 px-4">
         <h3 className="font-semibold">Featured Categories</h3>
 
-        <div className="flex space-x-4 py-4 w-full">
-          {featuredCategories.length ? (
-            featuredCategories.map((category: Category) => (
-              <a
-                title={
-                  category.name.includes("Cool") ? "Cool Mugs" : "Lame Mugs"
-                }
-                key={category.id}
-                href="/mugs"
-                className="relative w-1/2 min-h-[400px] bg-no-repeat bg-cover bg-center"
-                style={{
-                  backgroundImage: category.name.includes("Cool")
-                    ? `url(${getCategoryImage("cool")})`
-                    : `url(${getCategoryImage("lame")})`,
-                }}
-              >
-                <div>
-                  <p className="absolute bottom-4 p-4 bg-secondary-700 text-white">
-                    Buy {category.name.includes("Cool") ? "Cool" : "Lame"} Mugs
-                  </p>
-                </div>
-              </a>
-            ))
-          ) : (
-            <h3>There are no categories to display!</h3>
-          )}
-        </div>
+        {featuredCategories.length ? (
+          <div className="flex pl-0 space-x-4 py-4 w-full">
+            {
+              featuredCategories.map((category: Category) => (
+                <a
+                  title={
+                    `${category.name.split(" ")[0]} Mugs`
+                  }
+                  key={category.id}
+                  href="/mugs"
+                  className="relative w-1/2 min-h-[400px] bg-no-repeat bg-cover bg-center"
+                  style={{
+                    backgroundImage: `url(${resizeImage(category.image, 400, 400)})`,
+                  }}
+                >
+                  <div>
+                    <p className="absolute bottom-4 p-4 bg-secondary-700 text-white">
+                      Buy {category.name.split(" ")[0]} Mugs
+                    </p>
+                  </div>
+                </a>
+              ))
+            }
+          </div>
+        ) : (
+          <div className="p-4 flex justify-center">There are no categories to display!</div>
+        )}
       </div>
 
       <section className="relative justify-end flex flex-col -mt-nav">

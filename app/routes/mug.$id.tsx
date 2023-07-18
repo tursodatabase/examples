@@ -1,14 +1,13 @@
-import type { LoaderArgs, V2_MetaFunction } from "@remix-run/cloudflare";
-// import { createClient } from "@libsql/client";
+import type { LoaderArgs, LoaderFunction, V2_MetaFunction } from "@remix-run/cloudflare";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { eq } from "drizzle-orm";
 
 import type { Product } from "~/lib/types";
-import { db } from "~/lib/client";
+import { buildDbClient } from "~/lib/client";
 import { products } from "drizzle/schema";
 
-
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader: LoaderFunction = async ({ params, context }: LoaderArgs) => {
+  const db = buildDbClient(context);
   const { id } = params;
   if (!id) {
     throw new Response("Not Found", {
@@ -52,6 +51,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
     description: product.description
   }]
 };
+
 export default function () {
   const pageData = useLoaderData<typeof loader>();
   const triggerAction = useFetcher();

@@ -1,37 +1,38 @@
-import type { LoaderArgs } from "@remix-run/cloudflare";
-import { useLoaderData, useLocation } from "@remix-run/react";
-
+import type { LoaderArgs, LoaderFunction, V2_MetaFunction } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 import { Pagination } from "~/components/Pagination";
 import { ProductCard } from "~/components/ProductCard";
-import { ITEMS_PER_PAGE } from "~/lib/constants";
+import { buildDbClient } from "~/lib/client";
 import type { Product } from "~/lib/types";
-import { db } from "~/lib/client";
-import { products } from "drizzle/schema";
 
-export async function loader({ params }: LoaderArgs) {
+export const loader: LoaderFunction = async ({ params, context }: LoaderArgs) => {
+  const db = buildDbClient(context);
   const { pageNum } = params;
 
-  const allProducts = await db.select().from(products).all();
+  const allProducts = await db.query.products.findMany({
+    columns: {
+      name: true
+    }
+  });
 
   const itemsCount = allProducts.length;
-  const totalPages = Math.ceil((itemsCount as number) / ITEMS_PER_PAGE);
+  const itemsPerPage = context.env?.ITEMS_PER_PAGE || 20;
+  const totalPages = Math.ceil((itemsCount as number) / itemsPerPage);
   let currentPage = 1,
     offset = 0;
 
   if (pageNum !== undefined) {
     currentPage = parseInt(pageNum);
-    offset = currentPage > 1 ? currentPage * ITEMS_PER_PAGE : 0;
+    offset = currentPage === 1 ? 0 : (currentPage - 1) * itemsPerPage;
   }
 
-  const data = await db
-    .select()
-    .from(products)
-    .limit(ITEMS_PER_PAGE)
-    .offset(offset)
-    .all();
+  const products = await db.query.products.findMany({
+    offset: offset,
+    limit: itemsPerPage
+  });
 
   return {
-    products: data as unknown as Product[],
+    products: products as unknown as Product[],
     pageInfo: {
       currentPage,
       totalPages,
@@ -39,7 +40,6 @@ export async function loader({ params }: LoaderArgs) {
   };
 }
 
-export default function () {
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
   if (!data) {
     return [
@@ -57,13 +57,16 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
     description: pageInfo.currentPage ? "Mugs listing page " + pageInfo.currentPage : "Mugs listing page"
   }]
 };
+
+export default function Mugs() {
   const { products, pageInfo } = useLoaderData<typeof loader>();
-  const location = useLocation();
 
   return (
     <>
       {!products.length ? (
-        <div className="p-8">No items listed!</div>
+        <div className="p-8 flex justify-center">
+          There are no available products, please check back later!
+        </div>
       ) : (
         <section>
           <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">

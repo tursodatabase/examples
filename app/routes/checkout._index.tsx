@@ -16,16 +16,12 @@ import { useEffect, useState } from "react";
 
 import {
   cartItems,
-  insertOrderItemSchema,
   orderItems,
   orders,
-  products,
-  users,
 } from "drizzle/schema";
-import cartDataAdapter from "~/lib/cart-data-adapter";
-import { db } from "~/lib/client";
 import { requireUserId } from "~/lib/session.server";
-import type { CartItem } from "~/lib/types";
+import type { CartItem, User } from "~/lib/types";
+import { buildDbClient } from "~/lib/client";
 
 export const meta: V2_MetaFunction = () => {
   return [
@@ -34,55 +30,51 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
-export async function loader({ request }: LoaderArgs): Promise<any> {
-  const userId = await requireUserId({ request, redirectTo: "/account/login" });
+export async function loader({ request, context }: LoaderArgs): Promise<any> {
+  const userId = await requireUserId({ request, redirectTo: "/account/login" }, context);
   if (!userId || typeof userId !== "string") {
     return redirect("/account/login");
   } else {
-    let cartItemsData: CartItem[] = [],
-      userData;
-    try {
-      const storedCartItems: any = await db
-        .select({
-          count: cartItems.count,
-          cart_item_id: cartItems.id,
-          products,
-        })
-        .from(cartItems)
-        .leftJoin(products, eq(cartItems.productId, products.id))
-        .where(eq(cartItems.userId, userId))
-        .all();
-
-      userData = await db
-        .select()
-        .from(users)
-        .where(eq(users.id, userId))
-        .get();
-      // console.log({ userData });
-
-      cartItemsData = cartDataAdapter(storedCartItems);
-    } catch (error) {
-      // TODO: Catch error and notify user
+    const db = buildDbClient(context);
+    let user;
+    const cartItems = await db.query.cartItems.findMany({
+      where: (cartItems, { eq }) => eq(cartItems.userId, userId),
+      columns: {
+        count: true,
+        id: true,
+      },
+      with: {
+        product: true,
+        user: true
+      },
+    });
+    if (!cartItems.length) {
+      user = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.id, userId)
+      })
+    } else {
+      user = cartItems[0].user
     }
     return {
-      cartItemsData,
-      userData,
+      cartItems,
+      userData: user,
     };
   }
 }
 
 export const action = async ({
   request,
+  context
 }: ActionArgs): Promise<
   { status: string; message: string; data: any } | Response
 > => {
-  const userId = await requireUserId({ request, redirectTo: "/account/login" });
-  if (!userId || typeof userId !== "string") {
+  const userId = await requireUserId({ request, redirectTo: "/account/login" }, context);
+  if (userId === undefined) {
     return redirect("/account/login");
   } else {
     const formData = await request.formData();
     const values = Object.fromEntries(formData);
-    // check for missing input
+    // look for missing input
     if (
       !values.firstName ||
       !values.lastName ||
@@ -98,28 +90,32 @@ export const action = async ({
       };
     }
 
+    const db = buildDbClient(context);
+
     try {
-      const cartItemsData = await db
-        .select({
-          count: cartItems.count,
-          cart_item_id: cartItems.id,
-          products,
-        })
-        .from(cartItems)
-        .leftJoin(products, eq(cartItems.productId, products.id))
-        .all();
+      const cartItemsData = await db.query.cartItems.findMany({
+        where: (cartItems, { eq }) => eq(cartItems.userId, userId),
+        columns: {
+          count: true,
+          id: true,
+        },
+        with: {
+          product: true,
+          user: true
+        },
+      });
 
       if (!cartItemsData.length) {
         return {
           status: "error",
-          message: "Add something to your cart",
+          message: "Add something to your cart first",
           data: null,
         };
       }
 
       const amount = cartItemsData.reduce(
         (accumulator: any, currentVal: any) =>
-          accumulator + currentVal.count * currentVal.products.price,
+          accumulator + currentVal.count * currentVal.product.price,
         0
       );
       const calculatedShippingFees = 0;
@@ -145,14 +141,14 @@ export const action = async ({
         const orderItemData = {
           id: uuidv4(),
           orderId: newOrder.id as string,
-          productId: item.products?.id,
+          productId: item.product.id,
           count: item.count,
         };
         await db.insert(orderItems).values(orderItemData).returning().get();
 
         await db
           .delete(cartItems)
-          .where(eq(cartItems.id, item.cart_item_id))
+          .where(eq(cartItems.id, item.id))
           .returning()
           .get();
       }
@@ -173,7 +169,7 @@ export const action = async ({
 };
 
 export default function Checkout() {
-  const { cartItemsData: pageData, userData: authenticatedUser } =
+  const { cartItems, userData } =
     useLoaderData<typeof loader>();
   const makePayment = useFetcher<typeof action>();
   const nav = useNavigate();
@@ -186,19 +182,15 @@ export default function Checkout() {
   const [country] = useState<string>("England");
 
   useEffect(() => {
-    setEmail(authenticatedUser?.email || "");
-    setLastName(authenticatedUser?.lastName || "");
-    setFirstName(authenticatedUser?.firstName || "");
-    setPhone(authenticatedUser?.phone || "");
-
-    // respond to payment status
-    if (makePayment.data && makePayment.data.status === "error") {
-    }
+    setEmail(userData?.email || "");
+    setLastName(userData?.lastName || "");
+    setFirstName(userData?.firstName || "");
+    setPhone(userData?.phone || "");
 
     if (
       makePayment.state !== "submitting" &&
       makePayment.state !== "loading" &&
-      !makePayment.data?.data &&
+      !makePayment.data &&
       makePayment.data?.status === "success"
     ) {
       alert("Order successfully placed!");
@@ -222,12 +214,12 @@ export default function Checkout() {
               <h2 className="font-medium text-gray-900">The Mug store</h2>
             </div>
 
-            {!!pageData.length && (
+            {!!cartItems.length && (
               <div>
                 <p className="text-2xl font-medium tracking-tight text-gray-900">
                   $
                   {parseInt(
-                    pageData
+                    cartItems
                       .reduce(
                         (accumulator: any, currentVal: any) =>
                           accumulator +
@@ -247,8 +239,8 @@ export default function Checkout() {
             <div>
               <div className="flow-root">
                 <ul className="-my-4 divide-y divide-gray-100">
-                  {pageData.length ? (
-                    pageData.map((item: CartItem) => (
+                  {cartItems.length ? (
+                    cartItems.map((item: CartItem) => (
                       <li
                         key={item.id}
                         className="flex items-center gap-4 py-4"
@@ -446,6 +438,7 @@ export default function Checkout() {
                       <option>France</option>
                       <option>Belgium</option>
                       <option>Japan</option>
+                      <option>Tanzania</option>
                     </select>
                   </div>
 
@@ -468,14 +461,15 @@ export default function Checkout() {
               <input
                 type="hidden"
                 name="user_id"
-                value={authenticatedUser?.id}
+                value={userData?.id}
               />
 
               <div className="col-span-6">
                 <button
-                  className="block w-full rounded-md bg-black p-2.5 text-sm text-white transition hover:shadow-lg"
+                  className="block w-full rounded-md bg-black disabled:bg-gray-300 disabled:cursor-not-allowed p-2.5 text-sm text-white transition hover:shadow-lg disabled:hover:shadow-none"
                   name="_action"
                   value="make_payment"
+                  disabled={!cartItems.length}
                 >
                   {(makePayment.state === "submitting" ||
                     makePayment.state === "loading") &&

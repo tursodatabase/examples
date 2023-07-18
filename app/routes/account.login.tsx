@@ -1,15 +1,16 @@
-import { type ActionArgs, json } from "@remix-run/cloudflare";
+import { type ActionArgs, json, type ActionFunction, type V2_MetaFunction } from "@remix-run/cloudflare";
 import { useFetcher } from "@remix-run/react";
 
-import { createUserSession, login } from "~/lib/session.server";
+import { type LoginCredentials, createUserSession, login } from "~/lib/session.server";
 
-export async function action({ request }: ActionArgs) {
 export const meta: V2_MetaFunction = () => {
   return [
     { title: "Log in - The Mug Store" },
     { name: "description", content: "Log into your Mug Store account" },
   ];
 };
+
+export const action: ActionFunction = async ({ request, context }: ActionArgs) => {
   const formData = await request.formData();
   const { ...values } = Object.fromEntries(formData);
 
@@ -25,7 +26,7 @@ export const meta: V2_MetaFunction = () => {
     );
   }
 
-  const user = await login(values.email, values.password);
+  const user = await login(values as unknown as LoginCredentials, context);
   if (!user)
     return json(
       { ok: false, message: "Wrong credentials!" },
@@ -33,7 +34,7 @@ export const meta: V2_MetaFunction = () => {
     );
 
   // assign session
-  return createUserSession(user.id, "/account/dashboard");
+  return createUserSession(user.id, "/account/dashboard", context);
 }
 
 export default function Login() {
