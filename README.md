@@ -1,11 +1,11 @@
 # The Mug Store! 🍵
 
-An e-commerce store built with [Remix], [Turso], [Drizzle], and [Hydrogen].
+An e-commerce store built with [Remix], [Turso], [Drizzle], and deployed to [Cloudflare Workers].
 
 - [Remix Docs]
 - [Turso Docs]
 - [Drizzle Docs]
-- [Hydrogen Docs]
+- [Cloudflare Workers Docs]
 
 ## Development
 
@@ -139,11 +139,12 @@ npm run deploy
 [Remix]: https://github.com/remix-run/remix
 [Turso]: htthhttps://turso.tech/
 [Drizzle]: https://github.com/drizzle-team/drizzle-orm
-[Hydrogen]: https://github.com/Shopify/hydrogen
+
+[Cloudflare Workers]: https://github.com/Shopify/Cloudflare Workers
 [Remix Docs]: https://remix.run/docs
 [Turso Docs]: https://docs.turso.tech/
 [Drizzle Docs]: https://orm.drizzle.team/
-[Hydrogen Docs]: https://shopify.dev/docs/custom-storefronts/hydrogen
+[Cloudflare Workers Docs]: https://developers.cloudflare.com/workers/
 [Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
 [http://127.0.0.1:8787]: http://127.0.0.1:8787
 [create a cloudflare account here]: https://dash.cloudflare.com/sign-up
