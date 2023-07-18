@@ -1,16 +1,13 @@
-name = "app-turso-remix-cloudflare"
+name = "the-mug-store"
 
 workers_dev = true
 main = "./build/index.js"
 # https://developers.cloudflare.com/workers/platform/compatibility-dates
-compatibility_date = "2022-04-05"
-compatibility_flags = ["streams_enable_constructors"]
+compatibility_date = "2023-04-20"
 
 [site]
   bucket = "./public"
 
-[build]
-  command = "npm run build"
-
 [vars]
-  TURSO_DB_URL = "https://fast-commerce-xinnks.turso.io"
+  TURSO_DB_URL = "libsql://the-mug-store-xinnks.turso.io"
+  ITEMS_PER_PAGE=20
