@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
-import { useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 
 import type { CartItem } from "~/lib/types";
-import type { loader } from "~/routes/cart._index";
 
 import { CartIcon } from "./Icon";
 import { CartListItem } from "./CartListItem";
 
 export const Cart = () => {
-  const cartItems = useLoaderData<typeof loader>();
   const cartItemsFetcher = useFetcher();
   const [showCart, setShowCart] = useState(false);
 
@@ -17,8 +15,6 @@ export const Cart = () => {
   };
 
   useEffect(() => {
-    const currentItems = cartItemsFetcher as unknown as CartItem[];
-
     cartItemsFetcher.submit(
       {},
       {

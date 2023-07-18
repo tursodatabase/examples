@@ -1,9 +1,3 @@
-import styles from "~/styles/footer.css";
-
-export function links() {
-  return [{ rel: "stylesheet", href: styles }];
-}
-
 export const Footer = () => {
   return (
     <footer className="flex justify-center py-12">

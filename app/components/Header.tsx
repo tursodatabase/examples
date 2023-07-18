@@ -1,13 +1,12 @@
-// import type { LinksFunction } from "@remix-run/cloudflare";
 import { Cart } from "./Cart";
 import { AccountIcon } from "./Icon";
 
 export const Header = () => {
   return (
-    <header className={`header`}>
+    <header className="header flex justify-between px-4 py-2 bg-primary">
       <ul className="flex justify-start">
         <li>
-          <a href="/mugs" className="text-white font-thin">
+          <a href="/mugs" className="text-white font-thin hover:text-secondary-300">
             {" "}
             All Mugs{" "}
           </a>

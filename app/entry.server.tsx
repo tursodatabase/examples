@@ -22,7 +22,7 @@ export default async function handleRequest(
       signal: request.signal,
       onError(error: unknown) {
         // Log streaming rendering errors from inside the shell
-        // console.error(error);
+        console.error(error);
         responseStatusCode = 500;
       },
     }

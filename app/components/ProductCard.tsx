@@ -1,4 +1,4 @@
-import { resizeImage } from "~/lib/resizeImage";
+import { resizeImage } from "~/lib/utils";
 import type { Product } from "~/lib/types";
 
 export interface ProductCardProps {

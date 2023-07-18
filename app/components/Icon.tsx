@@ -1,9 +1,3 @@
-import clsx from "clsx";
-
-type IconProps = JSX.IntrinsicElements["svg"] & {
-  direction?: "up" | "right" | "down" | "left";
-};
-
 interface CartIconProps {
   color: string | undefined;
 }
