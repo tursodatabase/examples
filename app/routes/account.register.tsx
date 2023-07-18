@@ -4,6 +4,12 @@ import { useFetcher } from "@remix-run/react";
 import { register } from "~/lib/session.server";
 
 export async function action({ request }: ActionArgs) {
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Register - The Mug Store" },
+    { name: "description", content: "Create an account" },
+  ];
+};
   const formData = await request.formData();
   const { ...values } = Object.fromEntries(formData);
 

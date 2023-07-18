@@ -8,6 +8,12 @@ import { requireUserId } from "~/lib/session.server";
 
 export async function loader({ request }: LoaderArgs): Promise<any> {
   const userId = await requireUserId({ request, redirectTo: "/account/login" });
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Dashboard - The Mug Store" },
+    { name: "description", content: "User dashboard page" },
+  ];
+};
   if (!userId || typeof userId !== "string") {
     return redirect("/account/login");
   } else {

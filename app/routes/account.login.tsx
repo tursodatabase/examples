@@ -4,6 +4,12 @@ import { useFetcher } from "@remix-run/react";
 import { createUserSession, login } from "~/lib/session.server";
 
 export async function action({ request }: ActionArgs) {
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Log in - The Mug Store" },
+    { name: "description", content: "Log into your Mug Store account" },
+  ];
+};
   const formData = await request.formData();
   const { ...values } = Object.fromEntries(formData);
 

@@ -40,6 +40,23 @@ export async function loader({ params }: LoaderArgs) {
 }
 
 export default function () {
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  if (!data) {
+    return [
+      {
+        title: "Mugs - The Mug Store",
+      },
+      {
+        description: "Mugs listing page",
+      },
+    ];
+  }
+  const { pageInfo } = data;
+  return [{
+    title: pageInfo.currentPage ? "Mugs page " + pageInfo.currentPage : "Mugs - The Mug Store",
+    description: pageInfo.currentPage ? "Mugs listing page " + pageInfo.currentPage : "Mugs listing page"
+  }]
+};
   const { products, pageInfo } = useLoaderData<typeof loader>();
   const location = useLocation();
 

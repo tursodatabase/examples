@@ -7,16 +7,6 @@ import type { Product } from "~/lib/types";
 import { db } from "~/lib/client";
 import { products } from "drizzle/schema";
 
-export const meta: V2_MetaFunction = () => {
-  return [
-    {
-      title: "Product Page",
-    },
-    {
-      description: "Product page",
-    },
-  ];
-};
 
 export const loader = async ({ params }: LoaderArgs) => {
   const { id } = params;
@@ -45,6 +35,23 @@ export const loader = async ({ params }: LoaderArgs) => {
   };
 };
 
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  if (!data) {
+    return [
+      {
+        title: "Product Page",
+      },
+      {
+        description: "Product page",
+      },
+    ];
+  }
+  const { product } = data;
+  return [{
+    title: product.name,
+    description: product.description
+  }]
+};
 export default function () {
   const pageData = useLoaderData<typeof loader>();
   const triggerAction = useFetcher();

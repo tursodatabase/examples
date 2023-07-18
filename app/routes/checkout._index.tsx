@@ -3,6 +3,7 @@ import {
   type ActionArgs,
   type LoaderArgs,
   redirect,
+  V2_MetaFunction,
 } from "@remix-run/cloudflare";
 import {
   useFetcher,
@@ -25,6 +26,13 @@ import cartDataAdapter from "~/lib/cart-data-adapter";
 import { db } from "~/lib/client";
 import { requireUserId } from "~/lib/session.server";
 import type { CartItem } from "~/lib/types";
+
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Checkout - The Mug Store" },
+    { name: "description", content: "Customer checkout page" },
+  ];
+};
 
 export async function loader({ request }: LoaderArgs): Promise<any> {
   const userId = await requireUserId({ request, redirectTo: "/account/login" });

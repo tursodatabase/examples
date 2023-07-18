@@ -9,8 +9,8 @@ import type { Category, Product } from "~/lib/types";
 
 export const meta: V2_MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "The Mug Store" },
+    { name: "description", content: "Welcome to the Mug store!" },
   ];
 };
 

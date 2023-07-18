@@ -28,6 +28,12 @@ export async function loader({ request }: LoaderArgs): Promise<any> {
         .leftJoin(products, eq(products.id, cartItems.productId))
         .where(eq(cartItems.userId, userId))
         .all();
+export const meta: V2_MetaFunction = () => {
+  return [
+    { title: "Cart - The Mug Store" },
+    { name: "description", content: "The cart page!" },
+  ];
+};
 
       cartItemsData = cartDataAdapter(storedCartItems);
 
