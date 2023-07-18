@@ -1,5 +1,3 @@
-// import { component$ } from '@builder.io/qwik';
-
 export interface PaginationProps {
   totalPages: number;
   currentPage: number;

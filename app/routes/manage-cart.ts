@@ -77,12 +77,6 @@ export async function action({ request, context }: ActionArgs): Promise<any> {
       return json(append);
     } else {
       const id = uuidv4();
-      console.log("values to insert: ", [
-        id,
-        productId,
-        userId,
-        (quantity || 1) as number,
-      ]);
       const cartInsertionResponse = await db
         .insert(cartItems)
         .values({
