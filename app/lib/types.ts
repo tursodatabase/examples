@@ -3,15 +3,15 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  category_id: string;
+  categoryId: string;
   image: string;
-  created_at: string;
-  isInWishlist?: boolean;
+  createdAt: string;
 }
 
 export interface Category {
   id: string;
   name: string;
+  image: string;
 }
 
 export interface Review {
@@ -22,23 +22,23 @@ export interface Review {
 
 export interface User {
   id: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  address: string;
+  address: string | null;
   avatar: string;
-  created_at: number;
+  createdAt: number;
 }
 
 export interface CartItem {
-  id: number;
-  user?: User;
-  product: Product;
+  id: string;
   count: number;
+  user: User;
+  product: Product;
 }
 
 export interface Cart {
-  user?: User;
+  user: User;
   items: CartItem[];
   show: boolean;
 }
@@ -46,26 +46,11 @@ export interface Cart {
 export interface Order {
   id: number;
   amount: number;
-  shipping_fees: number;
+  shippingFees: number;
   discount: number;
-  final_amount: number;
+  finalAmount: number;
   paid: boolean;
-  user?: User; // there exist unregistered users
-  shipping_address: string;
-  created_at: number;
-}
-
-export interface AppState {
-  cart: Cart;
-  user?: User;
-  filters: Filter;
-}
-
-export interface Filter {
-  priceLow: number | 0;
-  priceHigh: number | 0;
-  sort: {
-    type: string | ""; // price/name,
-    order: string | ""; //asc/desc
-  };
+  user: User;
+  shippingAddress: string;
+  createdAt: number;
 }
