@@ -1,10 +1,10 @@
 /*
  * WHAT IS THIS FILE?
  *
- * It's the  entry point for netlify-edge when building for production.
+ * It's the entry point for Netlify Edge when building for production.
  *
- * Learn more about the cloudflare integration here:
- * - https://qwik.builder.io/integrations/deployments/netlify-edge/
+ * Learn more about the Netlify integration here:
+ * - https://qwik.builder.io/docs/deployments/netlify-edge/
  *
  */
 import {
@@ -16,7 +16,7 @@ import { manifest } from "@qwik-client-manifest";
 import render from "./entry.ssr";
 
 declare global {
-  interface QwikCityPlatform extends PlatformNetlify {}
+  interface QwikCityPlatform extends PlatformNetlify { }
 }
 
 export default createQwikCity({ render, qwikCityPlan, manifest });

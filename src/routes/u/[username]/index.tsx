@@ -1,12 +1,12 @@
 import { component$ } from "@builder.io/qwik";
-import { type DocumentHead, routeLoader$ } from "@builder.io/qwik-city";
+import { type DocumentHead, routeLoader$, type RequestEventLoader } from "@builder.io/qwik-city";
 import { Facebook } from "~/components/icons/facebook";
 import { GitHub } from "~/components/icons/github";
 import { LinkedIn } from "~/components/icons/linkedin";
 import { Twitter } from "~/components/icons/twitter";
 import { User } from "~/components/icons/user";
 import { Youtube } from "~/components/icons/youtube";
-import { createClient } from "@libsql/client/web";
+import { tursoClient } from "~/lib/turso";
 
 interface SocialLinks {
   website: string;
@@ -59,7 +59,8 @@ export const SocialLink = (props: SocialLinks) => {
 };
 
 export const useLinksLoader = routeLoader$(
-  async ({ params, status, url }): Promise<UserLinksResponse> => {
+  async (requestEvent: RequestEventLoader): Promise<UserLinksResponse> => {
+    // const { params, status, url } = requestEvent;
     // get local greeting
     const response = await fetch(`${url.origin}/get-local-greeting`, {
       method: "POST",
@@ -70,10 +71,7 @@ export const useLinksLoader = routeLoader$(
     let { greeting } = await response.json();
     greeting = greeting || "Hello";
 
-    const db = createClient({
-      url: import.meta.env.VITE_TURSO_DB_URL,
-      authToken: import.meta.env.VITE_TURSO_DB_AUTH_TOKEN,
-    });
+    const db = tursoClient(requestEvent)
     const userResponse = await db.execute({
       sql: "select users.full_name, links.id, links.website, links.link from users left join links on users.id = links.user_id where users.username = ?;",
       args: [params.username],

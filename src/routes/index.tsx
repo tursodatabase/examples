@@ -1,22 +1,18 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
-import { type DocumentHead, globalAction$, Form } from "@builder.io/qwik-city";
+import { type DocumentHead, Form, routeAction$, type RequestEventAction } from "@builder.io/qwik-city";
 import { LoadingAnimation } from "~/components/loading/loading";
 import { Noty } from "~/components/notification/notification";
-import { createClient } from "@libsql/client/web";
+import { tursoClient } from "~/lib/turso";
 
-export const useFormAction = globalAction$(async (form) => {
-  const db = createClient({
-    url: import.meta.env.VITE_TURSO_DB_URL,
-    authToken: import.meta.env.VITE_TURSO_DB_AUTH_TOKEN,
-  });
-
+export const useFormAction = routeAction$(async (data, requestEvent: RequestEventAction) => {
+  const db = tursoClient(requestEvent);
   // check if atleast one link was added
   if (
-    !(form.twitter as string).includes("twitter.com/") &&
-    !(form.linkedin as string).includes("linkedin.com/") &&
-    !(form.facebook as string).includes("facebook.com/") &&
-    !(form.github as string).includes("github.com/") &&
-    !(form.youtube as string).includes("youtube.com/")
+    !(data.twitter as string).includes("twitter.com/") &&
+    !(data.linkedin as string).includes("linkedin.com/") &&
+    !(data.facebook as string).includes("facebook.com/") &&
+    !(data.github as string).includes("github.com/") &&
+    !(data.youtube as string).includes("youtube.com/")
   ) {
     return {
       success: false,
@@ -28,44 +24,44 @@ export const useFormAction = globalAction$(async (form) => {
   await db.execute({
     sql: "insert into users(email, username, full_name) values(?, ?, ?)",
     args: [
-      form.email as string,
-      form.username as string,
-      form.fullname as string,
+      data.email as string,
+      data.username as string,
+      data.fullname as string,
     ],
   });
 
   const transaction = await db.transaction();
   const response = await transaction.execute({
     sql: "select * from users where email = ?",
-    args: [form.email as string],
+    args: [data.email as string],
   });
   const { id, username } = response.rows[0];
 
   // add links
-  if ((form.twitter as string).includes("twitter.com/"))
+  if ((data.twitter as string).includes("twitter.com/"))
     await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "Twitter", form.twitter as string],
+      args: [id, "Twitter", data.twitter as string],
     });
-  if ((form.linkedin as string).includes("linkedin.com/"))
+  if ((data.linkedin as string).includes("linkedin.com/"))
     await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "Linkedin", form.linkedin as string],
+      args: [id, "Linkedin", data.linkedin as string],
     });
-  if ((form.facebook as string).includes("facebook.com/"))
+  if ((data.facebook as string).includes("facebook.com/"))
     await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "Facebook", form.facebook as string],
+      args: [id, "Facebook", data.facebook as string],
     });
-  if ((form.github as string).includes("github.com/"))
+  if ((data.github as string).includes("github.com/"))
     await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "GitHub", form.github as string],
+      args: [id, "GitHub", data.github as string],
     });
-  if ((form.youtube as string).includes("youtube.com/"))
+  if ((data.youtube as string).includes("youtube.com/"))
     await transaction.execute({
       sql: "insert into links(user_id, website, link) values(?, ?, ?)",
-      args: [id, "Youtube", form.youtube as string],
+      args: [id, "Youtube", data.youtube as string],
     });
   await transaction.commit();
 
@@ -97,15 +93,15 @@ export default component$(() => {
         {formAction.value?.success && (
           <div class="flex flex-col justify-center space-y-2">
             <Noty
-              message={formAction.value?.message || "Links added!"}
+              message={formAction.value.message || "Links added!"}
               type="success"
             ></Noty>
             <p class="p-2 text-center">
               You social links are now available at{" "}
               <a
-                href={`${baseUrl.value}/u/${formAction.value?.username}`}
+                href={`${baseUrl.value}/u/${formAction.value.username}`}
                 target="_blank"
-              >{`${baseUrl}/u/${formAction.value?.username}`}</a>
+              >{`${baseUrl}/u/${formAction.value.username}`}</a>
             </p>
           </div>
         )}
