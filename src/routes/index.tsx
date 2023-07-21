@@ -2,7 +2,7 @@ import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { type DocumentHead, Form, routeAction$, type RequestEventAction } from "@builder.io/qwik-city";
 import { LoadingAnimation } from "~/components/loading/loading";
 import { Noty } from "~/components/notification/notification";
-import { tursoClient } from "~/lib/turso";
+import { tursoClient } from "~/utils/turso";
 
 export const useFormAction = routeAction$(async (data, requestEvent: RequestEventAction) => {
   const db = tursoClient(requestEvent);

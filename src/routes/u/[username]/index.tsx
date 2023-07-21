@@ -6,7 +6,7 @@ import { LinkedIn } from "~/components/icons/linkedin";
 import { Twitter } from "~/components/icons/twitter";
 import { User } from "~/components/icons/user";
 import { Youtube } from "~/components/icons/youtube";
-import { tursoClient } from "~/lib/turso";
+import { tursoClient } from "~/utils/turso";
 
 interface SocialLinks {
   website: string;
