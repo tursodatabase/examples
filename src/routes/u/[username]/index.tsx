@@ -60,7 +60,7 @@ export const SocialLink = (props: SocialLinks) => {
 
 export const useLinksLoader = routeLoader$(
   async (requestEvent: RequestEventLoader): Promise<UserLinksResponse> => {
-    // const { params, status, url } = requestEvent;
+    const { params, status, url } = requestEvent;
     // get local greeting
     const response = await fetch(`${url.origin}/get-local-greeting`, {
       method: "POST",
