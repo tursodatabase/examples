@@ -88,7 +88,7 @@ TURSO_DB_AUTH_TOKEN=
 TURSO_DB_URL=
 ```
 
-> **Note**
+> **_Note_**
 >
 > Do not stage the `.dev.env` and `.env` files used in local development.
 
@@ -139,8 +139,7 @@ npm run deploy
 [Remix]: https://github.com/remix-run/remix
 [Turso]: htthhttps://turso.tech/
 [Drizzle]: https://github.com/drizzle-team/drizzle-orm
-
-[Cloudflare Workers]: https://github.com/Shopify/Cloudflare Workers
+[Cloudflare Workers]: https://workers.cloudflare.com/
 [Remix Docs]: https://remix.run/docs
 [Turso Docs]: https://docs.turso.tech/
 [Drizzle Docs]: https://orm.drizzle.team/
