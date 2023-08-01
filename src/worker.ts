@@ -1,4 +1,4 @@
-import { createClient } from '@libsql/client/http';
+import { createClient } from '@libsql/client/web';
 import { drizzle, LibSQLDatabase } from 'drizzle-orm/libsql';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -47,6 +47,45 @@ function buildIttyRouter(env: Env): RouterType {
   router
     // add some middleware upstream on all routes
     .all('*', withParams)
+
+    .get('/', async () => {
+      return json({
+        name: 'The Mugs Store API',
+        endpoints: [
+          {
+            path: '/',
+            information: 'Get this endpoints index',
+            method: 'GET',
+          },
+          {
+            path: '/mugs',
+            information: 'Get a list of all mugs',
+            method: 'GET',
+          },
+          {
+            path: '/categories',
+            information: 'Get a list of all mug categories',
+            method: 'GET',
+          },
+          {
+            path: '/mug/$id',
+            information: 'Get the information on a mug whose $id was passed',
+            method: 'GET',
+          },
+          {
+            path: '/mug/$id',
+            information: 'Get the information on a mug whose $id was passed',
+            method: 'GET',
+          },
+          {
+            path: '/category/$id',
+            information:
+              'Get the information on the mug category whose $id was passed',
+            method: 'GET',
+          },
+        ],
+      });
+    })
 
     .get('/mugs', async () => {
       const mugsData = await db.select().from(mugs).all();
