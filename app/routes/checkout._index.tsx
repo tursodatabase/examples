@@ -65,9 +65,7 @@ export async function loader({ request, context }: LoaderArgs): Promise<any> {
 export const action = async ({
   request,
   context
-}: ActionArgs): Promise<
-  { status: string; message: string; data: any } | Response
-> => {
+}: ActionArgs) => {
   const userId = await requireUserId({ request, redirectTo: "/account/login" }, context);
   if (userId === undefined) {
     return redirect("/account/login");
@@ -75,7 +73,21 @@ export const action = async ({
     const formData = await request.formData();
     const values = Object.fromEntries(formData);
 
-    // Validate submitted data
+    // Validate submitted data (this is a simple, not fully adequate validation implementation)
+    if (
+      values.firstName === "" ||
+      values.lastName === "" ||
+      values.email === "" ||
+      values.phone === "" ||
+      values.country === "" ||
+      values.zipCode === ""
+    ) {
+      return {
+        status: "error",
+        message: "Some fields are missing!",
+        data: null,
+      };
+    }
 
     const db = buildDbClient(context);
 
@@ -131,22 +143,20 @@ export const action = async ({
           productId: item.product.id,
           count: item.count,
         };
-        await db.insert(orderItems).values(orderItemData);
+        await db.insert(orderItems).values(orderItemData).run();
 
         await db
           .delete(cartItems)
-          .where(eq(cartItems.id, item.id));
+          .where(eq(cartItems.id, item.id)).run();
       }
       return {
         status: "success",
-        message: "Order placed!",
         data: true,
       };
     } catch (error) {
       // TODO: Catch error and notify user
       return {
         status: "failure",
-        message: "Could not create an order!",
         data: null,
       };
     }
@@ -175,7 +185,7 @@ export default function Checkout() {
     if (
       makePayment.state !== "submitting" &&
       makePayment.state !== "loading" &&
-      !makePayment.data &&
+      makePayment.data &&
       makePayment.data?.status === "success"
     ) {
       alert("Order successfully placed!");
@@ -266,20 +276,20 @@ export default function Checkout() {
           <div className="mx-auto max-w-lg px-4 lg:px-8">
             {makePayment.state !== "submitting" &&
               makePayment.state !== "loading" &&
-              !makePayment.data?.data &&
+              makePayment.data &&
               makePayment.data?.status === "success" && (
                 <p className="text-green-600 font-semibold">
-                  {makePayment.data?.message}
+                  Order Placed
                 </p>
               )}
 
             {makePayment.state !== "submitting" &&
               makePayment.state !== "loading" &&
-              !makePayment.data?.data &&
+              makePayment.data &&
               (makePayment.data?.status === "error" ||
                 makePayment.data?.status === "failure") && (
                 <p className="text-red-600 font-semibold">
-                  {makePayment.data?.message}
+                  Could not place order
                 </p>
               )}
 
@@ -458,7 +468,7 @@ export default function Checkout() {
                 >
                   {(makePayment.state === "submitting" ||
                     makePayment.state === "loading") &&
-                    !makePayment.data?.data ? (
+                    !makePayment.data ? (
                     <span className="flex justify-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
