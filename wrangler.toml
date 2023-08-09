@@ -6,8 +6,8 @@ main = "./build/index.js"
 compatibility_date = "2023-04-20"
 
 [site]
-  bucket = "./public"
+bucket = "./public"
 
 [vars]
-  TURSO_DB_URL = "libsql://the-mug-store-xinnks.turso.io"
-  ITEMS_PER_PAGE=20
+TURSO_DB_URL = "libsql://the-mug-store-xinnks.turso.io"
+ITEMS_PER_PAGE = 20

@@ -1,6 +1,7 @@
 # The Mug Store! 🍵
 
-An e-commerce store built with [Remix], [Turso], [Drizzle], and deployed to [Cloudflare Workers].
+An e-commerce store built with [Remix], [Turso], [Drizzle], and deployed to
+[Cloudflare Workers].
 
 - [Remix Docs]
 - [Turso Docs]
@@ -65,18 +66,19 @@ turso db tokens create the-mug-store
 
 ### For local development
 
-Add a `.dev.env` file at the root of the project and inside it add the authentication token for your Turso
-database.
+Add a `.dev.env` file at the root of the project and inside it add the
+authentication token for your Turso database.
 
 ```
 TURSO_DB_AUTH_TOKEN=<AUTH-TOKEN>
 ```
 
-Add a `[vars]` section on the `wrangler.toml` file add the database url as follows.
+Add a `[vars]` section on the `wrangler.toml` file add the database url as
+follows.
 
 ```
 [vars]
-  TURSO_DB_URL = <DB-URL>
+TURSO_DB_URL = <DB-URL>
 ```
 
 Add another `.env` file with the following variables, populating them with the
@@ -97,11 +99,12 @@ TURSO_DB_URL=
 Run `npx wrangler secret put TURSO_DB_AUTH_TOKEN` and paste the authentication
 token obtained above.
 
-For the database url, run `npx wrangler secret put TURSO_DB_URL` and paste the database url obtained above.
+For the database url, run `npx wrangler secret put TURSO_DB_URL` and paste the
+database url obtained above.
 
 ```
 [vars]
-  TURSO_DB_URL = <DB-URL>
+TURSO_DB_URL = <DB-URL>
 ```
 
 ## Schema generation and migration

@@ -8,21 +8,13 @@ export function getCategoryImage(category: string) {
 }
 
 export function formatDate(date: number) {
-  const day = new Date(date * 1000).getDate();
-  const month = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ][new Date(date * 1000).getMonth()];
-  const year = new Date(date * 1000).getFullYear();
-  return `${day} ${month}, ${year}`;
+  const day = new Date(date * 1000);
+
+  const formattedDate = Intl.DateTimeFormat("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(day);
+
+  return formattedDate;
 }

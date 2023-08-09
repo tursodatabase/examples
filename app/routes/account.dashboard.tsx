@@ -3,6 +3,7 @@ import { useFetcher, useLoaderData } from "@remix-run/react";
 
 import { buildDbClient } from "~/lib/client";
 import { destroyUserSession, requireUserId } from "~/lib/session.server";
+import { Order, User } from '~/lib/types';
 import { formatDate } from "~/lib/utils";
 
 export const meta: V2_MetaFunction = () => {
@@ -12,7 +13,7 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
-export const loader: LoaderFunction = async ({ request, context }: LoaderArgs): Promise<any> => {
+export const loader: LoaderFunction = async ({ request, context }: LoaderArgs): Promise<ResponseInit | { user: User | undefined }> => {
   const userId = await requireUserId({ request, redirectTo: "/account/login" }, context);
   if (!userId || typeof userId !== "string") {
     return redirect("/account/login");
@@ -31,7 +32,7 @@ export const loader: LoaderFunction = async ({ request, context }: LoaderArgs): 
   }
 }
 
-export const action: ActionFunction = async ({ request, context }: ActionArgs): Promise<any> => {
+export const action: ActionFunction = async ({ request, context }: ActionArgs) => {
   const userId = await requireUserId({ request, redirectTo: "/account/login" }, context);
   if (userId !== undefined) {
     return destroyUserSession(userId, "/account/login", context);
@@ -63,10 +64,10 @@ export default function AccountDashboard() {
                 <th>Shipping to</th>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {user.orders.map((order: any) => (
+                {user.orders.map((order: Order) => (
                   <tr key={order.id}>
                     <td className="whitespace-nowrap text-center px-4 py-2">
-                      {formatDate(order.createdAt)}
+                      {formatDate(order?.createdAt as number)}
                     </td>
                     <td className="whitespace-nowrap text-center px-4 py-2">
                       {order.finalAmount}$

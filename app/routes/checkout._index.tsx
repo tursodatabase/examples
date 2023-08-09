@@ -74,21 +74,8 @@ export const action = async ({
   } else {
     const formData = await request.formData();
     const values = Object.fromEntries(formData);
-    // look for missing input
-    if (
-      !values.firstName ||
-      !values.lastName ||
-      !values.email ||
-      !values.phone ||
-      !values.country ||
-      !values.zipCode
-    ) {
-      return {
-        status: "error",
-        message: "Some fields are missing!",
-        data: null,
-      };
-    }
+
+    // Validate submitted data
 
     const db = buildDbClient(context);
 
@@ -114,7 +101,7 @@ export const action = async ({
       }
 
       const amount = cartItemsData.reduce(
-        (accumulator: any, currentVal: any) =>
+        (accumulator: number, currentVal: { count: number, product: { price: number } }) =>
           accumulator + currentVal.count * currentVal.product.price,
         0
       );
@@ -144,13 +131,11 @@ export const action = async ({
           productId: item.product.id,
           count: item.count,
         };
-        await db.insert(orderItems).values(orderItemData).returning().get();
+        await db.insert(orderItems).values(orderItemData);
 
         await db
           .delete(cartItems)
-          .where(eq(cartItems.id, item.id))
-          .returning()
-          .get();
+          .where(eq(cartItems.id, item.id));
       }
       return {
         status: "success",

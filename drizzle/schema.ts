@@ -31,12 +31,12 @@ export const products = sqliteTable(
     name: text("name").notNull(),
     description: text("description").notNull(),
     price: real("price").notNull(),
-    categoryId: integer("category_id")
+    categoryId: text("category_id")
       .notNull()
       .references(() => categories.id),
     image: text("image"),
-    createdAt: integer("created_at").default(sql`(strftime('%s', 'now'))`),
-    updatedAt: integer("updated_at").default(sql`(strftime('%s', 'now'))`),
+    createdAt: integer("created_at").default(sql`(cast (unixepoch () as int))`),
+    updatedAt: integer("updated_at").default(sql`(cast (unixepoch () as int))`),
   },
   (products) => ({
     idIdx: uniqueIndex("id_idx").on(products.id),
@@ -62,8 +62,8 @@ export const users = sqliteTable(
     address: text("address"),
     phone: text("phone"),
     avatar: text("avatar"),
-    createdAt: integer("created_at").default(sql`(strftime('%s', 'now'))`),
-    updatedAt: integer("updated_at").default(sql`(strftime('%s', 'now'))`),
+    createdAt: integer("created_at").default(sql`(cast (unixepoch () as int))`),
+    updatedAt: integer("updated_at").default(sql`(cast (unixepoch () as int))`),
   },
   (users) => ({
     emailIdx: uniqueIndex("email_idx").on(users.email),
@@ -109,8 +109,8 @@ export const cartItems = sqliteTable(
     productId: text("product_id")
       .notNull()
       .references(() => products.id),
-    createdAt: integer("created_at").default(sql`(strftime('%s', 'now'))`),
-    updatedAt: integer("updated_at").default(sql`(strftime('%s', 'now'))`),
+    createdAt: integer("created_at").default(sql`(cast (unixepoch () as int))`),
+    updatedAt: integer("updated_at").default(sql`(cast (unixepoch () as int))`),
   },
   (cartItems) => ({
     userIdProductIdx: uniqueIndex("cart_items_user_id_product_id_idx").on(
@@ -141,8 +141,8 @@ export const orders = sqliteTable("orders", {
   shippingAddress: text("shipping_address").notNull(),
   paid: integer("paid").notNull().default(0),
   userId: text("user_id").notNull(),
-  createdAt: integer("created_at").default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer("updated_at").default(sql`(strftime('%s', 'now'))`),
+  createdAt: integer("created_at").default(sql`(cast (unixepoch () as int))`),
+  updatedAt: integer("updated_at").default(sql`(cast (unixepoch () as int))`),
 });
 
 export const ordersRelations = relations(orders, ({ one, many }) => ({
@@ -164,8 +164,8 @@ export const orderItems = sqliteTable(
     productId: text("product_id")
       .notNull()
       .references(() => products.id),
-    createdAt: integer("created_at").default(sql`(strftime('%s', 'now'))`),
-    updatedAt: integer("updated_at").default(sql`(strftime('%s', 'now'))`),
+    createdAt: integer("created_at").default(sql`(cast (unixepoch () as int))`),
+    updatedAt: integer("updated_at").default(sql`(cast (unixepoch () as int))`),
   },
   (orderItems) => ({
     orderIdProductIdIdx: uniqueIndex("order_items_order_id_product_id_idx").on(

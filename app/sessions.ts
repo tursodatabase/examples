@@ -1,4 +1,7 @@
-import { createCookieSessionStorage } from "@remix-run/cloudflare";
+import {
+  AppLoadContext,
+  createCookieSessionStorage,
+} from "@remix-run/cloudflare";
 
 type SessionData = {
   userId: string;
@@ -8,7 +11,11 @@ type SessionFlashData = {
   error: string;
 };
 
-export function cookieSessionCreation(context: any) {
+interface CookiesEnv {
+  SESSION_SECRET: string;
+}
+
+export function cookieSessionCreation(context: AppLoadContext) {
   const { getSession, commitSession, destroySession } =
     createCookieSessionStorage<SessionData, SessionFlashData>({
       // a Cookie from `createCookie` or the CookieOptions to create one
@@ -25,7 +32,9 @@ export function cookieSessionCreation(context: any) {
         maxAge: 7 * 60 * 60,
         path: "/",
         sameSite: "lax",
-        secrets: [context.env?.SESSION_SECRET],
+        secrets: [
+          (context.env as unknown as CookiesEnv).SESSION_SECRET?.trim(),
+        ],
         secure: true,
       },
     });

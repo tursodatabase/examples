@@ -1,5 +1,5 @@
 import { passwords, users } from "./../../drizzle/schema";
-import { redirect } from "@remix-run/cloudflare";
+import { AppLoadContext, redirect } from "@remix-run/cloudflare";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 
@@ -24,7 +24,7 @@ export interface LoginCredentials {
 
 export async function login(
   { email, password }: LoginCredentials,
-  serverContext: any
+  serverContext: AppLoadContext
 ) {
   const db = buildDbClient(serverContext);
   // check if email exists
@@ -38,7 +38,7 @@ export async function login(
   if (user !== undefined) {
     const isValidPassword = bcrypt.compareSync(
       password,
-      (user.password.hash as string) || ""
+      user.password.hash as string
     );
 
     return !isValidPassword ? null : user;
@@ -119,7 +119,7 @@ export async function register(
 export async function createUserSession(
   userId: string,
   redirectUrl: string,
-  serverContext: any
+  serverContext: AppLoadContext
 ) {
   const { getSession, commitSession } = cookieSessionCreation(serverContext);
   const session = await getSession();
@@ -155,7 +155,7 @@ export async function requireUserId(
     request: Request;
     redirectTo?: string;
   },
-  serverContext: any
+  serverContext: AppLoadContext
 ) {
   const { getSession } = cookieSessionCreation(serverContext);
   const session = await getSession(request.headers.get("Cookie"));

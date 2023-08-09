@@ -5,7 +5,8 @@ export interface Product {
   price: number;
   categoryId: string;
   image: string;
-  createdAt: string;
+  createdAt?: number;
+  updatedAt?: number;
 }
 
 export interface Category {
@@ -14,20 +15,16 @@ export interface Category {
   image: string;
 }
 
-export interface Review {
-  userId: number;
-  rating: number;
-  comments: string;
-}
-
 export interface User {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
   address: string | null;
-  avatar: string;
-  createdAt: number;
+  avatar: string | null;
+  createdAt: number | null;
+  updatedAt: number | null;
+  orders?: Order[];
 }
 
 export interface CartItem {
@@ -44,13 +41,14 @@ export interface Cart {
 }
 
 export interface Order {
-  id: number;
+  id: string;
   amount: number;
   shippingFees: number;
-  discount: number;
+  discount?: number;
   finalAmount: number;
-  paid: boolean;
-  user: User;
+  paid: number;
+  user?: User;
   shippingAddress: string;
-  createdAt: number;
+  createdAt: number | null;
+  updatedAt: number | null;
 }

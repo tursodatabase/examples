@@ -4,6 +4,7 @@ import {
   type LoaderArgs,
   json,
   redirect,
+  TypedResponse,
 } from "@remix-run/cloudflare";
 import { and, eq } from "drizzle-orm";
 
@@ -40,7 +41,10 @@ export async function loader({ request, context }: LoaderArgs) {
   };
 }
 
-export async function action({ request, context }: ActionArgs): Promise<any> {
+export async function action({
+  request,
+  context,
+}: ActionArgs): Promise<TypedResponse<never> | TypedResponse | null> {
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
 
