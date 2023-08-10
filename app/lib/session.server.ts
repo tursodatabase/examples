@@ -36,10 +36,7 @@ export async function login(
   });
 
   if (user !== undefined) {
-    const isValidPassword = bcrypt.compareSync(
-      password,
-      user.password.hash as string
-    );
+    const isValidPassword = bcrypt.compareSync(password, user.password.hash);
 
     return !isValidPassword ? null : user;
   }

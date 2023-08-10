@@ -139,7 +139,7 @@ export const action = async ({
       for (const item of cartItemsData) {
         const orderItemData = {
           id: uuidv4(),
-          orderId: newOrder.id as string,
+          orderId: newOrder.id,
           productId: item.product.id,
           count: item.count,
         };
