@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { applyAction, enhance } from '$app/forms';
 	import { LoaderIcon, PlusIcon } from '$lib';
 
 	interface ChoicesType {
@@ -14,6 +15,7 @@
 	];
 
 	let choicesCount: number = 2;
+	let isSubmitting = false;
 
 	function addChoice(ev: Event) {
 		ev.preventDefault();
@@ -34,7 +36,17 @@
 
 <h1 class="text-2xl tect-center flex justify-center">New Poll</h1>
 
-<form method="post" class="p-2 lg:p-8 flex flex-col gap-4 max-w-xl mx-auto">
+<form
+	method="post"
+	class="p-2 lg:p-8 flex flex-col gap-4 max-w-xl mx-auto"
+	use:enhance={() => {
+		isSubmitting = true;
+		return async ({ result }) => {
+			await applyAction(result);
+			isSubmitting = false;
+		};
+	}}
+>
 	<div>
 		{#if form?.ok}
 			<div class="p-2 bg-green-200 rounded text-green-700 flex gap-2">
@@ -118,8 +130,11 @@
 	<div class="flex justify-center">
 		<button
 			type="submit"
-			class=" w-32 p-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded text-white"
-			>Add Poll</button
+			class=" w-32 p-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 rounded text-white flex justify-center items-center gap-1"
+		>
+			{#if isSubmitting}
+				<LoaderIcon styles="w-3 h-3 fill-white" />
+			{/if} <span>Add Poll</span></button
 		>
 	</div>
 </form>
