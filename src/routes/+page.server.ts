@@ -1,9 +1,9 @@
 import type { PageServerLoad } from './$types';
-import { tursoClient } from '$lib/turso';
-
-const db = tursoClient();
+import { tursoClient } from '$lib/server/turso';
 
 export const load: PageServerLoad = async () => {
+	const db = tursoClient();
+
 	const questions = await db.query.questions.findMany({
 		with: {
 			choices: {
@@ -18,5 +18,5 @@ export const load: PageServerLoad = async () => {
 		return { questions };
 	}
 
-	return { ok: false, message: 'No questions found' };
+	return { questions: [] };
 };

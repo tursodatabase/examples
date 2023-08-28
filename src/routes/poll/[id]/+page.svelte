@@ -1,12 +1,11 @@
 <script lang="ts">
-	import type { PageData } from '../$types';
-	import type { Question } from '$lib/types';
+	import type { PageData } from './$types';
 
 	export let data: PageData;
 
-	export let { question }: { question: Question & { hasVoted: boolean } } = data;
+	export let { question, ok, message } = data;
 	let totalVotes = 0;
-	question.choices.forEach((choice) => {
+	question?.choices.forEach((choice) => {
 		totalVotes += choice.votes?.length || 0;
 	});
 

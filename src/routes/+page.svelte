@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { PollCard } from '$lib';
-	import type { Question } from '../lib/types';
 	const title = 'Turso at the Polls';
 
 	export let data: PageData;
@@ -12,12 +11,10 @@
 	<h1 class="text-2xl font-bold mb-8">{title}</h1>
 </section>
 
-{#if questions !== undefined && questions.length}
+{#if questions.length}
 	<ul class="flex flex-col gap-4 p-2w-full lg:max-w-2xl mx-auto">
 		{#each questions as question (question.id)}
-			<a href="/poll/{question.id}">
-				<PollCard {question} />
-			</a>
+			<PollCard {question} />
 		{/each}
 	</ul>
 {:else}

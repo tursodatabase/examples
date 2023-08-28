@@ -1,12 +1,16 @@
-import { error, type Actions, type RequestEvent } from '@sveltejs/kit';
+import type { Actions } from '@sveltejs/kit';
 import { geolocation } from '@vercel/edge';
-import type { PageServerLoad } from './$types';
-import { tursoClient } from '$lib/turso';
+import type { PageServerLoad } from '../$types';
+import { tursoClient } from '$lib/server/turso';
 import { votes } from '../../../../drizzle/schema';
+import type { Question } from '$lib/types';
 
 const db = tursoClient();
 
-export const load: PageServerLoad = async ({ params, cookies }) => {
+export const load: PageServerLoad = async ({
+	params,
+	cookies
+}): Promise<{ question: Question & { hasVoted: boolean } } | { ok: boolean; message: string }> => {
 	if (!cookies.get('userid')) {
 		cookies.set('userid', crypto.randomUUID(), { path: '/' });
 	}
@@ -15,8 +19,9 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 	const { id }: { id?: string } = params;
 
 	if (id === undefined) {
-		throw error(404, 'Not Found');
+		return { ok: false, message: 'Poll id not provided' };
 	}
+	const db = tursoClient();
 
 	const question = await db.query.questions.findFirst({
 		where: (questions, { eq }) => eq(questions.id, id),
@@ -29,7 +34,6 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 		}
 	});
 
-	// check if voted
 	let hasVoted = false;
 
 	const userVotes = await db.query.votes.findMany({
@@ -49,11 +53,11 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 		return { question: { ...question, hasVoted } };
 	}
 
-	throw error(404, 'Not found');
+	return { ok: false, message: 'Poll not found!' };
 };
 
 export const actions = {
-	default: async ({ cookies, request }: RequestEvent) => {
+	default: async ({ cookies, request }) => {
 		if (!cookies.get('userid')) {
 			cookies.set('userid', crypto.randomUUID(), { path: '/' });
 		}
@@ -76,12 +80,11 @@ export const actions = {
 			where: (votes, { eq, and }) => and(eq(votes.choiceId, choiceId), eq(votes.voterId, userId))
 		});
 
-		let voteData = {};
 		if (alreadyVoted === undefined) {
 			// add vote
-			voteData = await db.insert(votes).values(vote).returning().get();
+			await db.insert(votes).values(vote).run();
 		}
 
-		return JSON.stringify({ voteData });
+		return { ok: true, message: 'Voted' };
 	}
 } satisfies Actions;

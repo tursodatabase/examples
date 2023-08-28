@@ -1,22 +1,15 @@
 import { fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions, RequestEvent } from '../$types';
 import date from 'date-and-time';
-import { tursoClient } from '$lib/turso';
+import { tursoClient } from '$lib/server/turso';
 import { questions, choices } from './../../../drizzle/schema';
 
-
-const db = tursoClient();
-
-export const load: PageServerLoad = async ({
-	cookies
-}): Promise<{ userId: string | undefined }> => {
+export const load: PageServerLoad = async ({ cookies }) => {
 	const userId = cookies.get('userid');
 
 	if (!userId) {
 		cookies.set('userid', crypto.randomUUID(), { path: '/' });
 	}
-
-	return { userId };
 };
 
 export const actions = {
@@ -45,6 +38,8 @@ export const actions = {
 			return fail(400, { question, missing: true });
 		}
 
+		const db = tursoClient();
+
 		const id = crypto.randomUUID();
 		const deleteId = crypto.randomUUID();
 
@@ -55,7 +50,6 @@ export const actions = {
 			expireDate
 		};
 
-		// add question
 		const questionData = await db.insert(questions).values(questionInsertValues).returning().get();
 
 		let i = 0;
@@ -72,7 +66,6 @@ export const actions = {
 			i++;
 		}
 
-		// add choices
 		await db.insert(choices).values(pollChoices).run();
 
 		return { ok: true, message: 'Poll added', deleteId: questionData.deleteId };

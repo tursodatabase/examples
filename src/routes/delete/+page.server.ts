@@ -1,31 +1,22 @@
 import type { PageServerLoad, Actions, RequestEvent } from '../$types';
-import { tursoClient } from '$lib/turso';
+import { tursoClient } from '$lib/server/turso';
 import { questions, choices, votes } from '../../../drizzle/schema';
 import { eq } from 'drizzle-orm';
 
-
-const db = tursoClient();
-
-export const load: PageServerLoad = async ({
-	cookies
-}): Promise<{ userId: string | undefined }> => {
+export const load: PageServerLoad = async ({ cookies }) => {
 	const userId = cookies.get('userid');
 
 	if (!userId) {
 		cookies.set('userid', crypto.randomUUID(), { path: '/' });
 	}
-
-	return { userId };
 };
 
 export const actions = {
-	default: async ({ cookies, request }: RequestEvent) => {
-		if (!cookies.get('userid')) {
-			cookies.set('userid', crypto.randomUUID(), { path: '/' });
-		}
-
+	default: async ({ request }: RequestEvent) => {
 		const data = await request.formData();
 		const questionDeleteId: string = data.get('question_delete_id') as unknown as string;
+
+		const db = tursoClient();
 
 		// get question
 		const pollQuestion = await db.query.questions.findFirst({
@@ -43,7 +34,6 @@ export const actions = {
 			return { ok: false, message: 'Unknown delete id!' };
 		}
 
-		// delete votes & choices
 		if (pollQuestion.choices.length > 0) {
 			pollQuestion.choices.forEach(async (choice) => {
 				if (choice.votes.length) {
@@ -54,7 +44,6 @@ export const actions = {
 			});
 		}
 
-		// delete question
 		await db.delete(questions).where(eq(questions.id, pollQuestion.id)).returning().get();
 
 		return { ok: true, message: 'Poll deleted!' };
