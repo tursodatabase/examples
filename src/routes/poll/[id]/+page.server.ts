@@ -1,4 +1,5 @@
 import { error, type Actions, type RequestEvent } from '@sveltejs/kit';
+import { geolocation } from '@vercel/edge';
 import type { PageServerLoad } from './$types';
 import type { Config } from '@sveltejs/adapter-vercel';
 import { tursoClient } from '$lib/turso';
@@ -68,10 +69,12 @@ export const actions = {
 		const data = await request.formData();
 		const choiceId: string = data.get('choice_id') as unknown as string;
 
+		const { country } = geolocation(request);
+
 		const vote = {
 			id: crypto.randomUUID() as unknown as string,
 			choiceId,
-			country: 'unknown',
+			country: country || 'unknown',
 			voterId: userId
 		};
 
