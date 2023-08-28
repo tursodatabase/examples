@@ -1,5 +1,5 @@
 import { type LibSQLDatabase, drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client/web';
+import { createClient } from '@libsql/client/http';
 import * as schema from '../../../drizzle/schema';
 
 export function tursoClient(): LibSQLDatabase<typeof schema> {
