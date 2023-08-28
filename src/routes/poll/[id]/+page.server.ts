@@ -1,15 +1,8 @@
 import { error, type Actions, type RequestEvent } from '@sveltejs/kit';
 import { geolocation } from '@vercel/edge';
 import type { PageServerLoad } from './$types';
-import type { Config } from '@sveltejs/adapter-vercel';
 import { tursoClient } from '$lib/turso';
 import { votes } from '../../../../drizzle/schema';
-
-export const config: Config = {
-	runtime: 'edge'
-};
-
-export const ssr = true;
 
 const db = tursoClient();
 

@@ -1,15 +1,9 @@
-import type { Config } from '@sveltejs/adapter-vercel';
 import { fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions, RequestEvent } from '../$types';
 import date from 'date-and-time';
 import { tursoClient } from '$lib/turso';
 import { questions, choices } from './../../../drizzle/schema';
 
-export const config: Config = {
-	runtime: 'edge'
-};
-
-export const ssr = true;
 
 const db = tursoClient();
 

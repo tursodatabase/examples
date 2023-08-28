@@ -1,14 +1,8 @@
-import type { Config } from '@sveltejs/adapter-vercel';
 import type { PageServerLoad, Actions, RequestEvent } from '../$types';
 import { tursoClient } from '$lib/turso';
 import { questions, choices, votes } from '../../../drizzle/schema';
 import { eq } from 'drizzle-orm';
 
-export const config: Config = {
-	runtime: 'edge'
-};
-
-export const ssr = true;
 
 const db = tursoClient();
 

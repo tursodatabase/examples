@@ -1,10 +1,5 @@
 import type { PageServerLoad } from './$types';
-import type { Config } from '@sveltejs/adapter-vercel';
 import { tursoClient } from '$lib/turso';
-
-export const config: Config = {
-	runtime: 'edge'
-};
 
 const db = tursoClient();
 
