@@ -1,0 +1,48 @@
+{
+	"name": "app-at-the-polls",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev --port 3000 --host",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"format": "prettier --plugin-search-dir . --write .",
+		"drizzle:generate": "drizzle-kit generate:sqlite --out ./drizzle/migrations --breakpoints --schema=./drizzle/schema.ts",
+		"drizzle:migrate": "tsx drizzle/migrate",
+		"drizzle:studio": "drizzle-kit studio --port 3333",
+		"turso:local": "turso dev --db-file at-the-polls.db --port 5555"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-vercel": "^3.0.3",
+		"@sveltejs/kit": "^1.20.4",
+		"@typescript-eslint/eslint-plugin": "^5.45.0",
+		"@typescript-eslint/parser": "^5.45.0",
+		"autoprefixer": "^10.4.14",
+		"dotenv": "^16.3.1",
+		"drizzle-kit": "^0.19.12",
+		"eslint": "^8.28.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-svelte": "^2.30.0",
+		"postcss": "^8.4.24",
+		"postcss-load-config": "^4.0.1",
+		"prettier": "^2.8.0",
+		"prettier-plugin-svelte": "^2.10.1",
+		"svelte": "^4.0.5",
+		"svelte-check": "^3.4.3",
+		"tailwindcss": "^3.3.2",
+		"tslib": "^2.4.1",
+		"typescript": "^5.0.0",
+		"vite": "^4.4.2"
+	},
+	"type": "module",
+	"dependencies": {
+		"@libsql/client": "^0.3.1",
+		"date-and-time": "^3.0.2",
+		"drizzle-orm": "^0.28.2",
+		"uuid": "^9.0.0"
+	}
+}
