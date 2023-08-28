@@ -42,7 +42,6 @@ export const actions = {
 		let expireTime = date.addDays(new Date(), days);
 		expireTime = date.addHours(expireTime, hours);
 		expireTime = date.addMinutes(expireTime, minutes);
-		console.log({ expireTime });
 		const timeDiffToSecs: number = date.subtract(expireTime, new Date()).toSeconds();
 		const expireDate = Number((Date.now() / 1000 + timeDiffToSecs).toFixed(0));
 
@@ -80,7 +79,7 @@ export const actions = {
 		}
 
 		// add choices
-		const choicesData = await db.insert(choices).values(pollChoices).returning().get();
+		await db.insert(choices).values(pollChoices).run();
 
 		return { ok: true, message: 'Poll added', deleteId: questionData.deleteId };
 	}

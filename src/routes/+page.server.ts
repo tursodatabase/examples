@@ -1,8 +1,6 @@
-import { HttpError_1, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { Config } from '@sveltejs/adapter-vercel';
 import { tursoClient } from '$lib/turso';
-import type { Choice, Question } from '../lib/types';
 
 export const config: Config = {
 	runtime: 'edge'

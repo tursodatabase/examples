@@ -2,38 +2,8 @@
 	import { applyAction, enhance } from '$app/forms';
 	import LoaderIcon from '$lib/loader-icon.svelte';
 
-	interface ChoicesType {
-		name: string;
-		value: string;
-	}
-
 	export let form: { ok: boolean; message: string };
 	let isSubmitting = false;
-
-	let choices: ChoicesType[] = [
-		{ name: 'choice_0', value: '' },
-		{ name: 'choice_1', value: '' }
-	];
-
-	let choicesCount: number = 2;
-
-	function addChoice(ev: Event) {
-		ev.preventDefault();
-		console.log('Adding a choice: ', { choicesCount });
-		if (choicesCount < 10) {
-			choices = [...choices, { name: `choice_${choicesCount}`, value: '' }];
-			choicesCount++;
-			console.log('Choice added ', { choices });
-			return;
-		}
-		console.log("Can't have more than 10 choices");
-	}
-
-	function validateLength(index: number) {
-		if (choices[index].value.length >= 20) {
-			choices[index].value = choices[index].value.slice(0, 20);
-		}
-	}
 </script>
 
 <h1 class="text-2xl tect-center flex justify-center mb-4">Delete poll</h1>

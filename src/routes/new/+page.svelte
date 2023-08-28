@@ -17,11 +17,9 @@
 
 	function addChoice(ev: Event) {
 		ev.preventDefault();
-		console.log('Adding a choice: ', { choicesCount });
 		if (choicesCount < 10) {
 			choices = [...choices, { name: `choice_${choicesCount}`, value: '' }];
 			choicesCount++;
-			console.log('Choice added ', { choices });
 			return;
 		}
 		console.log("Can't have more than 10 choices");

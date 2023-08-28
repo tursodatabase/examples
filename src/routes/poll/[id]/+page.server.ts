@@ -84,7 +84,6 @@ export const actions = {
 		if (alreadyVoted === undefined) {
 			// add vote
 			voteData = await db.insert(votes).values(vote).returning().get();
-			console.log(JSON.stringify(voteData));
 		}
 
 		return JSON.stringify({ voteData });

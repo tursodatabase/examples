@@ -53,30 +53,15 @@ export const actions = {
 		if (pollQuestion.choices.length > 0) {
 			pollQuestion.choices.forEach(async (choice) => {
 				if (choice.votes.length) {
-					const deletedVotes = await db
-						.delete(votes)
-						.where(eq(votes.choiceId, choice.id))
-						.returning()
-						.all();
-					console.log(JSON.stringify({ deletedVotes }));
+					await db.delete(votes).where(eq(votes.choiceId, choice.id)).returning().all();
 				}
 
-				const deletedChoice = await db
-					.delete(choices)
-					.where(eq(choices.id, choice.id))
-					.returning()
-					.all();
-				console.log(JSON.stringify({ deletedChoice }));
+				await db.delete(choices).where(eq(choices.id, choice.id)).run();
 			});
 		}
 
 		// delete question
-		const deletedQn = await db
-			.delete(questions)
-			.where(eq(questions.id, pollQuestion.id))
-			.returning()
-			.get();
-		console.log(JSON.stringify({ deletedQn }));
+		await db.delete(questions).where(eq(questions.id, pollQuestion.id)).returning().get();
 
 		return { ok: true, message: 'Poll deleted!' };
 	}
