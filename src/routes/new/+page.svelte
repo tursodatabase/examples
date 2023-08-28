@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PlusIcon from '$lib/plus-icon.svelte';
+	import { LoaderIcon, PlusIcon } from '$lib';
 
 	interface ChoicesType {
 		name: string;

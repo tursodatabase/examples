@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import LoaderIcon from '$lib/loader-icon.svelte';
+	import { LoaderIcon } from '$lib';
 
 	export let form: { ok: boolean; message: string };
 	let isSubmitting = false;
