@@ -5,8 +5,6 @@ import { tursoClient } from '$lib/server/turso';
 import { votes } from '../../../../drizzle/schema';
 import type { Question } from '$lib/types';
 
-const db = tursoClient();
-
 export const load: PageServerLoad = async ({
   params,
   cookies
@@ -74,6 +72,8 @@ export const actions = {
       country: country || 'unknown',
       voterId: userId
     };
+
+    const db = tursoClient();
 
     // check if voted
     const alreadyVoted = await db.query.votes.findFirst({
