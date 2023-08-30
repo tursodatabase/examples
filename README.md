@@ -10,19 +10,6 @@ Technologies used.
 - [Vercel]
 - [TailwindCSS]
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest turso-at-the-polls
-
-```
-
 ## Database Setup
 
 [Install the Turso CLI].
@@ -61,10 +48,29 @@ VITE_TURSO_DB_AUTH_TOKEN=<AUTH-TOKEN>
 VITE_TURSO_DB_URL=<DB-URL>
 ```
 
+## Schema generation and migration
+
+To generate the database schema with Drizzle, run:
+
+```sh
+npm run drizzle:generate
+```
+
+Migrate the generated database schema by running:
+
+```sh
+npm run drizzle:migrate
+```
+
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or
-`pnpm install` or `yarn`), start a development server:
+Once you've created a database, generated, and migrate the schema by following the instructions above, install the project's dependencies by running:
+
+```typescript
+npm install
+```
+
+To start a development server, run:
 
 ```bash
 npm run dev
@@ -77,19 +83,6 @@ npm run dev -- --open
 >
 > Do not stage the `.env` file used in local development.
 
-## Schema generation and migration
-
-To generate the database schema with Drizzle, run:
-
-```sh
-npm run drizzle:generate
-```
-
-Migrate the generated data schema by running:
-
-```sh
-npm run drizzle:migrate
-```
 
 ## Building
 
