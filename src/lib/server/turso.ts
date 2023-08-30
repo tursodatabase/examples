@@ -9,10 +9,8 @@ export function tursoClient(): LibSQLDatabase<typeof schema> {
   }
 
   const authToken = import.meta.env.VITE_TURSO_DB_AUTH_TOKEN?.trim();
-  if (authToken === undefined) {
-    if (!url.includes('file:')) {
-      throw new Error('VITE_TURSO_DB_AUTH_TOKEN is not defined');
-    }
+  if (authToken === undefined && !url.startsWith('file:')) {
+    new Error('VITE_TURSO_DB_AUTH_TOKEN is not defined');
   }
 
   return drizzle(
