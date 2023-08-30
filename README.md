@@ -83,7 +83,6 @@ npm run dev -- --open
 >
 > Do not stage the `.env` file used in local development.
 
-
 ## Building
 
 To create a production version of your app:
