@@ -35,13 +35,13 @@ export const actions = {
     }
 
     if (pollQuestion.choices.length > 0) {
-      pollQuestion.choices.forEach(async (choice) => {
+      for (const choice of pollQuestion.choices) {
         if (choice.votes.length) {
           await db.delete(votes).where(eq(votes.choiceId, choice.id)).returning().all();
         }
 
         await db.delete(choices).where(eq(choices.id, choice.id)).run();
-      });
+      }
     }
 
     await db.delete(questions).where(eq(questions.id, pollQuestion.id)).returning().get();
