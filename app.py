@@ -17,7 +17,6 @@ app = Flask(__name__)
 assets = Environment(app);
 css = Bundle("src/main.css", output="dist/main.css")
 js = Bundle("src/*.js", output="dist/main.js")
-logo = Bundle("img/logo.svg")
 
 assets.register("css", css)
 assets.register("js", js)
@@ -27,6 +26,8 @@ js.build()
 # Get environment variables
 TURSO_DB_URL = os.environ.get("TURSO_DB_URL")
 TURSO_DB_AUTH_TOKEN = os.environ.get("TURSO_DB_AUTH_TOKEN")
+
+# construct special SQLAlchemy URL
 dbUrl = f"sqlite+{TURSO_DB_URL}/?authToken={TURSO_DB_AUTH_TOKEN}&secure=true"
 
 current_time = datetime.datetime.now();
@@ -122,7 +123,6 @@ def get_username(username):
     if request.method == 'POST':
       # delete user
       delete_id = str(request.headers['HX-Prompt'])
-      print(delete_id)
       user_to_delete = session.scalars(select(User).where(User.delete_id.in_([delete_id]))).first()
       session.delete(user_to_delete)
       session.commit()
