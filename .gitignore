@@ -1,0 +1,7 @@
+*dist*
+.venv
+.env
+__pycache__
+.*-cache
+*.db*
+**.DS_Store

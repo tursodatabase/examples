@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+  header,
+    header>* {
+      @apply bg-teal-200;
+    }
+  
+    input {
+      @apply focus:outline-teal-600 rounded-full px-3 py-1 w-full bg-teal-50 focus:bg-white;
+      box-shadow: 0 0 0 1px #14b8a6;
+    }
+  
+    input:focus {
+      box-shadow: none;
+    }
+  
+    button[type="submit"] {
+      @apply text-white bg-teal-500 hover:bg-teal-600 active:bg-teal-700 rounded-full px-3 py-1 w-full;
+    }
+  
+    a {
+      @apply text-teal-800 visited:text-teal-400;
+    }
+  
+    a[title="FindMeOn"] {
+      @apply text-teal-800;
+    }
+  
+    div#social-link:hover {
+      box-shadow: 0 0 0 2px #14b8a6;
+    }
+
+    .status {
+      @apply flex flex-col justify-center items-center space-y-2
+    }
+
+    .success {
+      @apply px-4 py-3 text-green-800 bg-green-200
+    }
+
+    .error {
+      @apply px-4 py-3 text-red-800 bg-red-200
+    }
+}
