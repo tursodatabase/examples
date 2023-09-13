@@ -16,7 +16,8 @@ A social links listing app built with [Flask], [HTMX], and [Turso].
 This project is using Flask as the back-end and HTMX as the front-end.
 
 Inside your project, you'll see the following directory structure:
-templates/404.html templates/base.html templates/icons.html templates/index.html templates/username.html
+templates/404.html templates/base.html templates/icons.html templates/index.html
+templates/username.html
 
 ```bash
 ├── templates/
