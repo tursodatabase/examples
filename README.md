@@ -120,7 +120,7 @@ python3 app.py
 > **Note**
 >
 > You can opt to visit the "127.0.0.1:5000/seed" route to seed one account whose
-> information can be viewed by visiting "127.0.0.1:5000/seed" afterwards.
+> information can be viewed by visiting "127.0.0.1:5000/u/turso" afterwards.
 
 [Flask]: https://flask.palletsprojects.com/
 [HTMX]: https://htmx.org/
