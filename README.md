@@ -40,6 +40,12 @@ echo "TURSO_DB_URL = $TURSO_DB_URL" > .env
 echo "TURSO_DB_AUTH_TOKEN = $TURSO_DB_AUTH_TOKEN" >> .env
 ```
 
+Also make the configuration visible to Wrangler:
+
+```
+cp .env .dev.vars
+```
+
 Then install all the dependencies with:
 
 ```
@@ -76,13 +82,26 @@ npm run start
 
 ## For the production environment
 
-Run `npx wrangler secret put TURSO_DB_AUTH_TOKEN` and fill in the auth token acquired above when prompted to add it as a secret variable to your workers project and Cloudflare dashboard.
+Configure the Cloudflare project by running the following commands and copy-pasting the URL and the authentication token when prompted for them:
+
+```
+wrangler secret put TURSO_DB_URL
+wrangler secret put TURSO_DB_AUTH_TOKEN
+```
 
 ## Deployment
 
-If you don't have an account, then [create a Cloudflare account here]. After verifying your email address, run `npx wrangler login` on your project's workspace to authenticate it with Cloudflare workers.
+If you don't have an account, then [create a Cloudflare account here]. After verifying your email address, run the following command on your project's workspace to authenticate it with Cloudflare workers:
 
-Lastly, deploy your Cloudflare workers project by running `npx wrangler deploy src/indes.ts`.
+```
+npx wrangler login
+```
+
+Lastly, deploy your Cloudflare workers project by running:
+
+```
+npm run deploy
+```
 
 ## More information
 
