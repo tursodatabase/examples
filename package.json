@@ -11,9 +11,9 @@
     "seed": "tsx drizzle/seed"
   },
   "dependencies": {
-    "@libsql/client": "^0.2.1",
-    "drizzle-orm": "^0.26.5",
-    "drizzle-zod": "^0.4.3",
+    "@libsql/client": "^0.3.5",
+    "drizzle-orm": "^0.28.6",
+    "drizzle-zod": "^0.5.1",
     "itty-router": "^4.0.9",
     "uuid": "^9.0.0"
   },
@@ -22,7 +22,7 @@
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "dotenv": "^16.1.4",
-    "drizzle-kit": "^0.18.1",
+    "drizzle-kit": "^0.19.13",
     "eslint": "^8.42.0",
     "eslint-config-standard-with-typescript": "^35.0.0",
     "eslint-plugin-import": "^2.25.2",
