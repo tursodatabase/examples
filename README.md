@@ -11,24 +11,6 @@ Install dependencies:
 npm install
 ```
 
-Run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000] with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page
-auto-updates as you edit the file.
-
-This project uses [`next/font`] to automatically optimize and load Inter, a
-custom Google Font.
-
 ## Setting up the database
 
 [Install the Turso CLI].
@@ -112,24 +94,34 @@ And, to create an authentication token for your database, run:
 turso db tokens create web-frameworks
 ```
 
-Add a `.env.local` file at the root of the project and inside it add the values
+Rename the `.env.example` to `.env.local` and add the values
 obtained above as the database url and authentication token for your Turso
 database.
 
-```
+```txt
 NEXT_TURSO_DB_URL=
 NEXT_TURSO_DB_AUTH_TOKEN=
 ```
 
-## Learn More
+## Local development
 
-To learn more about the stack used in this template, take a look at the
-following resources:
+Run the development server:
 
-- [Next.js Documentation] - learn about Next.js features and API.
-- [Turso Documentation] - learn about Next.js features and API.
-- [Turso Community] - Join the Turso community.
-- [libSQL] - The open-source open-contribution fork of SQLite Turso is built on.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
+
+Open [http://localhost:3000] with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page
+auto-updates as you edit the file.
+
+This project uses [`next/font`] to automatically optimize and load Inter, a
+custom Google Font.
 
 ## Deploy on Vercel
 
@@ -140,6 +132,16 @@ the creators of Next.js.
 
 Check out the [Next.js deployment documentation] or [Turso's Vercel setup guide]
 for more details.
+
+## Learn More
+
+To learn more about the stack used in this template, take a look at the
+following resources:
+
+- [Next.js Documentation] - learn about Next.js features and API.
+- [Turso Documentation] - learn about Next.js features and API.
+- [Turso Community] - Join the Turso community.
+- [libSQL] - The open-source open-contribution fork of SQLite Turso is built on.
 
 [Next.js]: https://nextjs.org/
 [Turso]: https://turso.tech

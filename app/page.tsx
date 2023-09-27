@@ -18,7 +18,7 @@ export interface Framework {
 }
 
 async function getData() {
-  const res = await tursoClient.execute('select * from frameworks;');
+  const res = await tursoClient().execute('select * from frameworks;');
   return {
     frameworks: res.rows as unknown as Framework[],
   };

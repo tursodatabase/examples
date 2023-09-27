@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.redirect(addNewUrl, { status: 302 });
   }
 
-  const add = await tursoClient.execute({
+  const add = await tursoClient().execute({
     sql: 'insert into frameworks(name, language, url, stars) values(?, ?, ?, ?);',
     args: [name, language, url, stars],
   });
@@ -68,7 +68,7 @@ async function getFramework(
   name: string,
   url: string
 ): Promise<Framework | null> {
-  const response = await tursoClient.execute({
+  const response = await tursoClient().execute({
     sql: 'select * from frameworks where url = ? or name = ?',
     args: [url, name],
   });
