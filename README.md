@@ -22,13 +22,13 @@ To access the data stored inside your database, you need the Turso database url 
 To obtain the database url, run the following command:
 
 ```sh
-turso db show the-mugs-store-api --url
+export TURSO_DB_URL=$(turso db show the-mugs-store-api --url)
 ```
 
 And, to create an authentication token for your database, run:
 
 ```sh
-turso db tokens create the-mugs-store-api
+export TURSO_DB_AUTH_TOKEN=$(turso db tokens create the-mugs-store-api)
 ```
 
 ## For local development
@@ -36,19 +36,43 @@ turso db tokens create the-mugs-store-api
 Add a `.env` file at the root of the project and inside it add the database url and authentication token for your Turso database obtained in the previous step, these variables will be used to assist in database migration with Drizzle.
 
 ```
-TURSO_DB_URL = <DB-URL>
-TURSO_DB_AUTH_TOKEN=<AUTH-TOKEN>
+echo "TURSO_DB_URL = $TURSO_DB_URL" > .env
+echo "TURSO_DB_AUTH_TOKEN = $TURSO_DB_AUTH_TOKEN" >> .env
+```
+
+Then install all the dependencies with:
+
+```
+npm i
 ```
 
 ## Generate database schema, run migrations, and seed data
 
-To generate the schema for the API database, run `npm run generate` which will create a new `/migrations` directory under the `/drizzle` directory.
+To generate the schema for the API database, run:
 
-Next, run `npm run migrate` to apply the migrations on the created Turso database.
+```
+npm run generate
+```
 
-And lastly, seed the database with some data by running `npm run seed`.
+The command will create a new `migrations` directory under the `drizzle` directory.
 
-Run `npm run start` to start the development server.
+Next, run the following command to apply the migrations on the created Turso database:
+
+```
+npm run migrate
+```
+
+And lastly, seed the database with some data by running:
+
+```
+npm run seed
+```
+
+and run the following command to start the development server:
+
+```
+npm run start
+```
 
 ## For the production environment
 
