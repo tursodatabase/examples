@@ -22,13 +22,13 @@ To access the data stored inside your database, you need the Turso database url 
 To obtain the database url, run the following command:
 
 ```sh
-export TURSO_DB_URL=$(turso db show the-mugs-store-api --url)
+export TURSO_URL=$(turso db show the-mugs-store-api --url)
 ```
 
 And, to create an authentication token for your database, run:
 
 ```sh
-export TURSO_DB_AUTH_TOKEN=$(turso db tokens create the-mugs-store-api)
+export TURSO_AUTH_TOKEN=$(turso db tokens create the-mugs-store-api)
 ```
 
 ## For local development
@@ -36,8 +36,8 @@ export TURSO_DB_AUTH_TOKEN=$(turso db tokens create the-mugs-store-api)
 Add a `.env` file at the root of the project and inside it add the database url and authentication token for your Turso database obtained in the previous step, these variables will be used to assist in database migration with Drizzle.
 
 ```
-echo "TURSO_DB_URL = $TURSO_DB_URL" > .env
-echo "TURSO_DB_AUTH_TOKEN = $TURSO_DB_AUTH_TOKEN" >> .env
+echo "TURSO_URL = $TURSO_URL" > .env
+echo "TURSO_AUTH_TOKEN = $TURSO_AUTH_TOKEN" >> .env
 ```
 
 Also make the configuration visible to Wrangler:
@@ -85,8 +85,8 @@ npm run start
 Configure the Cloudflare project by running the following commands and copy-pasting the URL and the authentication token when prompted for them:
 
 ```
-wrangler secret put TURSO_DB_URL
-wrangler secret put TURSO_DB_AUTH_TOKEN
+wrangler secret put TURSO_URL
+wrangler secret put TURSO_AUTH_TOKEN
 ```
 
 ## Deployment
