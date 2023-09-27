@@ -19,20 +19,20 @@ import {
 import { eq } from 'drizzle-orm';
 
 interface Env {
-  TURSO_DB_AUTH_TOKEN?: string;
-  TURSO_DB_URL?: string;
+  TURSO_AUTH_TOKEN?: string;
+  TURSO_URL?: string;
   router?: RouterType;
 }
 
 function buildDbClient(env: Env): LibSQLDatabase {
-  const url = env.TURSO_DB_URL?.trim();
+  const url = env.TURSO_URL?.trim();
   if (url === undefined) {
-    throw new Error('TURSO_DB_URL is not defined');
+    throw new Error('TURSO_URL is not defined');
   }
 
-  const authToken = env.TURSO_DB_AUTH_TOKEN?.trim();
+  const authToken = env.TURSO_AUTH_TOKEN?.trim();
   if (authToken === undefined) {
-    throw new Error('TURSO_DB_AUTH_TOKEN is not defined');
+    throw new Error('TURSO_AUTH_TOKEN is not defined');
   }
 
   return drizzle(createClient({ url, authToken }));
