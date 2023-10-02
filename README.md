@@ -33,7 +33,7 @@ And, to create an authentication token for your database, run:
 export TURSO_AUTH_TOKEN=$(turso db tokens create the-mugs-store-api)
 ```
 
-## For local development
+## Local Setup
 
 Add a `.env` file at the root of the project and inside it add the database url
 and authentication token for your Turso database obtained in the previous step,
@@ -80,23 +80,15 @@ And lastly, seed the database with some data by running:
 npm run seed
 ```
 
-and run the following command to start the development server:
+## Local Development
+
+Run the following command to start the development server:
 
 ```sh
 npm run start
 ```
 
-## For the production environment
-
-Configure the Cloudflare project by running the following commands and
-copy-pasting the URL and the authentication token when prompted for them:
-
-```sh
-wrangler secret put TURSO_URL
-wrangler secret put TURSO_AUTH_TOKEN
-```
-
-## Deployment
+## Deploy to Cloudflare Workers
 
 If you don't have an account, then [create a Cloudflare account here]. After
 verifying your email address, run the following command on your project's
@@ -110,6 +102,23 @@ Lastly, deploy your Cloudflare workers project by running:
 
 ```sh
 npm run deploy
+```
+
+You need to configure Turso integration in your Cloudflare Workers project.
+
+You can either configure this at the integrations tab in your Cloudflare Workers dashboard:
+
+<img src="workers-integration-1.png" width="600" align="center" />
+
+Pick the Turso integration and follow the steps the UI gives you:
+
+<img src="workers-integration-2.png" width="300" align="center" />
+
+Alternative, run the following commands and copy-pasting the URL and the authentication token when prompted for them:
+
+```sh
+wrangler secret put TURSO_URL
+wrangler secret put TURSO_AUTH_TOKEN
 ```
 
 ## More information
