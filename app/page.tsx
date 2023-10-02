@@ -2,6 +2,8 @@ import { tursoClient } from '@/utils/tursoClient';
 
 export const runtime = 'edge';
 
+export const revalidate = 0;
+
 export const metadata = {
   title: {
     absolute: 'Top Web Frameworks',
