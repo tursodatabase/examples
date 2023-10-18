@@ -1,0 +1,50 @@
+{
+  "name": "turso-crm",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "build": "remix build",
+    "dev": "remix dev --manual",
+    "start": "remix-serve ./build/index.js",
+    "typecheck": "tsc",
+    "drizzle:migrate": "tsx drizzle/migrate",
+    "drizzle:generate": "drizzle-kit generate:sqlite --out ./drizzle/migrations --breakpoints --schema=./drizzle/schema.ts",
+    "drizzle:generate:orgs": "drizzle-kit generate:sqlite --out ./drizzle/migrations-orgs --breakpoints --schema=./drizzle/org-schema.ts",
+    "drizzle:studio": "drizzle-kit studio --port 3333"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.3.5",
+    "@remix-run/css-bundle": "^2.0.1",
+    "@remix-run/node": "^2.0.1",
+    "@remix-run/react": "^2.0.1",
+    "@remix-run/serve": "^2.0.1",
+    "@vercel/remix": "^2.0.1",
+    "axios": "^1.5.1",
+    "bcryptjs": "^2.4.3",
+    "drizzle-orm": "^0.28.6",
+    "isbot": "^3.6.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "resend": "^1.1.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^2.0.1",
+    "@remix-run/eslint-config": "^2.0.1",
+    "@types/bcryptjs": "^2.4.4",
+    "@types/node": "^20.8.6",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "@types/uuid": "^9.0.5",
+    "dotenv": "^16.3.1",
+    "drizzle-kit": "^0.19.13",
+    "eslint": "^8.38.0",
+    "tailwindcss": "^3.3.3",
+    "tsx": "^3.13.0",
+    "typescript": "^5.1.6"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
