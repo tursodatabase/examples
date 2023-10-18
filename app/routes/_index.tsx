@@ -5,8 +5,8 @@ import type { Organization } from '~/lib/types';
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Turso CRM" },
-    { name: "description", content: "Cater for your business!" },
+    { title: "Turso-CRM" },
+    { name: "description", content: "Better your customer service!" },
   ];
 };
 
