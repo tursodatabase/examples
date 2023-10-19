@@ -93,7 +93,7 @@ export default function AgentConversation() {
           : <p className='grid-cols-2'>Start writing...</p>}
       </div>
       <div className='fixed bottom-0 left-0 right-0 grid-cols-2 bg-white pt-2'>
-        <form className='w-full flex gap-4 items-center px-2' onSubmit={(sendMessage)}>
+        <form className='w-full flex gap-4 items-center px-2' onSubmit={sendMessage}>
           <div className='strink-0 w-full'>
             <textarea name="message" id="" rows={2} required onInput={(el) => setMessage(() => (el.target as HTMLInputElement).value)}
               disabled={conversation.ticket.isClosed === 1} className='mb-1 appearance-none rounded dark:bg-transparent border focus:border-primary/50 focus:ring-0 w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline border-gray-500 focus-visible:outline-gray-600 resize-none' />
