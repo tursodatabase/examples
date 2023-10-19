@@ -21,7 +21,7 @@ export const loader: LoaderFunction = async ({ params }: LoaderFunctionArgs): Pr
   })
 }
 
-export default function OrganizationDashboard() {
+export default function CustomerOpenTicket() {
   // @ts-ignore
   const { organization } = useLoaderData<typeof loader>();
   const customerFetcher = useFetcher();

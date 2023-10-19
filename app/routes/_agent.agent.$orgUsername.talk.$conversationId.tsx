@@ -24,7 +24,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderFunction
   };
 }
 
-export default function AgentDashboard() {
+export default function AgentConversation() {
   // @ts-ignore
   const { conversation, org } = useLoaderData<typeof loader>();
   const sendMessageFetcher = useFetcher();

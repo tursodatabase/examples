@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderFunction
   };
 }
 
-export default function AgentDashboard() {
+export default function OrganizationConversationPreview() {
   // @ts-ignore
   const { conversation } = useLoaderData<typeof loader>();
   const revalidator = useRevalidator();
