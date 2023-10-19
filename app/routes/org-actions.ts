@@ -78,11 +78,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // TODO: Send credentials to agent's email
 
-    console.log({
-      email,
-      password,
-    });
-
     return json(
       { ok: true, message: "Agent added", data: { email, password } },
       { status: 201, statusText: "Agent added" }

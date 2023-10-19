@@ -30,10 +30,6 @@ export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs): P
     }
   });
 
-  console.log(JSON.stringify({
-    agents, tickets
-  }))
-
   return json({
     agents: agents as unknown as Agent[],
     tickets: tickets as unknown as Ticket[]
