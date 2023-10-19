@@ -119,10 +119,7 @@ export async function createOrganizationSession(
   });
 }
 
-export async function destroyOrganizationSession(
-  userId: string,
-  redirectUrl: string
-) {
+export async function destroyOrganizationSession(redirectUrl: string) {
   const session = await getOrgSession();
 
   return redirect(redirectUrl, {

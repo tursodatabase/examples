@@ -1,5 +1,5 @@
 import { type LoaderFunction, type LoaderFunctionArgs, redirect } from '@remix-run/node';
-import { Outlet, useLoaderData } from '@remix-run/react';
+import { Outlet, useFetcher, useLoaderData } from '@remix-run/react';
 import { BuildingIcon } from '~/components/icons';
 import { getOrganizationDetails, requireOrganizationId } from '~/lib/session.server';
 import type { Organization } from '~/lib/types';
@@ -25,6 +25,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderFunction
 export default function OrganizationLayout() {
   // @ts-ignore
   const { org } = useLoaderData<typeof loader>();
+  const logOutFetcher = useFetcher();
 
   return <div className="flex flex-col min-h-screen space-x-8 space-y-8">
     <div className="flex flex-col gap-4">
@@ -35,6 +36,10 @@ export default function OrganizationLayout() {
             <span>{org.name}</span>
           </a>
         </div>
+        <logOutFetcher.Form method='post' action="/org-actions">
+          <input type="hidden" name='organization_id' value={org.id} />
+          <button type="submit" className="p-3" name='_action' value="logOut">Log Out</button>
+        </logOutFetcher.Form>
       </nav>
 
       <div className="flex gap-4 p-3">

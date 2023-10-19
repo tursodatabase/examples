@@ -30,7 +30,6 @@ export async function agentLogin({
 }: LoginCredentials & { organization: Organization }) {
   const db = buildOrgDbClient({
     url: organization.dbUrl as string,
-    authToken: organization.dbToken as string,
   });
 
   const agent = await db.query.agents.findFirst({
@@ -107,7 +106,6 @@ export async function getAgentDetails({
 
   const db = buildOrgDbClient({
     url: `${org.dbUrl}`,
-    authToken: `${org.dbToken}`,
   });
 
   const existingAgent = await db.query.agents.findFirst({
