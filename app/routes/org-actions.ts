@@ -2,7 +2,10 @@ import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
 import bcrypt from "bcryptjs";
 import { buildDbClient } from "~/lib/client";
 import { buildDbClient as buildOrgDbClient } from "~/lib/client-org";
-import { requireOrganizationId } from "~/lib/session.server";
+import {
+  destroyOrganizationSession,
+  requireOrganizationId,
+} from "~/lib/session.server";
 import { v4 as uuidv4 } from "uuid";
 import type { Agent } from "~/lib/types";
 import { agents } from "drizzle/org-schema";
@@ -34,7 +37,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const manageOrgDbs = buildOrgDbClient({
     url: currentOrganization.dbUrl as string,
-    authToken: currentOrganization.dbToken as string,
   });
 
   const formData = await request.formData();
@@ -80,5 +82,15 @@ export async function action({ request }: ActionFunctionArgs) {
       { ok: true, message: "Agent added", data: { email, password } },
       { status: 201, statusText: "Agent added" }
     );
+  }
+
+  if (_action === "logOut") {
+    const agentId = await requireOrganizationId({
+      request,
+      redirectTo: `/agent/${currentOrganization.username}/login`,
+    });
+    if (agentId !== undefined) {
+      return destroyOrganizationSession(`/login`);
+    }
   }
 }

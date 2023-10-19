@@ -4,16 +4,17 @@ import * as schema from "../../drizzle/org-schema";
 
 interface Env {
   url: string;
-  authToken: string;
+  TURSO_DB_AUTH_TOKEN?: string;
 }
 
-export function buildDbClient({ url, authToken }: Env) {
+export function buildDbClient({ url }: Env) {
   if (url === undefined) {
     throw new Error("db url is not defined");
   }
 
+  const authToken = (process.env as unknown as Env).TURSO_DB_AUTH_TOKEN?.trim();
   if (authToken === undefined) {
-    throw new Error("db token is not defined");
+    throw new Error("TURSO_DB_AUTH_TOKEN is not defined");
   }
 
   return drizzle(createClient({ url: `libsql://${url}`, authToken }), {

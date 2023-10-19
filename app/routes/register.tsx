@@ -86,7 +86,6 @@ export const action: ActionFunction = async ({ request }: ActionFunctionArgs) =>
     // add database credentials to organization record
     await buildDbClient().update(organizations).set({
       dbUrl: newOrgDb.data.url,
-      dbToken: newOrgDb.data.authToken
     }).where(eq(organizations.id, accountCreation.organization.id)).run();
 
     return redirect("/login");

@@ -7,7 +7,6 @@ CREATE TABLE `organizations` (
 	`password` text NOT NULL,
 	`logo` text,
 	`db_url` text,
-	`db_token` text,
 	`created_at` integer DEFAULT (cast(unixepoch() as int)),
 	`updated_at` integer DEFAULT (cast(unixepoch() as int))
 );

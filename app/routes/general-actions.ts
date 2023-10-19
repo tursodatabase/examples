@@ -32,7 +32,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const manageOrgDbs = buildOrgDbClient({
     url: currentOrganization.dbUrl as string,
-    authToken: currentOrganization.dbToken as string,
   });
 
   if (_action === "sendMessage") {

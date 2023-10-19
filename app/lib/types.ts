@@ -7,7 +7,6 @@ export interface Organization {
   password: string;
   logo: string | null;
   dbUrl: string | null;
-  dbToken: string | null;
   createdAt: number | null;
   updatedAt: number | null;
 }

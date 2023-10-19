@@ -21,7 +21,7 @@ export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs): P
     return redirect("/login");
   }
 
-  const db = buildDbClient({ url: orgInfo.dbUrl as string, authToken: orgInfo.dbToken as string });
+  const db = buildDbClient({ url: orgInfo.dbUrl as string });
 
   const agents = await db.query.agents.findMany();
   const tickets = await db.query.tickets.findMany({
@@ -107,7 +107,7 @@ export default function OrganizationDashboard() {
         <div className='w-full sm:w-1/2'>
           <h2 className='text-xl'>Tickets</h2>
           {tickets.length > 0 ? <ul className='list-none p-2 flex flex-col gap-2'>
-            {tickets.map((ticket: Ticket & { conversation: Conversation }) => <li key={ticket.id}>
+            {tickets.map((ticket: Ticket & { conversation?: Conversation }) => <li key={ticket.id}>
               <details className='flex gap-4 justify-between items-center ring-[1px] ring-gray-200 p-2'>
                 <summary className='flex flex-col'>
                   <span>{ticket.customerName}</span>
@@ -116,7 +116,7 @@ export default function OrganizationDashboard() {
                 <p className='px-2 py-1 border border-gray-300 rounded-md text-sm flex flex-col'
                 >
                   <span>{ticket.query}</span>
-                  {ticket.conversation !== undefined && <span className='flex justify-center'>
+                  {ticket?.conversation && ticket?.conversation !== undefined && <span className='flex justify-center'>
                     <a href={`/conversation/${ticket.conversation.id}`} className='px-2 py-1 text-sm border border-gray-300 hover:border-gray-600  rounded'>View interaction</a></span>}
                 </p>
               </details>

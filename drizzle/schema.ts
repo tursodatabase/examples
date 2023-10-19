@@ -18,7 +18,6 @@ export const organizations = sqliteTable(
     password: text("password").notNull(),
     logo: text("logo"),
     dbUrl: text("db_url"),
-    dbToken: text("db_token"),
     createdAt: integer("created_at").default(sql`(cast(unixepoch() as int))`),
     updatedAt: integer("updated_at").default(sql`(cast(unixepoch() as int))`),
   },

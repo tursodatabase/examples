@@ -15,9 +15,7 @@ export function buildDbClient() {
 
   const authToken = (process.env as unknown as Env).TURSO_DB_AUTH_TOKEN?.trim();
   if (authToken === undefined) {
-    if (!url.includes("file:")) {
-      throw new Error("TURSO_DB_AUTH_TOKEN is not defined");
-    }
+    throw new Error("TURSO_DB_AUTH_TOKEN is not defined");
   }
 
   return drizzle(createClient({ url, authToken }), { schema });

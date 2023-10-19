@@ -38,7 +38,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const orgDb = buildOrgDbClient({
     url: currentOrganization.dbUrl as string,
-    authToken: currentOrganization.dbToken as string,
   });
 
   const currentAgent = await orgDb.query.agents.findFirst({

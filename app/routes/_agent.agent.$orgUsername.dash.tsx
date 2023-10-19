@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderFunction
     return redirect(`/agent/${org.username}/login`); // * agent not exists
   }
 
-  const db = buildOrgDbClient({ url: org.dbUrl as string, authToken: org.dbToken as string });
+  const db = buildOrgDbClient({ url: org.dbUrl as string });
 
   // fetch open org tickets
   const tickets = await db.query.tickets.findMany({
