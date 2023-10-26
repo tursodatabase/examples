@@ -2,10 +2,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use dotenvy::dotenv;
-use libsql::{params, Database, Row, Rows};
+use libsql::{params, Database};
 use serde::{Deserialize, Serialize};
 use std::env;
 
+use std::ptr::null;
 use std::time::SystemTime;
 use std::time::UNIX_EPOCH;
 use std::vec;
@@ -41,7 +42,7 @@ async fn get_all_notes() -> Result<Vec<NoteItem>, String> {
         Ok(db) => db,
         Err(error) => {
             eprintln!("Error connecting to remote sync server: {}", error);
-            return;
+            return Err(error.to_string());
         }
     };
 
@@ -68,113 +69,156 @@ async fn get_all_notes() -> Result<Vec<NoteItem>, String> {
         notes.push(note);
     }
 
+    info!("All notes: {:?}", notes);
     Ok(notes)
 }
 
-// #[tauri::command]
-// #[tokio::main]
-// async fn new_note() {
-//     tracing_subscriber::fmt::init();
+#[tauri::command]
+async fn new_note() -> Result<NoteItem, String> {
+    tracing_subscriber::fmt::init();
 
-//     dotenv().expect(".env file not found");
+    dotenv().expect(".env file not found");
 
-//     let db_path = env::var("DB_PATH").unwrap();
-//     let sync_url = env::var("TURSO_SYNC_URL").unwrap();
-//     let auth_token = env::var("TURSO_TOKEN").unwrap();
+    let db_path = env::var("DB_PATH").unwrap();
+    let sync_url = env::var("TURSO_SYNC_URL").unwrap();
+    let auth_token = env::var("TURSO_TOKEN").unwrap();
 
-//     println!(
-//         "Here are the env vars: _db_path: {:?}, _auth_token: {:?}, _sync_url: {:?}",
-//         db_path, auth_token, sync_url
-//     );
+    println!(
+        "Here are the env vars: _db_path: {:?}, _auth_token: {:?}, _sync_url: {:?}",
+        db_path, auth_token, sync_url
+    );
 
-//     let db = match Database::open_with_remote_sync(db_path, sync_url, auth_token).await {
-//         Ok(db) => db,
-//         Err(error) => {
-//             eprintln!("Error connecting to remote sync server: {}", error);
-//             return;
-//         }
-//     };
+    let db = match Database::open_with_remote_sync(db_path, sync_url, auth_token).await {
+        Ok(db) => db,
+        Err(error) => {
+            eprintln!("Error connecting to remote sync server: {}", error);
+            return Err(error.to_string());
+        }
+    };
 
-//     let conn = db.connect().unwrap();
+    let conn = db.connect().unwrap();
 
-//     let mut id = Uuid::new_v4();
-//     let mut created_at = match SystemTime::now().duration_since(UNIX_EPOCH) {
-//         Ok(n) => n.as_secs(),
-//         Err(_) => panic!("SystemTime before UNIX EPOCH!"),
-//     };
-//     let mut title = String::from("New note..");
+    let id = Uuid::new_v4();
+    let created_at = match SystemTime::now().duration_since(UNIX_EPOCH) {
+        Ok(n) => n.as_secs(),
+        Err(_) => panic!("SystemTime before UNIX EPOCH!"),
+    };
+    let title = String::from("New note..");
 
-//     let params = params![id.to_string(), title, created_at];
+    let params = params![id.to_string(), title, created_at];
 
-//     let response = conn
-//         .execute(
-//             "INSERT INTO note (id, title, created_at) VALUES (?, ?, ?)",
-//             params,
-//         )
-//         .await
-//         .unwrap();
+    let mut response = conn
+        .query(
+            "INSERT INTO note (id, title, created_at) VALUES (?, ?, ?)",
+            params,
+        )
+        .await
+        .unwrap();
 
-//     print!("Syncing with remote database...");
-//     db.sync().await.unwrap();
-//     println!(" done");
+    print!("Syncing with remote database...");
+    db.sync().await.unwrap();
+    println!(" done");
 
-//     println!("Notes added: [{:?}]!", response);
-// }
+    let mut added_note = NoteItem {
+        id: "".to_string(),
+        title: "".to_string(),
+        text: "".to_string(),
+        created_at: created_at,
+        updated_at: created_at,
+    };
+    if let Some(row) = response.next().unwrap() {
+        added_note = NoteItem {
+            id: row.get(0).unwrap(),
+            title: row.get(1).unwrap(),
+            text: row.get(2).unwrap(),
+            created_at: row.get(3).unwrap(),
+            updated_at: row.get(4).unwrap(),
+        };
+    }
 
-// #[tauri::command]
-// #[tokio::main]
-// async fn update_note(id: &str, new_text: &str) -> Result<u64, String> {
-//     tracing_subscriber::fmt::init();
+    print!("Syncing with remote database...");
+    db.sync().await.unwrap();
+    println!(" done");
 
-//     info!(id, new_text);
+    format!("New note: {:?}", added_note);
 
-//     dotenv().expect(".env file not found");
+    Ok(added_note)
+}
 
-//     let db_path = env::var("DB_PATH").unwrap();
-//     let sync_url = env::var("TURSO_SYNC_URL").unwrap();
-//     let auth_token = env::var("TURSO_TOKEN").unwrap();
+#[tauri::command]
+async fn update_note(id: String, new_text: String) -> Result<NoteItem, String> {
+    tracing_subscriber::fmt::init();
 
-//     println!(
-//         "Here are the env vars: _db_path: {:?}, _auth_token: {:?}, _sync_url: {:?}",
-//         db_path, auth_token, sync_url
-//     );
+    info!(id, new_text);
 
-//     let db = match Database::open_with_remote_sync(db_path, sync_url, auth_token).await {
-//         Ok(db) => db,
-//         Err(error) => {
-//             println!("Error connecting to remote sync server: {}", error);
-//             return;
-//         }
-//     };
+    dotenv().expect(".env file not found");
 
-//     let conn = db.connect().unwrap();
+    let db_path = env::var("DB_PATH").unwrap();
+    let sync_url = env::var("TURSO_SYNC_URL").unwrap();
+    let auth_token = env::var("TURSO_TOKEN").unwrap();
 
-//     let created_at = match SystemTime::now().duration_since(UNIX_EPOCH) {
-//         Ok(n) => n.as_secs(),
-//         Err(_) => panic!("SystemTime before UNIX EPOCH!"),
-//     };
+    println!(
+        "Here are the env vars: db_path: {:?}, auth_token: {:?}, _syncrl: {:?}",
+        db_path, auth_token, sync_url
+    );
 
-//     let params = params!([new_text.to_string(), id]);
-//     let updated_note = conn
-//         .execute("UPDATE notes SET text = ? where id = ?", params)
-//         .await
-//         .unwrap();
+    let db = match Database::open_with_remote_sync(db_path, sync_url, auth_token).await {
+        Ok(db) => db,
+        Err(error) => {
+            eprintln!("Error connecting to remote sync server: {}", error);
+            return Err(error.to_string());
+        }
+    };
 
-//     db.sync().await.unwrap();
+    let conn = db.connect().unwrap();
 
-//     let result = r#"Notes added!"#;
-//     result.to_string();
-//     format!("Notes added {}", result);
+    let updated_at = match SystemTime::now().duration_since(UNIX_EPOCH) {
+        Ok(n) => n.as_secs(),
+        Err(_) => panic!("SystemTime before UNIX EPOCH!"),
+    };
 
-//     Ok(updated_note)
-// }
+    let params = params!([new_text.to_string(), updated_at.to_string(), id.to_string()]);
+
+    conn.query(
+        "UPDATE notes SET text = ?, updated_at = ? WHERE id = ?",
+        params,
+    )
+    .await
+    .unwrap();
+
+    let results = conn
+        .query("SELECT * from notes WHERE id = ?", params![id.to_string()])
+        .await
+        .unwrap();
+
+    let mut updated_note;
+    while let Some(row) = results.next().unwrap() {
+        let updated_note: NoteItem = NoteItem {
+            id: row.get(0).unwrap(),
+            title: row.get(1).unwrap(),
+            text: row.get(2).unwrap(),
+            created_at: row.get(3).unwrap(),
+            updated_at: row.get(4).unwrap(),
+        };
+        info!("  {:?}", updated_note);
+        break;
+    }
+
+    print!("Syncing with remote database...");
+    db.sync().await.unwrap();
+    println!(" done");
+
+    format!("Updated note: {:?}", updated_note);
+
+    Ok(updated_note)
+}
 
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             get_all_notes,
-            // new_note,git
-            // update_note,
+            new_note,
+            update_note,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

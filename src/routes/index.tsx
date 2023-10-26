@@ -28,7 +28,9 @@ export default component$(() => {
       { text: "The second note's details", id: "n3jnuh3bouh", title: "The second note" },
     ];
 
-    await invoke("get_all_notes")
+    console.log("Invoking get_all_notes")
+    const allNotes = await invoke("get_all_notes");
+    console.log("Got all notes: ", JSON.stringify({ allNotes }));
   })
 
   // adds new note
@@ -36,6 +38,7 @@ export default component$(() => {
     if (isServer) {
       return;
     }
+    await invoke("new_note");
   })
 
   // updates passed note's text, returning the updated array of all notes
