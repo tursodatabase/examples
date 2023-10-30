@@ -56,10 +56,6 @@ async fn get_all_notes() -> Result<Vec<NoteItem>> {
 
     let conn = db.connect()?;
 
-    print!("Syncing with remote database...");
-    db.sync().await.unwrap();
-    println!(" done");
-
     let mut results = conn
         .query("SELECT * FROM notes order by created_at desc", ())
         .await?;
