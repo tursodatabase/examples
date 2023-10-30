@@ -131,11 +131,17 @@ export default component$(() => {
   return (
     <div class="flex h-[100vh] bg-primary">
       <ul class="w-[320px] flex-grow-0 pr-2">
-        <li class="p-2 refresh cursor-pointer flex items-center gap-2" onClick$={getAllNotes}>
-          <span>
-            <RefreshIcon styles={`w-4 h-4 fill-plight ${loading.value ? 'animate-spin' : ''}`} />
-          </span>
-          <span class="text-plight">Sync notes</span>
+        <li class="p-2 flex justify-between items-center">
+          <button class="cursor-pointer flex items-center gap-2 grow" onClick$={getAllNotes}>
+            <span>
+              <RefreshIcon styles={`w-4 h-4 fill-plight ${loading.value ? 'animate-spin' : ''}`} />
+            </span>
+            <span class="text-plight">Sync notes</span>
+          </button>
+
+          <button class="shrink-1 p-2 text-white flex justify-center gap-2 items-center w-8 hover:bg-primary" title="New Note" onClick$={newNote}>
+            <NewNoteIcon styles='fill-white h-4 w-4' />
+          </button>
         </li>
         {
           notes.value === undefined
@@ -152,16 +158,6 @@ export default component$(() => {
               <span>{note.title}</span>
             </li>)
         }
-        <li class="w-full py-2 px-2 border-t border-[#143633] text-white">
-          <button class="p-2 text-white flex justify-center gap-2 items-center w-full hover:bg-primary" onClick$={newNote}>
-            <span>
-              <NewNoteIcon styles='fill-white h-4 w-4' />
-            </span>
-            <span>
-              New Note
-            </span>
-          </button>
-        </li>
       </ul>
       <div class="shrink flex-grow w-full flex flex-col">
         <div class="flex-grow">
