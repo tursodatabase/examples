@@ -2,14 +2,29 @@ import { $, component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import {
   type DocumentHead,
 } from "@builder.io/qwik-city";
-import { invoke } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api";
+import { confirm } from "@tauri-apps/api/dialog";
 import { isServer } from "@builder.io/qwik/build";
+import { DeleteIcon, NewNoteIcon, RefreshIcon, TursoLogo } from '~/components/icons';
 
 interface NoteItem {
   text: string;
   id: string;
   title: string;
+  created_at: number;
+  updated_at: number;
 }
+
+function dateFromUnixepoch(val: number) {
+  const newDate = new Date(val * 1000);
+
+  return newDate.toLocaleDateString('US', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  });
+}
+
 
 export default component$(() => {
   const notes = useSignal<NoteItem[]>();
@@ -17,20 +32,18 @@ export default component$(() => {
   const placeholder = useSignal('');
   const currentNote = useSignal<NoteItem | undefined>();
   const initialCall = useSignal(true);
+  const loading = useSignal<boolean>(false);
 
   // gets all notes
   const getAllNotes = $(async () => {
     if (isServer) {
       return;
     }
-    notes.value = [
-      { text: "The first note's details", id: "ijn2i3nh5b3", title: "The first note" },
-      { text: "The second note's details", id: "n3jnuh3bouh", title: "The second note" },
-    ];
 
-    console.log("Invoking get_all_notes")
+    loading.value = true;
     const allNotes = await invoke("get_all_notes");
-    console.log("Got all notes: ", JSON.stringify({ allNotes }));
+    loading.value = false;
+    notes.value = allNotes as unknown as NoteItem[];
   })
 
   // adds new note
@@ -39,6 +52,7 @@ export default component$(() => {
       return;
     }
     await invoke("new_note");
+    getAllNotes();
   })
 
   // updates passed note's text, returning the updated array of all notes
@@ -52,8 +66,28 @@ export default component$(() => {
     getAllNotes()
   })
 
+  // updates passed note's text, returning the updated array of all notes
+  const deleteNote = $(async (note: NoteItem) => {
+    if (isServer) {
+      return;
+    }
+
+    placeholder.value = await invoke("delete_note", { id: note.id })
+    getAllNotes()
+  })
+
   const setCurrentNote = $((note: NoteItem | undefined) => {
     currentNote.value = note
+  })
+
+  const verifyDelete = $(async (note: NoteItem) => {
+    const deleteItem = await confirm("Do you want to delete this note?", {
+      type: "warning",
+    });
+
+    if (deleteItem) {
+      deleteNote(note)
+    }
   })
 
   // update current note information after notes have been re-fetched
@@ -61,7 +95,7 @@ export default component$(() => {
     track(() => notes.value);
 
     if (notes.value !== undefined && currentNote.value !== undefined) {
-      const noteIndex = notes.value.findIndex((note: NoteItem) => note.id === currentNote.value.id);
+      const noteIndex = notes.value.findIndex((note: NoteItem) => note.id === currentNote.value!.id);
       if (noteIndex !== -1) {
         currentNote.value.text = notes.value![noteIndex].text
       }
@@ -95,21 +129,48 @@ export default component$(() => {
   });
 
   return (
-    <div class="flex py-4 pr-4 h-[100vh] bg-teal-900">
-      <ul class="w-[320px] flex-grow-0">
-        <li class="p-2 refresh cursor-pointer" onClick$={getAllNotes}>Refresh</li>
+    <div class="flex h-[100vh] bg-primary">
+      <ul class="w-[320px] flex-grow-0 pr-2">
+        <li class="p-2 refresh cursor-pointer flex items-center gap-2" onClick$={getAllNotes}>
+          <span>
+            <RefreshIcon styles={`w-4 h-4 fill-plight ${loading.value ? 'animate-spin' : ''}`} />
+          </span>
+          <span class="text-plight">Sync notes</span>
+        </li>
         {
           notes.value === undefined
-            ? <li>Add some notes</li>
-            : notes.value.map((note: NoteItem) => <li key={note.id} onClick$={() => setCurrentNote(note)} class="w-full py-2 px-2 border-t border-teal-700 text-white cursor-pointer">{note.title}</li>)
+            ? <></>
+            : notes.value.map((note: NoteItem) => <li key={note.id} onClick$={() => setCurrentNote(note)} class={`w-full py-2 px-2 border-t border-[#143633] text-white cursor-pointer flex flex-col ${note.id === currentNote.value?.id ? 'bg-paccent rounded-md' : ''}`}>
+              <span class="text-plight text-xs flex justify-between">
+                {dateFromUnixepoch(note.created_at)}
+                <span class="shrink items-center">
+                  <button onClick$={() => verifyDelete(note)}>
+                    <DeleteIcon styles='w-4 h-4 fill-[#CA815E] hover:bg-[#CA815E] hover:fill-[#75310F] hover:rounded-full cursor-pointer' />
+                  </button>
+                </span>
+              </span>
+              <span>{note.title}</span>
+            </li>)
         }
-        <li class="w-full py-2 px-2 border-t border-teal-700 text-white">
-          <button class="p-2 text-white rounded-md" onClick$={newNote}>New Note +</button>
+        <li class="w-full py-2 px-2 border-t border-[#143633] text-white">
+          <button class="p-2 text-white flex justify-center gap-2 items-center w-full hover:bg-primary" onClick$={newNote}>
+            <span>
+              <NewNoteIcon styles='fill-white h-4 w-4' />
+            </span>
+            <span>
+              New Note
+            </span>
+          </button>
         </li>
       </ul>
       <div class="shrink flex-grow w-full flex flex-col">
         <div class="flex-grow">
-          <textarea id="editor" class="w-full h-full text-black p-2 rounded-br-md resize-none" onInput$={(e) => text.value = (e.target as HTMLInputElement).value} placeholder={placeholder.value} value={text.value}></textarea>
+          {currentNote.value !== undefined
+            ? <textarea id="editor" class="w-full h-full text-black p-2 rounded-br-md resize-none" onInput$={(e) => text.value = (e.target as HTMLInputElement).value} placeholder={placeholder.value} value={text.value} onBlur$={updateNote}></textarea>
+            : <div class="w-full h-full flex flex-col gap-4 items-center justify-center bg-primary text-paccent text-2xl border-l border-paccent">
+              <TursoLogo styles='h-52 w-52 fill-paccent' />
+              <span>Pick/create a note to edit</span>
+            </div>}
         </div>
       </div>
     </div>
