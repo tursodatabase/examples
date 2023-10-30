@@ -83,11 +83,6 @@ async fn new_note() -> Result<Option<NoteItem>> {
     let sync_url = env::var("TURSO_SYNC_URL").unwrap();
     let auth_token = env::var("TURSO_TOKEN").unwrap();
 
-    println!(
-        "Here are the env vars: _db_path: {:?}, _auth_token: {:?}, _sync_url: {:?}",
-        db_path, auth_token, sync_url
-    );
-
     let db = Database::open_with_remote_sync(db_path, sync_url, auth_token).await?;
 
     let conn = db.connect()?;
@@ -108,9 +103,7 @@ async fn new_note() -> Result<Option<NoteItem>> {
         )
         .await?;
 
-    print!("Syncing with remote database...");
     db.sync().await?;
-    println!(" done");
 
     let ret = match response.next()? {
         Some(row) => Some(NoteItem {
@@ -123,29 +116,16 @@ async fn new_note() -> Result<Option<NoteItem>> {
         None => None,
     };
 
-    print!("Syncing with remote database...");
-    db.sync().await?;
-    println!(" done");
-
-    format!("New note: {ret:?}");
-
     Ok(ret)
 }
 
 #[tauri::command]
 async fn update_note(id: String, new_text: String) -> Result<NoteItem> {
-    info!(id, new_text);
-
     dotenv().expect(".env file not found");
 
     let db_path = env::var("DB_PATH").unwrap();
     let sync_url = env::var("TURSO_SYNC_URL").unwrap();
     let auth_token = env::var("TURSO_TOKEN").unwrap();
-
-    println!(
-        "Here are the env vars: db_path: {:?}, auth_token: {:?}, _syncrl: {:?}",
-        db_path, auth_token, sync_url
-    );
 
     let db = Database::open_with_remote_sync(db_path, sync_url, auth_token).await?;
 
@@ -162,7 +142,6 @@ async fn update_note(id: String, new_text: String) -> Result<NoteItem> {
         Some(text) => text,
         None => "Unamed note",
     };
-    info!("process_title: {:?}", title);
 
     let params = params!(title, new_text, updated_at, id.clone());
 
@@ -171,6 +150,8 @@ async fn update_note(id: String, new_text: String) -> Result<NoteItem> {
         params,
     )
     .await?;
+
+    db.sync().await?;
 
     let mut results = conn
         .query("SELECT * from notes WHERE id = ?", params![id.to_string()])
@@ -184,13 +165,6 @@ async fn update_note(id: String, new_text: String) -> Result<NoteItem> {
         created_at: row.get(3).unwrap(),
         updated_at: row.get(4).unwrap(),
     };
-    info!("  {:?}", updated_note);
-
-    print!("Syncing with remote database...");
-    db.sync().await?;
-    println!(" done");
-
-    format!("Updated note: {updated_note:?}");
 
     Ok(updated_note)
 }
@@ -205,11 +179,6 @@ async fn delete_note(id: String) -> Result<()> {
     let sync_url = env::var("TURSO_SYNC_URL").unwrap();
     let auth_token = env::var("TURSO_TOKEN").unwrap();
 
-    println!(
-        "Here are the env vars: db_path: {:?}, auth_token: {:?}, _syncrl: {:?}",
-        db_path, auth_token, sync_url
-    );
-
     let db = Database::open_with_remote_sync(db_path, sync_url, auth_token).await?;
 
     let conn = db.connect()?;
@@ -218,9 +187,7 @@ async fn delete_note(id: String) -> Result<()> {
 
     conn.query("DELETE from notes WHERE id = ?", params).await?;
 
-    print!("Syncing with remote database...");
     db.sync().await?;
-    println!("done");
 
     Ok(())
 }
