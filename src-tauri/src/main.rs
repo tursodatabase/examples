@@ -6,6 +6,7 @@ use libsql::{params, Database};
 use serde::{Deserialize, Serialize};
 use std::env;
 
+use std::time::Instant;
 use std::time::SystemTime;
 use std::time::UNIX_EPOCH;
 
@@ -56,9 +57,13 @@ async fn get_all_notes() -> Result<Vec<NoteItem>> {
 
     let conn = db.connect()?;
 
+    let start = Instant::now();
     let mut results = conn
         .query("SELECT * FROM notes order by created_at desc", ())
         .await?;
+    let duration = start.elapsed();
+
+    println!("Time taken to fetch all notes: {:?}", duration);
 
     let mut notes: Vec<NoteItem> = Vec::new();
     while let Some(row) = results.next()? {
@@ -96,12 +101,15 @@ async fn new_note() -> Result<Option<NoteItem>> {
 
     let params = params![id.to_string(), title, created_at];
 
+    let start = Instant::now();
     let mut response = conn
         .query(
             "INSERT INTO notes (id, title, created_at) VALUES (?, ?, ?)",
             params,
         )
         .await?;
+    let duration = start.elapsed();
+    println!("Time taken to insert data: {:?}", duration);
 
     db.sync().await?;
 
@@ -145,11 +153,14 @@ async fn update_note(id: String, new_text: String) -> Result<NoteItem> {
 
     let params = params!(title, new_text, updated_at, id.clone());
 
+    let start = Instant::now();
     conn.query(
         "UPDATE notes SET title = ?, text = ?, updated_at = ? WHERE id = ?",
         params,
     )
     .await?;
+    let duration = start.elapsed();
+    println!("Time taken to update data: {:?}", duration);
 
     db.sync().await?;
 
@@ -185,7 +196,10 @@ async fn delete_note(id: String) -> Result<()> {
 
     let params = params!(id.clone());
 
+    let start = Instant::now();
     conn.query("DELETE from notes WHERE id = ?", params).await?;
+    let duration = start.elapsed();
+    println!("Time taken to delete data: {:?}", duration);
 
     db.sync().await?;
 
