@@ -1,71 +1,95 @@
-# Qwik City App ⚡️
+# Turso Notes ⚡️
 
-- [Qwik Docs](https://qwik.builder.io/)
-- [Discord](https://qwik.builder.io/chat)
-- [Qwik GitHub](https://github.com/BuilderIO/qwik)
-- [@QwikDev](https://twitter.com/QwikDev)
-- [Vite](https://vitejs.dev/)
+A multi-platform note-taking desktop application built with [Tauri], [Turso], [Qwik], and [TailwindCSS].
 
----
+## Prerequisites
 
-## Project Structure
+- [Node.js v16.8] or higher.
 
-This project is using Qwik with [QwikCity](https://qwik.builder.io/qwikcity/overview/). QwikCity is just an extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.
+- Rust installed in your machine.
 
-Inside your project, you'll see the following directory structure:
+- Platform specific system dependencies to develop Tauri apps:
+  - [Windows]
+  - [MacOs]
+  - [Linux]
 
+## Database Setup
+
+[Install the Turso CLI].
+
+Create a new turso database.
+
+```sh
+turso db create turso-notes
 ```
-├── public/
-│   └── ...
-└── src/
-    ├── components/
-    │   └── ...
-    └── routes/
-        └── ...
+
+Get the database URL.
+
+```sh
+turso db show turso-notes --url
 ```
 
-- `src/routes`: Provides the directory-based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. Please see the [routing docs](https://qwik.builder.io/qwikcity/routing/overview/) for more info.
+Create an authentication token for your database.
 
-- `src/components`: Recommended directory for components.
+```sh
+turso db tokens create turso-notes
+```
 
-- `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
+Create a .env file inside `/src-tauri` adding the acquired values from the two commands above as environment variables.
 
-## Add Integrations and deployment
+```toml
+# /src-tauri/.env
 
-Use the `pnpm qwik add` command to add additional integrations. Some examples of integrations includes: Cloudflare, Netlify or Express Server, and the [Static Site Generator (SSG)](https://qwik.builder.io/qwikcity/guides/static-site-generation/).
+TURSO_SYNC_URL=<OBTAINED_URL>
+TURSO_TOKEN=<CREATED_TOKEN>
+```
 
-```shell
-pnpm qwik add # or `pnpm qwik add`
+Add a `DB_PATH` key with the path to the local SQLite database (embedded replica) that this app is going to sync with Turso and perform reads on. (Turso will automatically create the file database on first run)
+
+```toml
+# /src-tauri/.env
+
+DB_PATH=../turso-notes.db
+```
+
+Open the created Turso database on the Turso CLI shell to issue SQLite statements:
+
+```sh
+turso db shell turso-notes.
+```
+
+On the Turso CLI shell, issue the following statement to create a "notes" table.
+
+```sql
+create table notes(
+ id varchar not null,
+ title varchar not null,
+ `text` text default ('Write something here...'),
+ created_at integer default (cast(unixepoch() as int)),
+ updated_at integer default (cast(unixepoch() as int))
+);
 ```
 
 ## Development
 
-Development mode uses [Vite's development server](https://vitejs.dev/). The `dev` command will server-side render (SSR) the output during development.
+Install project's dependencies.
 
-```shell
-npm start # or `pnpm start`
+```sh
+npm install
 ```
 
-> Note: during dev mode, Vite may request a significant number of `.js` files. This does not represent a Qwik production build.
+Run the following command to run a development preview of the application.
 
-## Preview
-
-The preview command will create a production build of the client modules, a production build of `src/entry.preview.tsx`, and run a local server. The preview server is only for convenience to preview a production build locally and should not be used as a production server.
-
-```shell
-pnpm preview # or `pnpm preview`
+```sh
+cargo tauri dev
 ```
 
-## Production
-
-The production build will generate client and server modules by running both client and server build commands. The build command will use Typescript to run a type check on the source code.
-
-```shell
-pnpm build # or `pnpm build`
-```
-
-## Static Site Generator (Node.js)
-
-```shell
-pnpm build.server
-```
+[Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
+[Node.js v16.8]: https://nodejs.org/en/download/
+[Tauri]: https://tauri.app
+[Windows]: https://tauri.app/v1/guides/getting-started/prerequisites#setting-up-windows
+[MacOs]: https://tauri.app/v1/guides/getting-started/prerequisites#setting-up-macos
+[Linux]: https://tauri.app/v1/guides/getting-started/prerequisites#setting-up-linux
+[Turso]: https://turso.tech
+[Qwik]: https://qwik.builder.io
+[TailwindCSS]: https://tailwindcss.com
