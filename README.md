@@ -1,10 +1,59 @@
-# Welcome to Remix!
+# Turso CRM
+
+A Customer Relationship Management application (CRM) SaaS built with [Remix], [Turso], and [Drizzle].
+
+## Setting up the database
+
+Create a turso database
+
+```sh
+turso db create turso-crm
+```
+
+Create an authentication token for all your databases
+
+```sh
+turso db tokens create turso-crm --group
+```
+
+Get the database URL for the created database
+
+```sh
+turso db show --url turso-crm
+```
+
+Store the acquired values as key value pairs in a .env file at the root of the project.
+
+```toml
+# .env
+
+TURSO_URL=<OBTAINED_URL>
+TURSO_AUTH_TOKEN=<CREATED_TOKEN>
+```
+
+Generate the database schema by running:
+
+```sh
+npm run drizzle:generate
+```
+
+Migrate the database schema by running:
+
+```sh
+npm run drizzle:migrate
+```
 
 - [Remix Docs](https://remix.run/docs)
 
-## Development
+## Local development
 
-From your terminal:
+Install dependencies
+
+```sh
+npm install
+```
+
+Spin up a local server:
 
 ```sh
 npm run dev
@@ -36,3 +85,7 @@ Make sure to deploy the output of `remix build`
 
 - `build/`
 - `public/build/`
+
+[Remix]: https://remix.run
+[Turso]: https://turso.tech
+[Drizzle]: https://drizzle.team
