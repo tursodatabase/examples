@@ -1,6 +1,6 @@
 # Turso CRM
 
-A Customer Relationship Management application (CRM) SaaS built with [Remix], [Turso], and [Drizzle].
+A Customer Relationship Management (CRM) SaaS service built with [Remix], [Turso], and [Drizzle].
 
 ## Setting up the database
 
