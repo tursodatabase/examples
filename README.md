@@ -4,6 +4,8 @@ A Customer Relationship Management (CRM) SaaS service built with [Remix], [Turso
 
 ## Setting up the database
 
+[Install the Turso CLI].
+
 Create a turso database
 
 ```sh
@@ -86,6 +88,7 @@ Make sure to deploy the output of `remix build`
 - `build/`
 - `public/build/`
 
+[Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
 [Remix]: https://remix.run
 [Turso]: https://turso.tech
 [Drizzle]: https://drizzle.team
