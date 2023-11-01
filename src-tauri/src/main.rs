@@ -48,11 +48,6 @@ async fn get_all_notes() -> Result<Vec<NoteItem>> {
     let sync_url = env::var("TURSO_SYNC_URL").unwrap();
     let auth_token = env::var("TURSO_TOKEN").unwrap();
 
-    println!(
-        "Here are the env vars: db_path: {:?}, auth_token: {:?}, _syncrl: {:?}",
-        db_path, auth_token, sync_url
-    );
-
     let db = Database::open_with_remote_sync(db_path, sync_url, auth_token).await?;
 
     let conn = db.connect()?;
