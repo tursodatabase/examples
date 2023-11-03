@@ -122,8 +122,8 @@ turso db tokens create [DATABASE-NAME] --expiration none
 Add a `.env` file at the root of the project and inside it add the values obtained above as the database url and authentication token for your Turso database.
 
 ```txt
-VITE_TURSO_DB_URL=
-VITE_TURSO_DB_AUTH_TOKEN=
+TURSO_DB_URL=
+TURSO_DB_AUTH_TOKEN=
 ```
 
 [Qwik Docs]: https://qwik.builder.io/
