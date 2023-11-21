@@ -29,8 +29,8 @@ Store the acquired values as key value pairs in a .env file at the root of the p
 ```toml
 # .env
 
-TURSO_URL=<OBTAINED_URL>
-TURSO_AUTH_TOKEN=<CREATED_TOKEN>
+TURSO_DB_URL=<OBTAINED_URL>
+TURSO_DB_AUTH_TOKEN=<CREATED_TOKEN>
 ```
 
 Generate the database schema by running:
