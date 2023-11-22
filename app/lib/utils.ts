@@ -39,7 +39,7 @@ export async function createOrganizationDatabase(organization: Organization) {
     `${process.env.TURSO_API_URL}/v1/databases`,
     {
       name: `${process.env.APP_NAME}-${organization.username}`,
-      group: `${process.env.APP_NAME}`,
+      group: `${process.env.APP_GROUP}`,
       location: `${process.env.APP_PRIMARY_LOCATION}`,
     },
     config

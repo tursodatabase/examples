@@ -2,6 +2,8 @@
 
 A Customer Relationship Management (CRM) SaaS service built with [Remix], [Turso], and [Drizzle].
 
+(Accompanying [instructional blog post])
+
 ## Setting up the database
 
 [Install the Turso CLI].
@@ -88,7 +90,8 @@ Make sure to deploy the output of `remix build`
 - `build/`
 - `public/build/`
 
-[Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
 [Remix]: https://remix.run
 [Turso]: https://turso.tech
 [Drizzle]: https://drizzle.team
+[instructional blog post]: https://blog.turso.tech/creating-a-multitenant-saas-service-with-turso-remix-and-drizzle-6205cf47
+[Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
