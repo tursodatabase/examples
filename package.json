@@ -12,7 +12,7 @@
     "drizzle:generate": "drizzle-kit generate:sqlite --out ./drizzle/migrations --breakpoints --schema=./drizzle/schema.ts",
     "drizzle:generate:orgs": "drizzle-kit generate:sqlite --out ./drizzle/migrations-orgs --breakpoints --schema=./drizzle/org-schema.ts",
     "drizzle:studio": "drizzle-kit studio --port 3333",
-    "start-replica": "curl http://localhost:3000/create-main-replicas"
+    "start-replicas": "mkdir -p databases && curl http://localhost:3000/create-main-replicas"
   },
   "dependencies": {
     "@libsql/client": "^0.3.6",
