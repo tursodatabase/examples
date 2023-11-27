@@ -23,6 +23,7 @@
     "@vercel/remix": "^2.2.0",
     "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
+    "dotenv-cli": "^7.3.0",
     "drizzle-orm": "^0.28.6",
     "isbot": "^3.7.1",
     "libsql": "0.1.34",
