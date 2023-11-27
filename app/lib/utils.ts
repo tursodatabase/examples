@@ -160,7 +160,7 @@ CREATE TABLE conversations (
 	id text PRIMARY KEY NOT NULL,
 	ticket_id text NOT NULL,
 	agent_id text NOT NULL,
-	created_at integer DEFAULT (cast(unixepoch() as int)) NOT NULL,
+	created_at integer DEFAULT (cast(unixepoch() as int)),
 	updated_at integer DEFAULT (cast(unixepoch() as int))
 );
 --> statement-breakpoint
@@ -169,7 +169,7 @@ CREATE TABLE messages (
 	sender text NOT NULL,
 	message text NOT NULL,
 	conversation_id text,
-	created_at integer DEFAULT (cast(unixepoch() as int)) NOT NULL,
+	created_at integer DEFAULT (cast(unixepoch() as int)),
 	updated_at integer DEFAULT (cast(unixepoch() as int))
 );
 --> statement-breakpoint
@@ -180,8 +180,8 @@ CREATE TABLE tickets (
 	query text,
 	is_closed integer DEFAULT 0 NOT NULL,
 	service_rating integer,
-	created_at integer DEFAULT (cast(unixepoch() as int)) NOT NULL,
-	updated_at integer DEFAULT (cast(unixepoch() as int)) NOT NULL
+	created_at integer DEFAULT (cast(unixepoch() as int)),
+	updated_at integer DEFAULT (cast(unixepoch() as int))
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX email_idx ON agents (email);`;
