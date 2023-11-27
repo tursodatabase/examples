@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev --manual",
-    "start": "remix-serve ./build/index.js",
+    "start": "dotenv .env.production remix-serve ./build/index.js",
     "typecheck": "tsc",
     "drizzle:migrate": "tsx drizzle/migrate",
     "drizzle:generate": "drizzle-kit generate:sqlite --out ./drizzle/migrations --breakpoints --schema=./drizzle/schema.ts",
