@@ -29,7 +29,7 @@ export default function CustomerOpenTicket() {
   return (
     <section className='w-full min-h-screen p-4 grid grid-cols-2'>
 
-      <div className='col-span-2 flex flex-col items-center gap-4 pt-6 pb-8 mt-4 mb-4 w-full px-2 lg:px-8 lg:w-[600px] mx-auto'>
+      <div className='col-span-2 flex flex-col items-center gap-4 pt-6 pb-8 mt-4 mb-4 min-w-full max-w-[500px] mx-auto'>
         <h3 className='text-2xl font-semibold'>Talk to {organization.name}.</h3>
 
         {customerFetcher.state === "idle" && customerFetcher.data && (
