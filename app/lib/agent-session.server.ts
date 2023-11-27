@@ -6,10 +6,7 @@ import {
   destroyAgentSession,
   getAgentSession,
 } from "~/session";
-import {
-  _buildOrgDbClient,
-  buildDbClient as buildOrgDbClient,
-} from "./client-org";
+import { _buildOrgDbClient } from "./client-org";
 import { makeAgent, type Organization } from "./types";
 
 export interface RegistrationData {

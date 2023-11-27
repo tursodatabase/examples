@@ -1,4 +1,4 @@
-import { Delta, dateToUnixepoch } from "~/lib/utils";
+import { Delta } from "~/lib/utils";
 import { redirect } from "@vercel/remix";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
@@ -69,7 +69,7 @@ export async function register({
   const db = _buildServiceDbClient();
 
   const t1 = new Delta();
-  const existingOrganization = db
+  const existingOrganization = await db
     .prepare("SELECT * FROM organizations WHERE email = ?")
     .get(email);
   t1.stop("Fetching a single organization");

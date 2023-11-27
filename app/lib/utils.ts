@@ -44,7 +44,6 @@ export function unixepochToDate(val: number) {
  * @param url: Turso database URL
  * */
 export function tenantDbLocalPath(url: string) {
-  console.log("Received org db url: ", url);
   return `databases/${(url as string).replace(
     `-${process.env.APP_ORGANIZATION}.turso.io`,
     ".db"

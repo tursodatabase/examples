@@ -37,7 +37,6 @@ export async function action({ request }: ActionFunctionArgs) {
     };
 
     const id = uuidv4();
-    // const currentTime = dateToUnixepoch();
 
     const ticketInformation = [id, customer_email, customer_name, query, 0];
 
