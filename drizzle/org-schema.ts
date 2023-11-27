@@ -47,9 +47,7 @@ export const conversations = sqliteTable("conversations", {
   id: text("id").primaryKey(),
   ticketId: text("ticket_id").notNull(),
   agentId: text("agent_id").notNull(),
-  createdAt: integer("created_at")
-    .default(sql`(cast(unixepoch() as int))`)
-    .notNull(),
+  createdAt: integer("created_at").default(sql`(cast(unixepoch() as int))`),
   updatedAt: integer("updated_at").default(sql`(cast(unixepoch() as int))`),
 });
 
