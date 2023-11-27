@@ -1,14 +1,15 @@
 import { type ActionFunctionArgs, json } from "@vercel/remix";
-import { buildDbClient } from "~/lib/client";
-import { buildDbClient as buildOrgDbClient } from "~/lib/client-org";
+import { _buildServiceDbClient } from "~/lib/client";
+import { _buildOrgDbClient } from "~/lib/client-org";
 import { v4 as uuidv4 } from "uuid";
-import { messages } from "drizzle/org-schema";
+import { Delta, dateToUnixepoch } from "~/lib/utils";
+import { makeOrganization } from "~/lib/types";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
 
-  const db = buildDbClient();
+  const db = _buildServiceDbClient();
 
   if (values.organization_username === undefined) {
     return json(
@@ -18,10 +19,11 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // get organization
-  const currentOrganization = await db.query.organizations.findFirst({
-    where: (organizations, { eq }) =>
-      eq(organizations.username, values.organization_username as string),
-  });
+  const t0 = new Delta();
+  const currentOrganization = await db
+    .prepare("SELECT * FROM organizations WHERE username = ?")
+    .get(values.organization_username);
+  t0.stop("Fetching single organization");
 
   if (currentOrganization === undefined) {
     return json(
@@ -30,8 +32,8 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  const manageOrgDbs = buildOrgDbClient({
-    url: currentOrganization.dbUrl as string,
+  const manageOrgDbs = _buildOrgDbClient({
+    url: makeOrganization(currentOrganization).dbUrl as string,
   });
 
   if (_action === "sendMessage") {
@@ -42,18 +44,30 @@ export async function action({ request }: ActionFunctionArgs) {
     };
 
     const id = uuidv4();
-    const messageInformation = {
+    const currentTime = dateToUnixepoch();
+    const messageInformation = [
       id,
       sender,
       message,
-      conversationId: conversation_id,
-    };
+      conversation_id,
+      currentTime,
+      currentTime,
+    ];
 
-    //* add agent to db
+    //* submit a message
+    const t1 = new Delta();
+    await manageOrgDbs
+      .prepare(
+        "INSERT INTO messages(id, sender, message, conversation_id, created_at, updated_at) VALUES(?, ?, ?, ?, ?, ?)"
+      )
+      .run(messageInformation);
+    t1.stop("Creating a new message");
+
+    const t2 = new Delta();
     const messageSubmitted = await manageOrgDbs
-      .insert(messages)
-      .values(messageInformation)
-      .run();
+      .prepare("SELECT * FROM messages WHERE id = ?")
+      .get(id);
+    t2.stop("Fetching created message");
 
     if (messageSubmitted === undefined) {
       return json(

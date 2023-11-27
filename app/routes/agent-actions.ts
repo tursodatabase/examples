@@ -1,26 +1,26 @@
 import { type ActionFunctionArgs, json, redirect } from "@vercel/remix";
-import { buildDbClient } from "~/lib/client";
-import { buildDbClient as buildOrgDbClient } from "~/lib/client-org";
+import { _buildServiceDbClient } from "~/lib/client";
+import { _buildOrgDbClient } from "~/lib/client-org";
 import {
   destroyAgentAuthSession,
   requireAgentId,
 } from "~/lib/agent-session.server";
 import { v4 as uuidv4 } from "uuid";
-import { conversations, tickets } from "drizzle/org-schema";
-import { dateToUnixepoch } from "~/lib/utils";
-import { eq } from "drizzle-orm";
+import { Delta, dateToUnixepoch } from "~/lib/utils";
+import { makeOrganization } from "~/lib/types";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const { _action, ...values } = Object.fromEntries(formData);
 
-  const db = buildDbClient();
+  const db = _buildServiceDbClient();
 
   // get organization
-  const currentOrganization = await db.query.organizations.findFirst({
-    where: (organizations, { eq }) =>
-      eq(organizations.id, values.organization_id as string),
-  });
+  const t0 = new Delta();
+  const currentOrganization = await db
+    .prepare("SELECT * FROM organizations WHERE id = ?")
+    .get(values.organization_id);
+  t0.stop("Fetching organization details");
 
   if (currentOrganization === undefined) {
     return redirect(`/`); // org not exists
@@ -36,13 +36,15 @@ export async function action({ request }: ActionFunctionArgs) {
     return redirect(`/agent/${currentOrganization.username}/login`);
   }
 
-  const orgDb = buildOrgDbClient({
-    url: currentOrganization.dbUrl as string,
+  const orgDb = _buildOrgDbClient({
+    url: makeOrganization(currentOrganization).dbUrl as string,
   });
 
-  const currentAgent = await orgDb.query.agents.findFirst({
-    where: (agents, { eq }) => eq(agents.id, agentId),
-  });
+  const t1 = new Delta();
+  const currentAgent = await orgDb
+    .prepare("SELECT * FROM agents WHERE id = ?")
+    .get(agentId);
+  t1.stop("Fetching a single agent");
 
   if (currentAgent === undefined) {
     return redirect(`/agent/${currentOrganization.username}/login`);
@@ -65,11 +67,11 @@ export async function action({ request }: ActionFunctionArgs) {
       ticket_id: string;
     };
 
-    const id = uuidv4();
-
-    const ticket = orgDb.query.tickets.findFirst({
-      where: (tickets, { eq }) => eq(tickets.id, ticket_id),
-    });
+    const t0 = new Delta();
+    const ticket = await orgDb
+      .prepare("SELECT * FROM tickets WHERE id = ?")
+      .get(ticket_id);
+    t0.stop("Fetching a single ticket");
 
     if (ticket === undefined) {
       return json(
@@ -81,20 +83,34 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    const conversationInfo = {
-      id,
-      ticketId: ticket_id,
-      agentId,
-    };
+    const id = uuidv4();
+    const conversationInfo = [id, ticket_id, agentId];
 
     //* start conversation
+    const t1 = new Delta();
+    await orgDb
+      .prepare(
+        "INSERT INTO conversations(id, ticket_id, agent_id) values(?, ?, ?)"
+      )
+      .run(conversationInfo);
+    t1.stop("Creating a new conversation");
+
+    const t2 = new Delta();
+    await orgDb.sync();
+    t2.stop("Syncronizing conversations");
+
+    const t3 = new Delta();
     const newConversation = await orgDb
-      .insert(conversations)
-      .values(conversationInfo)
-      .returning()
-      .get();
+      .prepare("SELECT * FROM conversations WHERE id = ?")
+      .get(id);
+    t3.stop("Fetching created conversation");
+    console.log(
+      { newConversation, id },
+      `SELECT * FROM conversations WHERE id = ${id}`
+    );
 
     if (newConversation === undefined) {
+      console.log("Failed to start a conversation;");
       return json(
         {
           ok: true,
@@ -116,9 +132,11 @@ export async function action({ request }: ActionFunctionArgs) {
       ticket_id: string;
     };
 
-    const ticket = orgDb.query.tickets.findFirst({
-      where: (tickets, { eq }) => eq(tickets.id, ticket_id),
-    });
+    const t0 = new Delta();
+    const ticket = await orgDb
+      .prepare("SELECT * FROM tickets WHERE id = ?")
+      .get(ticket_id);
+    t0.stop("Fetching a single ticket");
 
     if (ticket === undefined) {
       return json(
@@ -130,17 +148,17 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    const updateInfo = {
-      isClosed: 1,
-      updatedAt: dateToUnixepoch(),
-    };
+    const updateTime = dateToUnixepoch();
+    const updateInfo = [1, updateTime, ticket_id];
 
     //* close ticket
+    const t1 = new Delta();
     await orgDb
-      .update(tickets)
-      .set(updateInfo)
-      .where(eq(tickets.id, ticket_id))
-      .run();
+      .prepare("UPDATE tickets SET is_closed = ?, updated_at = ? WHERE id = ?")
+      .run(updateInfo);
+    t1.stop("Closing ticket");
+
+    await orgDb.sync();
 
     return redirect(`/agent/${currentOrganization.username}/dash`);
   }

@@ -2,9 +2,7 @@ import { type ActionFunctionArgs, json, redirect, type ActionFunction, type Meta
 import { useFetcher } from "@remix-run/react";
 import { register } from "~/lib/session.server";
 import { createOrganizationDatabase } from '~/lib/utils';
-import { buildDbClient } from '~/lib/client';
-import { organizations } from 'drizzle/schema';
-import { eq } from 'drizzle-orm';
+import { _buildServiceDbClient } from '~/lib/client';
 import { LoaderIcon } from '~/components/icons';
 
 export const meta: MetaFunction = () => {
@@ -58,7 +56,6 @@ export const action: ActionFunction = async ({ request }: ActionFunctionArgs) =>
     );
   }
 
-
   const accountCreation = await register({
     name: values.name as string,
     website: values.website as string,
@@ -74,7 +71,6 @@ export const action: ActionFunction = async ({ request }: ActionFunctionArgs) =>
     );
   }
 
-
   // create organization database
   const newOrgDb = await createOrganizationDatabase(accountCreation.organization);
 
@@ -84,9 +80,9 @@ export const action: ActionFunction = async ({ request }: ActionFunctionArgs) =>
 
   if (newOrgDb.ok && newOrgDb.data !== null) {
     // add database credentials to organization record
-    await buildDbClient().update(organizations).set({
-      dbUrl: newOrgDb.data.url,
-    }).where(eq(organizations.id, accountCreation.organization.id)).run();
+    await _buildServiceDbClient().prepare("UPDATE organizations SET db_url = ? where id = ?").run([newOrgDb.data.url, accountCreation.organization.id]);
+
+    await _buildServiceDbClient().sync();
 
     return redirect("/login");
   }

@@ -1,10 +1,11 @@
-import { organizations } from "./../../drizzle/schema";
+import { Delta, dateToUnixepoch } from "~/lib/utils";
 import { redirect } from "@vercel/remix";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 
 import { commitOrgSession, destroyOrgSession, getOrgSession } from "~/session";
-import { buildDbClient } from "./client";
+import { makeOrganization } from "./types";
+import { _buildServiceDbClient } from "./client";
 
 export interface RegistrationData {
   name: string;
@@ -21,11 +22,13 @@ export interface LoginCredentials {
 }
 
 export async function login({ email, password }: LoginCredentials) {
-  const db = buildDbClient();
+  const db = _buildServiceDbClient();
 
-  const organization = await db.query.organizations.findFirst({
-    where: (organizations, { eq }) => eq(organizations.email, email),
-  });
+  const t0 = new Delta();
+  const organization = await db
+    .prepare("SELECT * FROM organizations WHERE email = ?")
+    .get(email);
+  t0.stop("Fetching a single organization");
 
   if (organization !== undefined) {
     const isValidPassword = bcrypt.compareSync(
@@ -33,7 +36,9 @@ export async function login({ email, password }: LoginCredentials) {
       (organization.password as string) || ""
     );
 
-    return !isValidPassword ? null : organization;
+    return !isValidPassword
+      ? null
+      : { ...organization, dbUrl: organization.db_url };
   }
 
   return null;
@@ -61,11 +66,13 @@ export async function register({
     };
   }
 
-  const db = buildDbClient();
+  const db = _buildServiceDbClient();
 
-  const existingOrganization = await db.query.organizations.findFirst({
-    where: (organizations, { eq }) => eq(organizations.email, email),
-  });
+  const t1 = new Delta();
+  const existingOrganization = db
+    .prepare("SELECT * FROM organizations WHERE email = ?")
+    .get(email);
+  t1.stop("Fetching a single organization");
 
   if (existingOrganization !== undefined) {
     return {
@@ -77,25 +84,38 @@ export async function register({
 
   const newUuid = uuidv4();
   const organizationPassword = await bcrypt.hash(password, 10);
+
+  const newOrg = [
+    newUuid,
+    name,
+    website,
+    username,
+    email,
+    organizationPassword,
+    logo,
+  ];
+
+  const time = new Delta();
+  await db
+    .prepare(
+      "INSERT INTO organizations(id, name, website, username, email, password, logo) values(?, ?, ?, ?, ?, ?, ?)"
+    )
+    .run(newOrg);
+  time.stop("Creating a new organization");
+
+  await db.sync();
+
+  const t2 = new Delta();
   const organizationRecord = await db
-    .insert(organizations)
-    .values({
-      id: newUuid,
-      name,
-      email,
-      username,
-      website,
-      password: organizationPassword,
-      logo,
-    })
-    .returning()
-    .get();
+    .prepare("SELECT * FROM organizations WHERE id = ?")
+    .get(newUuid);
+  t2.stop("Fetching created organization");
 
   if (organizationRecord !== undefined) {
     return {
       ok: true,
       message: "Account created",
-      organization: organizationRecord,
+      organization: makeOrganization(organizationRecord),
     };
   }
 
@@ -155,7 +175,7 @@ export async function getOrganizationDetails({
   organizationId?: string;
   organizationUsername?: string;
 }) {
-  const db = buildDbClient();
+  const db = _buildServiceDbClient();
 
   if (organizationId === undefined && organizationUsername === undefined) {
     return undefined;
@@ -164,15 +184,22 @@ export async function getOrganizationDetails({
   let existingOrganization;
 
   if (organizationId !== undefined) {
-    existingOrganization = await db.query.organizations.findFirst({
-      where: (organizations, { eq }) => eq(organizations.id, organizationId),
-    });
+    const existingOrganization = await db
+      .prepare("SELECT * FROM organizations WHERE id = ?")
+      .get(organizationId);
+    return existingOrganization !== undefined
+      ? makeOrganization(existingOrganization)
+      : undefined;
   } else if (organizationUsername !== undefined) {
-    existingOrganization = await db.query.organizations.findFirst({
-      where: (organizations, { eq }) =>
-        eq(organizations.username, organizationUsername),
-    });
+    const existingOrganization = await db
+      .prepare("SELECT * FROM organizations WHERE username = ?")
+      .get(organizationUsername);
+    return existingOrganization !== undefined
+      ? makeOrganization(existingOrganization)
+      : undefined;
   }
 
-  return existingOrganization;
+  return existingOrganization !== undefined
+    ? makeOrganization(existingOrganization)
+    : undefined;
 }

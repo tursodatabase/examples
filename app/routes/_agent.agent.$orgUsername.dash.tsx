@@ -1,9 +1,9 @@
 import { useFetcher, useLoaderData } from '@remix-run/react';
 import { type LoaderFunctionArgs, type LoaderFunction, redirect } from '@vercel/remix';
-import { buildDbClient as buildOrgDbClient } from '~/lib/client-org';
+import { _buildOrgDbClient } from '~/lib/client-org';
 import { getAgentDetails, requireAgentId } from '~/lib/agent-session.server';
 import { getOrganizationDetails } from '~/lib/session.server';
-import type { Agent, Conversation, Organization, Ticket } from '~/lib/types';
+import { makeConversation, type Conversation, type Organization, type Ticket, makeAgent, makeTicket } from '~/lib/types';
 import { unixepochToDate } from '~/lib/utils';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderFunctionArgs): Promise<any> => {
@@ -20,25 +20,18 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderFunction
     return redirect(`/agent/${org.username}/login`); // * agent not exists
   }
 
-  const db = buildOrgDbClient({ url: org.dbUrl as string });
+  const db = _buildOrgDbClient({ url: org.dbUrl as string });
 
   // fetch open org tickets
-  const tickets = await db.query.tickets.findMany({
-    where: (tickets, { eq }) => eq(tickets.isClosed, 0)
-  });
+  const tickets = await db.prepare("SELECT * FROM tickets WHERE is_closed = ?").all(0);
 
   // fetch agent conversations
-  const conversations = await db.query.conversations.findMany({
-    where: (conversations, { eq }) => eq(conversations.agentId, agentId),
-    with: {
-      ticket: true,
-    }
-  });
+  const conversations = await db.prepare('select "id", "ticket_id", "agent_id", "created_at", "updated_at", (select json_array("id", "customer_email", "customer_name", "query", "is_closed", "service_rating", "created_at", "updated_at") as "data" from (select * from "tickets" "conversations_ticket" where "conversations_ticket"."id" = "conversations"."ticket_id" limit ?) "conversations_ticket") as "ticket" from "conversations" where "conversations"."agent_id" = ?').all(agentId);
 
   return {
-    tickets: tickets as unknown as Ticket[],
-    conversations: conversations as unknown as Conversation[],
-    agent: fetchAgent.agent as unknown as Agent,
+    tickets: tickets.map((ticket: any) => makeTicket(ticket)), // 
+    conversations: conversations.map((conversation: any) => (makeConversation(conversations))),
+    agent: makeAgent(fetchAgent),
     org
   };
 }

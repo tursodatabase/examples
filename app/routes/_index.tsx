@@ -1,7 +1,7 @@
 import { json, type TypedResponse, type LoaderFunction, type MetaFunction } from "@remix-run/node";
 import { useLoaderData } from '@remix-run/react';
-import { buildDbClient } from '~/lib/client';
-import type { Organization } from '~/lib/types';
+import { makeOrganization, type Organization } from '~/lib/types';
+import { getAllOrganizations } from '~/lib/utils';
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,12 +11,10 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async (): Promise<{ organizations: Organization[] } | TypedResponse> => {
-  const db = buildDbClient();
-
-  const organizations = await db.query.organizations.findMany();
+  const organizations = await getAllOrganizations();
 
   return json({
-    organizations: organizations as unknown as Organization[]
+    organizations: organizations.map((organization: any) => makeOrganization(organization))
   })
 }
 
