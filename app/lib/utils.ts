@@ -82,7 +82,6 @@ export async function getConversationDetails(
 ) {
   const db = buildDbClient({
     url: `${org.dbUrl}`,
-    authToken: `${org.dbToken}`,
   });
 
   const conversation = await db.query.conversations.findFirst({
@@ -113,7 +112,6 @@ export async function getCustomerConversationDetails({
 
   const db = buildDbClient({
     url: `${org.dbUrl}`,
-    authToken: `${org.dbToken}`,
   });
 
   const conversation = await db.query.conversations.findFirst({
