@@ -27,6 +27,42 @@ export function unixepochToDate(val: number) {
   return date;
 }
 
+/**
+ * @description Constructs local path for tenant db
+ * @param url: Turso database URL
+ * */
+export function tenantDbLocalPath(url: string) {
+  console.log("Received org db url: ", url);
+  return `databases/${(url as string).replace(
+    `-${process.env.APP_ORGANIZATION}.turso.io`,
+    ".db"
+  )}`;
+}
+
+/**
+ * @description Calculates time diff between two points
+ */
+export class Delta {
+  time: any;
+
+  /**
+   * Start counting time
+   */
+  constructor() {
+    this.time = performance.now();
+  }
+
+  /**
+   * @description Stop counting time
+   * @param label Label to accompany time diff output
+   */
+  stop(label = "Request Delta") {
+    console.log(
+      `${label}: ${(performance.now() - this.time).toFixed(4)} milliseconds`
+    );
+  }
+}
+
 export async function createOrganizationDatabase(organization: Organization) {
   const config = {
     headers: {
