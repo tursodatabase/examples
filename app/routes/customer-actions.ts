@@ -44,7 +44,7 @@ export async function action({ request }: ActionFunctionArgs) {
       query,
     };
 
-    //* add agent to db
+    //* open a ticket
     const openedTicket = await manageOrgDbs
       .insert(tickets)
       .values(ticketInformation)

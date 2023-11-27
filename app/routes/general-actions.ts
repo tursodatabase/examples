@@ -49,7 +49,7 @@ export async function action({ request }: ActionFunctionArgs) {
       conversationId: conversation_id,
     };
 
-    //* add agent to db
+    //* submit a message
     const messageSubmitted = await manageOrgDbs
       .insert(messages)
       .values(messageInformation)
