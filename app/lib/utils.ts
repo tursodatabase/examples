@@ -69,9 +69,7 @@ export class Delta {
    * @param label Label to accompany time diff output
    */
   stop(label = "Request Delta") {
-    console.log(
-      `${label}: ${(performance.now() - this.time).toFixed(4)} milliseconds`
-    );
+    console.log(`${label}: ${(performance.now() - this.time).toFixed(3)} ms`);
   }
 }
 
