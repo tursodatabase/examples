@@ -13,7 +13,7 @@ export const loader: LoaderFunction = async ({ request, params }: LoaderFunction
 
   const agentId = await requireAgentId({ request, redirectTo: `/agent/${org.username}/login` });
   if (agentId === undefined) {
-    return redirect(`/${org.username}/login`); // * no agent (user) session
+    return redirect(`/agent/${org.username}/login`); // * no agent (user) session
   }
 
   const conversation = await getConversationDetails(params.conversationId as string, org)
