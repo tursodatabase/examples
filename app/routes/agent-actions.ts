@@ -65,8 +65,6 @@ export async function action({ request }: ActionFunctionArgs) {
       ticket_id: string;
     };
 
-    const id = uuidv4();
-
     const ticket = orgDb.query.tickets.findFirst({
       where: (tickets, { eq }) => eq(tickets.id, ticket_id),
     });
@@ -81,6 +79,7 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
+    const id = uuidv4();
     const conversationInfo = {
       id,
       ticketId: ticket_id,
