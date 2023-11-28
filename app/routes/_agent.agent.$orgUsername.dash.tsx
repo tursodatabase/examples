@@ -5,6 +5,7 @@ import { getAgentDetails, requireAgentId } from '~/lib/agent-session.server';
 import { getOrganizationDetails } from '~/lib/session.server';
 import type { Agent, Conversation, Organization, Ticket } from '~/lib/types';
 import { unixepochToDate } from '~/lib/utils';
+import { LoaderIcon } from '~/components/icons';
 
 export const loader: LoaderFunction = async ({ request, params }: LoaderFunctionArgs): Promise<any> => {
   const org: Organization | undefined = await getOrganizationDetails({ organizationUsername: params.orgUsername as string }) as Organization;
@@ -66,10 +67,14 @@ export default function AgentDashboard() {
               >
                 <input type="hidden" name="organization_id" value={org.id} />
                 <input type="hidden" name="ticket_id" value={ticket.id} />
-                <button className='px-2 py-1 border border-gray-300 hover:border-gray-600 rounded-md text-sm'
+                <button className={`x-2 py-1 border border-gray-300 hover:border-gray-600 rounded-md text-sm flex gap-2 items-center justify-center w-20 disabled:opacity-50 ${startConversationFetcher.state === "submitting" && !startConversationFetcher.data ? 'disabled' : ''}`}
                   name='_action'
                   value="startConversation"
-                >Engage</button>
+                  disabled={startConversationFetcher.state === "submitting" && !startConversationFetcher.data}
+                >
+                  {startConversationFetcher.state === "submitting" && !startConversationFetcher.data && <LoaderIcon styles="h-4 w-4 animate-spin fill-gray-800" />}
+                  <span>Engage</span>
+                </button>
               </startConversationFetcher.Form>
             </div>
           </li>)}
