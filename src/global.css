@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+
   header,
-  header > * {
+  header>* {
     @apply bg-teal-200;
   }
 
@@ -12,6 +13,7 @@
     @apply focus:outline-teal-600 rounded-full px-3 py-1 w-full bg-teal-50 focus:bg-white;
     box-shadow: 0 0 0 1px #14b8a6;
   }
+
   input:focus {
     box-shadow: none;
   }
