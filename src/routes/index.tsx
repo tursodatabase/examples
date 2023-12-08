@@ -1,5 +1,5 @@
-import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
-import { type DocumentHead, Form, routeAction$, type RequestEventAction } from "@builder.io/qwik-city";
+import { component$, useSignal, useTask$ } from "@builder.io/qwik";
+import { type DocumentHead, Form, routeAction$, type RequestEventAction, useLocation } from "@builder.io/qwik-city";
 import { LoadingAnimation } from "~/components/loading/loading";
 import { Noty } from "~/components/notification/notification";
 import { tursoClient } from "~/utils/turso";
@@ -75,9 +75,10 @@ export const useFormAction = routeAction$(async (data, requestEvent: RequestEven
 export default component$(() => {
   const formAction = useFormAction();
   const baseUrl = useSignal("");
+  const location = useLocation();
 
-  useVisibleTask$(() => {
-    baseUrl.value = window.location.href;
+  useTask$(() => {
+    baseUrl.value = location.url.origin;
   });
 
   return (

@@ -1,5 +1,6 @@
-import { component$ } from "@builder.io/qwik";
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
+
+import { component$ } from "@builder.io/qwik";
 
 /**
  * The RouterHead component is placed inside of the document `<head>` element.
@@ -17,15 +18,19 @@ export const RouterHead = component$(() => {
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
       {head.meta.map((m) => (
-        <meta {...m} />
+        <meta key={m.key} {...m} />
       ))}
 
       {head.links.map((l) => (
-        <link {...l} />
+        <link key={l.key} {...l} />
       ))}
 
       {head.styles.map((s) => (
-        <style {...s.props} dangerouslySetInnerHTML={s.style} />
+        <style key={s.key} {...s.props} dangerouslySetInnerHTML={s.style} />
+      ))}
+
+      {head.scripts.map((s) => (
+        <script key={s.key} {...s.props} dangerouslySetInnerHTML={s.script} />
       ))}
     </>
   );
