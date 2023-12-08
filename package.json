@@ -17,20 +17,20 @@
     "cypress:run": "LOCAL_SITE_URL=http://localhost:3000 cypress run"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config-typescript": "^12.0.0",
-    "@typescript-eslint/parser": "^5.60.1",
-    "cypress": "^12.16.0",
-    "eslint": "^8.43.0",
-    "eslint-config-prettier": "^8.8.0",
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "cypress": "^12.17.4",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "nuxt": "^3.5.3",
+    "nuxt": "^3.8.2",
     "prettier": "^2.8.8",
-    "tsx": "^3.12.7",
-    "typescript": "^5.1.6"
+    "tsx": "^3.14.0",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@libsql/client": "^0.2.1",
-    "@nuxtjs/tailwindcss": "^6.8.0",
-    "@tailwindcss/forms": "^0.5.3"
+    "@libsql/client": "0.4.0-pre.5",
+    "@nuxtjs/tailwindcss": "^6.10.1",
+    "@tailwindcss/forms": "^0.5.7"
   }
 }
