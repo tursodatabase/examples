@@ -1,0 +1,13 @@
+{
+  "name": "@turso-quickstart/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nx/js": "17.2.4",
+    "@nx/workspace": "17.2.4",
+    "nx": "17.2.4"
+  }
+}
