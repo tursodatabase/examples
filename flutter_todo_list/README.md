@@ -25,16 +25,17 @@ then issue the database schema.
 
 ```sh
 CREATE TABLE IF NOT EXISTS todos (
-    task TEXT NOT NULL,
+    id INTEGER PRIMARY KEY,
+    task TEXT NOT NULL
 );
 ```
 
 Populate the `todos` table with some data and exit the shell.
 
 ```sql
-INSERT INTO todos values ("Go to the gym");
-INSERT INTO todos values ("Watch a movie");
-INSERT INTO todos values ("Write some code");
+INSERT INTO todos values (1, "Go to the gym");
+INSERT INTO todos values (2, "Watch a movie");
+INSERT INTO todos values (3, "Write some code");
 
 .quit -- exit the shell
 ```
