@@ -1,42 +1,31 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
-  </q-page>
+  <div class="q-pa-md" style="max-width: 350px">
+    <q-list bordered separator>
+      <q-item
+        clickable
+        v-ripple
+        v-for="recipe of recipes"
+        :key="recipe.id"
+        :to="`/recipe/${recipe.id}`"
+      >
+        <q-item-section>
+          <q-item-label overline>{{ recipe.name }}</q-item-label>
+          <q-item-label caption>{{
+            recipe.nutritionInformation?.slice(0, 20) + '...'
+          }}</q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
-import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useDatabaseStore } from 'src/stores/database';
 
-const todos = ref<Todo[]>([
-  {
-    id: 1,
-    content: 'ct1'
-  },
-  {
-    id: 2,
-    content: 'ct2'
-  },
-  {
-    id: 3,
-    content: 'ct3'
-  },
-  {
-    id: 4,
-    content: 'ct4'
-  },
-  {
-    id: 5,
-    content: 'ct5'
-  }
-]);
-const meta = ref<Meta>({
-  totalCount: 1200
-});
+const store = useDatabaseStore();
+const { recipes } = storeToRefs(store);
+const { fetchAllRecipes } = store;
+
+fetchAllRecipes();
 </script>
