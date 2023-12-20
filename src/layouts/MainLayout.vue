@@ -18,7 +18,7 @@
           @click="addRecipe()"
           color="accent"
           icon-right="local_dining"
-          label="New Recipe"
+          label="Add"
         />
       </q-toolbar>
     </q-header>
