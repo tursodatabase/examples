@@ -7,8 +7,6 @@ import { Ingredient, Recipe } from 'src/components/models';
 
 const PORT = 3000;
 
-dotenv.config({ path: '.env.local' });
-
 const db = createClient({
   url: 'file:recipe-book.db',
 });
