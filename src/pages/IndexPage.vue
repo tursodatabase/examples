@@ -1,6 +1,6 @@
 <template>
-  <div class="q-pa-md" style="max-width: 350px">
-    <q-list bordered separator>
+  <div class="q-pa-md">
+    <q-list separator>
       <q-item
         clickable
         v-ripple
