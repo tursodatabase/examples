@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-list separator>
+    <q-list separator v-if="recipes.length > 0">
       <q-item
         clickable
         v-ripple
@@ -16,6 +16,20 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <div
+      class="column flex-center items-center q-pa-md"
+      style="height: 100vh; width: 100%"
+      v-else
+    >
+      <div class="col-12 self-center" style="height: 100px">
+        <q-btn
+          to="/add-recipe"
+          color="primary"
+          icon-right="local_dining"
+          label="Add a recipe"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
