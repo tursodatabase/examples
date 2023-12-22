@@ -15,7 +15,7 @@
 
         <q-btn
           v-show="recipes.length > 0 || route.path !== '/add-recipe'"
-          @click="addRecipe()"
+          to="/add-recipe"
           color="accent"
           icon-right="local_dining"
           label="Add"
@@ -53,19 +53,16 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import EssentialLink, {
   EssentialLinkProps,
 } from 'components/EssentialLink.vue';
 import { useDatabaseStore } from 'src/stores/database';
 
 const route = useRoute();
-const router = useRouter();
 const store = useDatabaseStore();
 
 const { recipes } = store;
-
-const addRecipe = () => router.push('/add-recipe');
 
 const essentialLinks: EssentialLinkProps[] = [
   {

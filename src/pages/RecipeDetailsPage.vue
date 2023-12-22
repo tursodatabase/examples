@@ -58,8 +58,8 @@ const { isLoading } = storeToRefs(store);
 
 const recipe = getRecipeById(route.params.id as string);
 
-const remove = async () => {
-  await deleteRecipe(recipe as Recipe);
+const remove = () => {
+  deleteRecipe(recipe as Recipe);
 
   watch(isLoading, (loading) => {
     if (!loading) {
