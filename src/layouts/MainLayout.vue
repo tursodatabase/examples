@@ -67,7 +67,7 @@ const { recipes } = store;
 const essentialLinks: EssentialLinkProps[] = [
   {
     title: 'Turso Docs',
-    caption: 'quasar.dev',
+    caption: 'turso.tech',
     icon: 'public',
     link: 'https://docs.turso.tech',
   },
