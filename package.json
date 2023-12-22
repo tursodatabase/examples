@@ -1,7 +1,7 @@
 {
   "name": "my-recipe-book",
   "version": "0.0.1",
-  "description": "A recipe book application built with Quasar and Turso",
+  "description": "A recipe book application built with Quasar and SQLite",
   "productName": "My Recipe Book",
   "author": "James Sinkala <xinnks@gmail.com>",
   "private": true,

@@ -1,4 +1,4 @@
-# My Recipe Book (my-recipe-book)
+# My Recipe Book
 
 A recipe book application built with Quasar and SQLite.
 
