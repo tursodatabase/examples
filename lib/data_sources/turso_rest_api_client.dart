@@ -57,7 +57,6 @@ class TursoRestAPIClient {
           HttpHeaders.contentTypeHeader: "application/json"
         },
         body: json.encode({
-          // "statements": ["$sql"]
           "statements": batch ? sql : ["$sql"]
         }));
   }
