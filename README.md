@@ -1,10 +1,38 @@
-# app_recipe_book
+# My Recipe book
 
-A new Flutter project.
+A recipe book mobile application built with Flutter and Turso
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Database setup
+
+Create new Turso database from the embedded SQLite file.
+
+```
+turso db create recipe-book --from-file recipe-book.db
+```
+
+Get the created database's credentials.
+
+```bash
+turso db show --url recipe-
+turso db create tokens recipe-book
+```
+
+> [!NOTE]
+> Replace the provided database URL's `libsql` protocol with `https` before using it to send HTTP requests.
+
+## Development
+
+```bash
+flutter run --debug --dart-define=TURSO_URL=[db-url-with-https] --dart-define=TURSO_AUTH_TOKEN=[issued-auth-token]
+```
+
+## Application Screens
+
+![Recipe book application presentation](assets/app-screens.png)
+
+## References
 
 A few resources to get you started if this is your first Flutter project:
 
