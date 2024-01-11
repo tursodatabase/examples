@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { tursoClient } from '@/utils/tursoClient';
 import { Framework } from '@/app/page';
+import Filter from 'bad-words';
 
 export const runtime = 'edge';
 
@@ -48,9 +49,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.redirect(addNewUrl, { status: 302 });
   }
 
+  const filter = new Filter();
   const add = await tursoClient().execute({
     sql: 'insert into frameworks(name, language, url, stars) values(?, ?, ?, ?);',
-    args: [name, language, url, stars],
+    args: [
+      filter.clean(name),
+      filter.clean(language),
+      filter.clean(url),
+      stars,
+    ],
   });
 
   return NextResponse.redirect(addNewUrl + '?message=Framework added!', {

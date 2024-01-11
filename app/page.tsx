@@ -20,10 +20,17 @@ export interface Framework {
 }
 
 async function getData() {
-  const res = await tursoClient().execute('select * from frameworks;');
-  return {
-    frameworks: res.rows as unknown as Framework[],
-  };
+  try {
+    const res = await tursoClient().execute('select * from frameworks;');
+    return {
+      frameworks: res.rows as unknown as Framework[],
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      frameworks: []
+    }
+  }
 }
 
 export default async function Home(page: any) {
