@@ -1,3 +1,5 @@
+import Filter from "bad-words";
+
 export default defineEventHandler(async (event) => {
   const { name, language, url, stars } = await readBody(event);
 
@@ -8,10 +10,16 @@ export default defineEventHandler(async (event) => {
     });
 
   const client = useTurso();
+  const filter = new Filter();
 
   await client.execute({
     sql: "insert into frameworks(name, language, url, stars) values(?, ?, ?, ?)",
-    args: [name, language, url, stars],
+    args: [
+      filter.clean(name),
+      filter.clean(language),
+      filter.clean(url),
+      stars,
+    ],
   });
 
   const framework = await client.execute({
