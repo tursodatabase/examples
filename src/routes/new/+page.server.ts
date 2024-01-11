@@ -3,6 +3,7 @@ import type { PageServerLoad, Actions, RequestEvent } from '../$types';
 import date from 'date-and-time';
 import { tursoClient } from '$lib/server/turso';
 import { questions, choices } from './../../../drizzle/schema';
+import Filter from 'bad-words';
 
 export const load: PageServerLoad = async ({ cookies }) => {
   const userId = cookies.get('userid');
@@ -18,6 +19,7 @@ export const actions = {
       cookies.set('userid', crypto.randomUUID(), { path: '/' });
     }
     const userId = cookies.get('userid');
+    const filter = new Filter();
 
     const data = await request.formData();
     const pollChoicesCount: number = data.get('choices_count') as unknown as number;
@@ -45,7 +47,7 @@ export const actions = {
 
     const questionInsertValues = {
       id,
-      question,
+      question: filter.clean(question),
       deleteId,
       expireDate
     };
@@ -58,7 +60,7 @@ export const actions = {
         const id = crypto.randomUUID();
         pollChoices.push({
           id,
-          choice: data.get(`choice_${i}`) as unknown as string,
+          choice: filter.clean(data.get(`choice_${i}`) as unknown as string),
           userId,
           questionId: questionData.id
         });
