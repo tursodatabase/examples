@@ -1,0 +1,38 @@
+{
+  "name": "api-turso-cf-workers",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "format": "prettier --write .",
+    "generate": "npx drizzle-kit generate:sqlite --out ./drizzle/migrations --breakpoints --schema=./drizzle/schema.ts",
+    "migrate": "tsx drizzle/migrate",
+    "seed": "tsx drizzle/seed"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.3.5",
+    "drizzle-orm": "^0.28.6",
+    "drizzle-zod": "^0.5.1",
+    "itty-router": "^4.0.9",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20230518.0",
+    "@types/uuid": "^9.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "dotenv": "^16.1.4",
+    "drizzle-kit": "^0.19.13",
+    "eslint": "^8.42.0",
+    "eslint-config-standard-with-typescript": "^35.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "knex": "^2.4.2",
+    "lorem-ipsum": "^2.0.8",
+    "prettier": "^2.8.8",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.3",
+    "wrangler": "3.1.0"
+  }
+}

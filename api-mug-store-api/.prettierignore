@@ -1,0 +1,8 @@
+node_modules
+package-lock.json
+drizzle/migrations/
+package.json
+README.md
+.*
+*.json
+*.yaml
