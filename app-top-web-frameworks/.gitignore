@@ -1,0 +1,21 @@
+node_modules
+*.log*
+.nuxt
+.nitro
+.cache
+.output
+.env
+dist
+.DS_Store
+.vscode
+
+# Local Netlify folder
+.netlify
+.vercel
+
+# Cypress media directories
+cypress/screenshots
+cypress/videos
+
+# File databases
+*.db
