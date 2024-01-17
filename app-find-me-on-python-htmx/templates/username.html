@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% import 'icons.html' as icons %} {% block title %}
+{{user.full_name}} - {% endblock %} {% block heading %}
+<h1
+  class="p-2 text-center font-bold text-xl text-teal-700 flex justify-center space-x-3"
+>
+  {{icons.get_icon('user')}} <span>{{user.full_name}}</span>
+</h1>
+{% endblock%} {% block content %}
+<div class="p-8 mx-auto max-w-xl">
+  <div class="p-4 flex flex-col space-y-3">
+    {% for account in links %}
+    <div key="{{account.id}}">
+      {% if not 'http' in account.link %}
+      <a
+        class="flex space-x-3"
+        href="{{ 'https://' ~ account.link}}"
+        target="_blank"
+      >
+        <div
+          id="social-link"
+          class="w-full p-2 text-gray-600 bg-teal-200 hover:bg-teal-300 rounded-md flex space-x-3"
+        >
+          {{icons.get_icon(account.website)}} <span>{{account.website}}</span>
+        </div>
+      </a>
+      {% else %}
+      <a class="flex space-x-3" href="{{account.link}}" target="_blank">
+        <div
+          id="social-link"
+          class="w-full p-2 text-gray-600 bg-teal-200 hover:bg-teal-300 rounded-md flex space-x-3"
+        >
+          {{icons.get_icon(account.website)}} <span>{{account.website}}</span>
+        </div>
+      </a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="p-4 w-full flex justify-center space-y-3">
+    <button
+      class="p-2 mt-16 outline-1 outline-red-400 text-red-600 text-xs"
+      hx-post="{{page_url}}"
+      hx-prompt="Provide delete id"
+      hx-confirm="Are you sure?"
+      hx-target="#response"
+    >
+      Want to delete your information?
+    </button>
+  </div>
+</div>
+{% endblock content %}

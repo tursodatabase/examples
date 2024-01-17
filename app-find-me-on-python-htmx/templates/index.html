@@ -1,0 +1,99 @@
+{% extends "base.html" %} {% block heading %}
+<h1 class="p-2 text-center font-bold text-xl text-teal-700">FindMeOn</h1>
+{% endblock %} {% block content %}
+<div class="p-8 mx-auto max-w-xl">
+  <form
+    class="p-4 flex flex-col space-y-2"
+    hx-post="{{page_url}}"
+    hx-target="#response"
+  >
+    <div class="p-2 font-semibold text-teal-600">User Details</div>
+    <div>
+      <input
+        type="text"
+        name="full_name"
+        placeholder="Full Name"
+        value="{{request.form['full_name']}}"
+        _="on htmx:validation:validate
+                if my.value == ''
+                    call me.setCustomValidity('Please enter your full name')
+                else
+                    call me.setCustomValidity('')"
+        required
+      />
+    </div>
+    <div>
+      <input
+        type="email"
+        name="email"
+        placeholder="someone@mail.com"
+        value="{{request.form['email']}}"
+        _="on htmx:validation:validate
+                if my.value == ''
+                    call me.setCustomValidity('Please enter your email')
+                else
+                    call me.setCustomValidity('')"
+        required
+      />
+    </div>
+    <div>
+      <input
+        type="text"
+        name="user_name"
+        placeholder="username"
+        value="{{request.form['email']}}"
+        _="on htmx:validation:validate
+                if my.value == ''
+                    call me.setCustomValidity('Please enter your username')
+                else
+                    call me.setCustomValidity('')"
+        required
+      />
+    </div>
+    <div class="p-2 font-semibold text-teal-600">Social Links</div>
+    <div>
+      <input
+        type="text"
+        name="twitter"
+        value="{{request.form['twitter']}}"
+        placeholder="Twitter"
+      />
+    </div>
+    <div>
+      <input
+        type="text"
+        name="linkedin"
+        value="{{request.form['linkedin']}}"
+        placeholder="Linkedin"
+      />
+    </div>
+    <div>
+      <input
+        type="text"
+        name="facebook"
+        value="{{request.form['facebook']}}"
+        placeholder="Facebook"
+      />
+    </div>
+    <div>
+      <input
+        type="text"
+        name="github"
+        value="{{request.form['github']}}"
+        placeholder="GitHub"
+      />
+    </div>
+    <div>
+      <input
+        type="text"
+        name="youtube"
+        value="{{request.form['youtube']}}"
+        placeholder="Youtube"
+      />
+    </div>
+    <div class="pt-2">
+      <button type="submit">Add Links</button>
+    </div>
+  </form>
+</div>
+{% endblock content %}
