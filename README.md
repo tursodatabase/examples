@@ -5,7 +5,7 @@
 
 ## Applications
 
-Kitchen sink applications involving Turso and your favorite framework.
+Kitchen sink applications featuring Turso and your favorite framework.
 
 ### Mobile
 
@@ -53,6 +53,8 @@ Kitchen sink applications involving Turso and your favorite framework.
 [multitenancy]: https://turso.tech/multitenancy
 [embedded replicas]: https://blog.turso.tech/introducing-embedded-replicas-deploy-turso-anywhere-2085aa0dc242
 [Akamai's Linode]: https://www.linode.com
+<!-- [11ty]: https://www.11ty.dev -->
+<!-- [Zola]: https://www.getzola.org -->
 [At The Polls]: /app-at-the-polls
 [Turso Next.js Starter]: /app-turso-nextjs-starter
 [Recipe book app]: /app_recipe_book
