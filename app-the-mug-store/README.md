@@ -1,4 +1,4 @@
-# The Mug Store! 🍵
+# [The Mug Store! 🍵]
 
 An e-commerce store built with [Remix], [Turso], [Drizzle], and deployed to
 [Cloudflare Workers].
@@ -139,6 +139,7 @@ Once that's done, you should be able to deploy your app:
 npm run deploy
 ```
 
+[The Mug Store! 🍵]: https://the-mug-store.infra-43f.workers.dev
 [Remix]: https://github.com/remix-run/remix
 [Turso]: htthhttps://turso.tech/
 [Drizzle]: https://github.com/drizzle-team/drizzle-orm

@@ -1,4 +1,4 @@
-# The Mug Store API
+# [The Mug Store API]
 
 This is a distributed REST API built using [Cloudflare workers] and [Turso] with
 [Drizzle] used as the ORM.
@@ -129,6 +129,7 @@ For more information, visit the following links:
 - [Turso Docs]
 - [Drizzle Docs]
 
+[The Mug Store API]: https://the-mugs-store-api.infra-43f.workers.dev
 [Cloudflare workers Docs]: https://developers.cloudflare.com/workers/
 [Cloudflare workers]: https://developers.cloudflare.com/workers/
 [Turso Docs]: https://docs.turso.tech/

@@ -1,4 +1,4 @@
-# Turso Nextjs Starter
+# [Turso Nextjs Starter]
 
 This is a [Next.js] starter template that uses [Turso] to store data and
 [Tailwindcss] for styling.
@@ -143,6 +143,7 @@ following resources:
 - [Turso Community] - Join the Turso community.
 - [libSQL] - The open-source open-contribution fork of SQLite Turso is built on.
 
+[Turso Nextjs Starter]: https://turso-nextjs-starter.vercel.app
 [Next.js]: https://nextjs.org/
 [Turso]: https://turso.tech
 [Tailwindcss]: https://tailwindcss.com

@@ -1,4 +1,4 @@
-# FindMeOn ⚡️
+# [FindMeOn ⚡️]
 
 A social links listing app built with [Qwik] and [Turso].
 
@@ -126,6 +126,7 @@ TURSO_DB_URL=
 TURSO_DB_AUTH_TOKEN=
 ```
 
+[FindMeOn ⚡️]: https://findmeon.netlify.app
 [Qwik Docs]: https://qwik.builder.io/
 [Turso]: https://chiselstrike.com
 [QwikCity]: https://qwik.builder.io/qwikcity/overview/
