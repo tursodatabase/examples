@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .header .logo a {
+    display: inline-block;
+  }
+
+  .header li a {
+    @apply text-white px-4 flex space-x-1 justify-center items-center;
+  }
+
+  @media (min-width: 450px) {
+    .header li {
+      display: inline-block;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .header {
+      padding: 20px 70px;
+    }
+  }
+}
