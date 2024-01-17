@@ -1,0 +1,10 @@
+[build]
+publish = "dist"
+command = "npm run build"
+
+[dev]
+targetPort = 3000
+
+[template.environment]
+TURSO_DB_URL = "TURSO_DB_URL"
+TURSO_DB_AUTH_TOKEN = "TURSO_DB_AUTH_TOKEN"

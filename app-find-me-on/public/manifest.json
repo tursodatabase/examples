@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "findmeon",
+  "short_name": "FindMeOn",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#97f7e4",
+  "description": "All your social links in one place."
+}
