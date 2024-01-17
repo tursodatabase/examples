@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@layer base{
+  .header {
+    @apply flex justify-center px-4 py-2 bg-primary;
+  }
+  
+  .header .logo a {
+    display: inline-block;
+  }
+  
+  .header ul {
+    margin: 0;
+    list-style: none;
+    flex: 1;
+    text-align: right;
+  }
+  
+  .header li {
+    display: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .header li a {
+    @apply text-secondary px-4 flex space-x-1 justify-center items-center;
+  }
+  
+  .header li a:hover {
+    @apply text-secondary-300;
+  }
+  
+  @media (min-width: 450px) {
+    .header li {
+      display: inline-block;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .header {
+      padding: 20px 70px 0;
+    }
+  }
+}
