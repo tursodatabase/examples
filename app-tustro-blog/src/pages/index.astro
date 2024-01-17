@@ -1,0 +1,75 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import type { Blog } from '../lib/types';
+import { client } from '../lib/tursoDb';
+import FormattedDate from "../components/FormattedDate.astro";
+
+let posts: Blog[] = [];
+try {
+  const allPostsResponse = await client.execute("select posts.title, posts.description, posts.slug, posts.hero, authors.first_name, authors.last_name, authors.slug as author_slug, authors.avatar, posts.content, posts.created_at from posts left join authors on authors.id = posts.author_id order by posts.created_at desc;");
+  const allPosts = allPostsResponse.rows;
+  posts = allPosts.map((post: any): Blog => {
+    return {
+      published: false,
+      title: post.title,
+      description: post.description,
+      slug: post.slug,
+      hero: post.hero,
+      created_at: post.created_at,
+      author: {
+        first_name: post.first_name,
+        last_name: post.last_name,
+        slug: post.slug,
+        avatar: post.avatar
+      }
+    }
+  });
+} catch (error) {
+  // TODO: Handle error and notify user
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      ul {
+        list-style-type: none;
+        padding: unset;
+      }
+      ul li {
+        display: flex;
+      }
+      ul li :global(time) {
+        flex: 0 0 130px;
+        font-style: italic;
+        color: #595959;
+      }
+      ul li a:visited {
+        color: #8e32dc;
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section>
+        <ul>
+          {
+            posts.map((post) => (
+              <li>
+                <FormattedDate date={post.publish_date || post.created_at} />
+                <a href={`/post/${post.slug}/`}>{post.title}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
