@@ -1,0 +1,33 @@
+# Contributions
+
+Contributions are welcome, especially entire projects. If you have a project to
+contribute, you must observe the following requirements:
+
+- There must be a README that:
+  - Describes the purpose of the project
+  - Explains how to build and run any code
+  - May attribute authorship to yourself (by mentioning yourself and linking as you prefer)
+- All code must be licensed with the MIT license.
+- There must be a [LICENSE file] in the root of the repo with the full MIT
+  license naming "ChiselStrike, Inc." as the license holder using the current
+  year.
+- The name of your repo should use all lowercase letters with hyphens as word
+  separators (e.g. my-awesome-turso-project). Depending on the type of repo, its
+  name should:
+  - Start with "app-" if it's an application or other runnable product
+  - Start with "lib-" if it's a library or SDK
+  - Start with "example-" if it contains code snippets or other examples
+  - (or let us know if you have something else)
+- The repo must not be a fork of another repo.
+
+Steps to contribute a new repo:
+
+1. Stage your repo on an organization you own (e.g. your personal org)
+2. Reach out to us at on our [Discord] or <info@turso.tech> to provide a
+   link and ask for a review.
+3. We will review your submission, possibly offering suggestions.
+4. After we accept it, fork this repo, create a new branch e.g "adding-app-my-project", [follow these steps to add your repo as a subdirectory], and make a new Pull Request.
+
+[LICENSE file]: ../LICENSE
+[Discord]: https://discord.com/invite/4B5D7hYwub
+[follow these steps to add your repo as a subdirectory]: (https://gist.github.com/xinnks/23302408c58a38059d1f27a650b67102#file-add-external-repo-as-subdirectory-with-history-intact-md)
