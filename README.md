@@ -23,11 +23,12 @@ Kitchen sink applications involving Turso and your favorite framework.
 - [Find Me On htmx]: A social links listing app built with [Flask], [htmx], and [Turso].
 - [Turso CRM]: A multitenant CRM website built with [Remix] and [Turso], leveraging the latter's [multitenancy] offering.
 - [Turso CRM ER]: A multitenant CRM website built with [Remix] and [Turso] set to be deployed on managed cloud services like [Akamai's Linode], leveraging Turso's [multitenancy] and [embedded replicas] offerings.
-- [Turso Notes]: A multi-platform note-taking desktop application built with [Tauri], [Turso] & [Qwik].
 - [TurQw Store]: A shopping cart built with [Qwik] and [Turso].
 - [Tustro Blog]: A Server-side Rendered (SSR) [Astro] blog that fetches data from [Turso].
 
-<!-- ## Desktop -->
+## Desktop
+
+- [Turso Notes]: A multi-platform note-taking desktop application built with [Tauri], [Turso] & [Qwik].
 
 <!-- ## Docs -->
 
