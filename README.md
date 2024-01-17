@@ -48,6 +48,7 @@ Kitchen sink applications involving Turso and your favorite framework.
 [Qwik]: https://qwik.builder.io
 [Flask]: https://flask.palletsprojects.com
 [htmx]: https://htmx.org
+[Tauri]: https://tauri.app
 [Cloudflare Workers]: https://workers.cloudflare.com
 [multitenancy]: https://turso.tech/multitenancy
 [embedded replicas]: https://blog.turso.tech/introducing-embedded-replicas-deploy-turso-anywhere-2085aa0dc242
