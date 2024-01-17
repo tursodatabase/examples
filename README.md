@@ -1,6 +1,6 @@
 # Turso Examples
 
-<a title="Turso logo" href="https://turso.tech" target="_blank" rel="noreferrer"><img src="assets/Turso-Symbol-Blue.png" width="90" alt="Turso Logo></a>
+<a title="Turso logo" href="https://turso.tech" target="_blank" rel="noreferrer"><img src="assets/Turso-Symbol-Blue.png" width="90" alt="Turso Logo"></a>
 
 
 ## Applications
