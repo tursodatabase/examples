@@ -72,7 +72,7 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [The Mug Store]: /app-the-mug-store
 [Find Me On]: /app-find-me-on
 [Turso CRM]: /app-turso-crm
-[Turso CRM ER]: /app-turso-crm-er-linode
+[Turso CRM ER]: /app-turso-crm-er
 [Turso Notes]: /app-turso-notes
 [The Mug Store API]: /api-mug-store-api
 [Find Me On htmx]: /app-find-me-on-python-htmx
