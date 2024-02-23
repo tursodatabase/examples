@@ -1,6 +1,6 @@
-# Turso + Axum
+# Turso + Axum Todo List
 
-A simple example showing how to use [Turso](https://turso.tech) within the [Axum](https://github.com/tokio-rs/axum) framework.
+A todo list example featuring [Turso](https://turso.tech) and [Axum](https://github.com/tokio-rs/axum).
 
 ## Development
 
