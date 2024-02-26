@@ -1,4 +1,4 @@
-# Turso + Axum Todo List
+# Axum Todo List
 
 A todo list example featuring [Turso](https://turso.tech) and [Axum](https://github.com/tokio-rs/axum).
 
