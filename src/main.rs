@@ -27,7 +27,7 @@ async fn get_todos() -> Json<Vec<Todo>> {
     let db = Database::open_remote(url, token).unwrap();
     let conn = db.connect().unwrap();
 
-    let mut response = conn.query("select from ? from todos", ()).await.unwrap();
+    let mut response = conn.query("select * from todos", ()).await.unwrap();
 
     let mut todos: Vec<Todo> = Vec::new();
     while let Some(row) = response.next().unwrap() {
@@ -47,15 +47,12 @@ async fn add_todos(todo: Json<Todo>) -> Json<Todo> {
     let url = env::var("TURSO_DATABASE_URL").expect("TURSO_DATABASE_URL not found!");
     let token = env::var("TURSO_AUTH_TOKEN").expect("TURSO_AUTH_TOKEN not found!");
 
-    println!("{:?} :::: {:?}", url, token);
-
     let db = Database::open_remote(url, token).unwrap();
     let conn = db.connect().unwrap();
 
     let _ = conn
-        .query("insert into todos values (?1)", params!(todo.task.clone()))
-        .await
-        .unwrap();
+        .query("insert into todos values (?1)", params![todo.task.clone()])
+        .await;
 
     todo
 }
