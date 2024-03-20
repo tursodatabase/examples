@@ -1,14 +1,17 @@
 {
-  "name": "embedded-replicas-with-bun",
+  "name": "my-expenses-tracker",
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@libsql/client": "^0.5.6",
+    "elysia": "latest",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.8",
     "bun-types": "latest"
   },
   "module": "src/index.js"

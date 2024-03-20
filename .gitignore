@@ -40,3 +40,8 @@ yarn-error.log*
 **/*.log
 package-lock.json
 **/*.bun
+
+*.db*
+.http
+.env
+*.toml
