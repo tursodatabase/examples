@@ -59,7 +59,7 @@ async fn connection() -> Database {
         .replace("libsql", "https");
 
     let db: Database = Builder::new_remote_replica(db_file, url, auth_token)
-        .read_your_writes(true)
+        .read_your_writes(true) // `true` by default - https://docs.turso.tech/sdk/rust/reference#read-your-own-writes
         .build()
         .await
         .unwrap();
