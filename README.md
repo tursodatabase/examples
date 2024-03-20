@@ -33,11 +33,7 @@ TURSO_AUTH_TOKEN=
 mkdir -p db && cargo run
 ```
 
-Run migrations:
-
-```sh
-curl "http://127.0.0.1:$PORT"
-```
+## Send Requests
 
 Add a new hit:
 

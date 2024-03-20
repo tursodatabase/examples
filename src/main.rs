@@ -30,6 +30,16 @@ async fn main() -> std::io::Result<()> {
     let port = env::var("PORT").unwrap();
     let port = port.parse::<u16>().expect("Invalid port given");
 
+    let db = connection().await;
+    let conn = db.connect().unwrap();
+
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS pages(title VARCHAR, link VARCHAR NOT NULL, visits INTEGER)",
+        (),
+    )
+    .await
+    .unwrap();
+
     HttpServer::new(|| {
         App::new()
             .route("/", web::get().to(index))
@@ -68,18 +78,6 @@ async fn connection() -> Database {
 }
 
 async fn index() -> Result<String> {
-    let db = connection().await;
-    let conn = db.connect().unwrap();
-
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS pages(title VARCHAR, link VARCHAR NOT NULL, visits INTEGER)",
-        (),
-    )
-    .await
-    .unwrap();
-
-    db.sync().await.unwrap();
-
     Ok(format!("Welcome to the Web Traffic Checker! ❤︎ Turso"))
 }
 
