@@ -1,6 +1,6 @@
-# Web Traffic Checker
+# Embedded Replicas with Rust
 
-A simple web traffic checking API featuring [Turso embedded replicas](https://docs.turso.tech/features/embedded-replicas) and [Actix](https://github.com/actix/actix-web).
+A simple web traffic analytics tracking API featuring [Turso embedded replicas](https://docs.turso.tech/features/embedded-replicas) and [Actix](https://github.com/actix/actix-web).
 
 ## Development
 
