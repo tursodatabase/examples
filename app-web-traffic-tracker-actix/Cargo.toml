@@ -1,5 +1,5 @@
 [package]
-name = "web_traffic_checker"
+name = "web_traffic_tracker"
 version = "0.1.0"
 edition = "2021"
 

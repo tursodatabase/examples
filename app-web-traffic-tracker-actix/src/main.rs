@@ -78,7 +78,7 @@ async fn connection() -> Database {
 }
 
 async fn index() -> Result<String> {
-    Ok(format!("Welcome to the Web Traffic Checker! ❤︎ Turso"))
+    Ok(format!("Welcome to the Web Traffic Tracker! ❤︎ Turso"))
 }
 
 async fn get_page_hits(query: web::Query<QueryParams>) -> Result<HttpResponse, Error> {
