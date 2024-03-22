@@ -35,7 +35,8 @@ Kitchen sink applications featuring Turso and your favorite framework.
 - [TurQw Store]: A shopping cart built with [Qwik] and [Turso].
 - [Tustro Blog]: A Server-side Rendered (SSR) [Astro] blog that fetches data from [Turso].
 - [Axum Todo List]: A todo list web application built with [Turso] and [Axum] - the Rust web framework.
-- [Web Traffic Tracker]: A simple web traffic analytics tracking API featuring [Turso embedded replicas](https://docs.turso.tech/features/embedded-replicas) and [Actix](https://github.com/actix/actix-web).
+- [Web Traffic Tracker]: A simple web traffic analytics tracking API featuring Turso's [Embedded Replicas] and [Actix].
+- [Expenses Tracker]: A personal expenses tracking application built with [Elysia], [Bun], and Turso's [Embedded Replicas].
 
 ## Desktop
 
@@ -62,9 +63,12 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Tauri]: https://tauri.app
 [Cloudflare Workers]: https://workers.cloudflare.com
 [multitenancy]: https://turso.tech/multitenancy
-[embedded replicas]: https://blog.turso.tech/introducing-embedded-replicas-deploy-turso-anywhere-2085aa0dc242
 [Akamai's Linode]: https://www.linode.com
 [Axum]: https://github.com/tokio-rs/axum
+[Actix]: https://github.com/actix/actix-web
+[Elysia]: https://elysiajs.com/
+[Bun]: https://bun.sh/
+[Embedded Replicas]: https://docs.turso.tech/features/embedded-replicas
 <!-- [11ty]: https://www.11ty.dev -->
 <!-- [Zola]: https://www.getzola.org -->
 [At The Polls]: /app-at-the-polls
@@ -83,3 +87,4 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Tustro Blog]: /app-tustro-blog
 [Axum Todo List]: /app-todo-axum
 [Web Traffic Tracker]: /app-web-traffic-tracker-actix
+[Expenses Tracker]: /app-expenses-tracker-elysia

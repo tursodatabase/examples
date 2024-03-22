@@ -1,4 +1,4 @@
-# Embedded Replicas with JavaScript
+# Expenses Tracker
 
 A personal expenses tracking application built with [Elysia](https://elysiajs.com/), [Bun](https://bun.sh/), and Turso's [Embedded Replicas](https://docs.turso.tech/features/embedded-replicas).
 
