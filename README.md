@@ -35,6 +35,7 @@ Kitchen sink applications featuring Turso and your favorite framework.
 - [TurQw Store]: A shopping cart built with [Qwik] and [Turso].
 - [Tustro Blog]: A Server-side Rendered (SSR) [Astro] blog that fetches data from [Turso].
 - [Axum Todo List]: A todo list web application built with [Turso] and [Axum] - the Rust web framework.
+- [Web Traffic Tracker]: A simple web traffic analytics tracking API featuring [Turso embedded replicas](https://docs.turso.tech/features/embedded-replicas) and [Actix](https://github.com/actix/actix-web).
 
 ## Desktop
 
@@ -81,3 +82,4 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [TurQw Store]: /app-turqw-store
 [Tustro Blog]: /app-tustro-blog
 [Axum Todo List]: /app-todo-axum
+[Web Traffic Tracker]: /app-web-traffic-tracker-actix
