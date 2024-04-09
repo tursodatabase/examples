@@ -30,6 +30,7 @@ Kitchen sink applications featuring Turso and your favorite framework.
 - [The Mug Store API]: A distributed REST API built using [Cloudflare workers] and [Turso] with [Drizzle] used as the ORM.
 - [Find Me On]: A social links listing app built with [Qwik] and [Turso].
 - [Find Me On htmx]: A social links listing app built with [Flask], [htmx], and [Turso].
+- [A/B testing w/ Turso, NextJs & Growthbook]: A simple [Next.js] starter template storing data in [Turso] and styled using [Tailwindcss].
 - [Turso CRM]: A multitenant CRM website built with [Remix] and [Turso], leveraging the latter's [multitenancy] offering.
 - [Turso CRM ER]: A multitenant CRM website built with [Remix] and [Turso] set to be deployed on managed cloud services like [Akamai's Linode], leveraging Turso's [multitenancy] and [embedded replicas] offerings.
 - [TurQw Store]: A shopping cart built with [Qwik] and [Turso].
@@ -51,11 +52,8 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Flutter]: https://flutter.dev
 [Quasar]: https://quasar.dev
 [SQLite]: https://sqlite.org
-<!-- [Vue]: https://vue.org -->
 [Next.js]: https://nuxt.com
-<!-- [React]: https://react.org -->
 [Sveltekit]: https://kit.svelte.dev
-<!-- [Svelte]: https://svelte.dev -->
 [Astro]: https://astro.build
 [Remix]: https://remix.run
 [Qwik]: https://qwik.builder.io
@@ -70,8 +68,7 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Elysia]: https://elysiajs.com/
 [Bun]: https://bun.sh/
 [Embedded Replicas]: https://docs.turso.tech/features/embedded-replicas
-<!-- [11ty]: https://www.11ty.dev -->
-<!-- [Zola]: https://www.getzola.org -->
+[Tailwindcss]: https://tailwindcss.com/
 [At The Polls]: /app-at-the-polls
 [Turso Next.js Starter]: /app-turso-nextjs-starter
 [Recipe book app]: /app_recipe_book
@@ -90,3 +87,4 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Web Traffic Tracker]: /app-web-traffic-tracker-actix
 [Expenses Tracker w/ Elysia]: /app-expenses-tracker-elysia
 [Expenses Tracker w/ Hono]: /app-expenses-tracker-hono
+[A/B testing w/ Turso, NextJs & Growthbook]: /app-ab-testing-nextjs-growthbook
