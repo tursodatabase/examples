@@ -36,7 +36,8 @@ Kitchen sink applications featuring Turso and your favorite framework.
 - [Tustro Blog]: A Server-side Rendered (SSR) [Astro] blog that fetches data from [Turso].
 - [Axum Todo List]: A todo list web application built with [Turso] and [Axum] - the Rust web framework.
 - [Web Traffic Tracker]: A simple web traffic analytics tracking API featuring Turso's [Embedded Replicas] and [Actix].
-- [Expenses Tracker]: A personal expenses tracking application built with [Elysia], [Bun], and Turso's [Embedded Replicas].
+- [Expenses Tracker w/ Elysia]: A personal expenses tracking application built with [Elysia], [Bun], and Turso's [Embedded Replicas].
+- [Expenses Tracker w/ Hono]: A personal expenses tracking application built with [Hono], [Bun], and Turso.
 
 ## Desktop
 
@@ -87,4 +88,5 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Tustro Blog]: /app-tustro-blog
 [Axum Todo List]: /app-todo-axum
 [Web Traffic Tracker]: /app-web-traffic-tracker-actix
-[Expenses Tracker]: /app-expenses-tracker-elysia
+[Expenses Tracker w/ Elysia]: /app-expenses-tracker-elysia
+[Expenses Tracker w/ Hono]: /app-expenses-tracker-hono
