@@ -26,6 +26,8 @@ Kitchen sink applications featuring Turso and your favorite framework.
 - [At The Polls]: A poll making website built with [Sveltekit], [Turso], and [Drizzle].
 - [Top Web Frameworks]: A top web frameworks listing made with [Nuxt] and [Turso].
 - [Turso Next.js Starter]: A top web frameworks listing made with [Next.js] and [Turso].
+- [Workers-Turso TypeScript Demo]: A demo project demostrating using the integration of [Turso] in a
+[Cloudflare Workers] TypeScript project.
 - [The Mug Store]: An e-commerce store built with [Remix], [Turso], [Drizzle], set to be deployed to [Cloudflare Workers].
 - [The Mug Store API]: A distributed REST API built using [Cloudflare workers] and [Turso] with [Drizzle] used as the ORM.
 - [Find Me On]: A social links listing app built with [Qwik] and [Turso].
@@ -88,3 +90,4 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Expenses Tracker w/ Elysia]: /app-expenses-tracker-elysia
 [Expenses Tracker w/ Hono]: /app-expenses-tracker-hono
 [A/B testing w/ Turso, NextJs & Growthbook]: /app-ab-testing-nextjs-growthbook
+[Workers-Turso TypeScript Demo]: /app-workers-turso-ts-demo

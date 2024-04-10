@@ -1,4 +1,4 @@
-# Workers Turso TS Demo
+# Workers-Turso TypeScript Demo
 
 This is a demo project demonstrating the integration of Turso into a
 Cloudflare Workers TypeScript/JavaScript project.
