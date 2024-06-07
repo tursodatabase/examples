@@ -19,8 +19,8 @@ STMT;
 $db->executeBatch($createUsers);
 
 $stmt = $db->prepare("SELECT * FROM users WHERE id = ?");
-$user = $stmt->query([2]);
-if (empty($user['rows'])) {
+$user = $stmt->query([2])->fetchArray();
+if (empty($user)) {
     echo "User not found!" . PHP_EOL;
     exit(1);
 }

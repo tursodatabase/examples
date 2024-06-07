@@ -18,8 +18,8 @@ STMT;
 
 $db->executeBatch($createUsers);
 
-$getAllUsers = $db->query("SELECT * FROM users");
-foreach ($getAllUsers['rows'] as $user) {
+$getAllUsers = $db->query("SELECT * FROM users")->fetchArray(LibSQL::LIBSQL_ASSOC);
+foreach ($getAllUsers as $user) {
     echo "- Name: " . $user['name'] . " - Age: " . $user['age'] . PHP_EOL;
 }
 
