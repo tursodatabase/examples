@@ -3800,16 +3800,16 @@
         },
         {
             "name": "tursodatabase/turso-doctrine-dbal",
-            "version": "1.0.2",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tursodatabase/turso-doctrine-dbal.git",
-                "reference": "14d23e9110348e799a23be43ee9c436755147cd2"
+                "reference": "372582065675888f473cdcc0277e1eaae2aa2e32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tursodatabase/turso-doctrine-dbal/zipball/14d23e9110348e799a23be43ee9c436755147cd2",
-                "reference": "14d23e9110348e799a23be43ee9c436755147cd2",
+                "url": "https://api.github.com/repos/tursodatabase/turso-doctrine-dbal/zipball/372582065675888f473cdcc0277e1eaae2aa2e32",
+                "reference": "372582065675888f473cdcc0277e1eaae2aa2e32",
                 "shasum": ""
             },
             "require": {
@@ -3836,7 +3836,7 @@
             "description": "A Doctribe DBAL Driver implementation on top of LibSQL Extension",
             "support": {
                 "issues": "https://github.com/tursodatabase/turso-doctrine-dbal/issues",
-                "source": "https://github.com/tursodatabase/turso-doctrine-dbal/tree/1.0.2"
+                "source": "https://github.com/tursodatabase/turso-doctrine-dbal/tree/1.2.0"
             },
             "funding": [
                 {
@@ -3844,7 +3844,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-06T20:25:13+00:00"
+            "time": "2024-06-10T23:38:20+00:00"
         }
     ],
     "packages-dev": [
@@ -3908,16 +3908,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.59.1",
+            "version": "v1.60.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "b87b1b25c607a8a50832395bc751c784946a0350"
+                "reference": "c305a02a22974670f359d4274c9431e1a191f559"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/b87b1b25c607a8a50832395bc751c784946a0350",
-                "reference": "b87b1b25c607a8a50832395bc751c784946a0350",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/c305a02a22974670f359d4274c9431e1a191f559",
+                "reference": "c305a02a22974670f359d4274c9431e1a191f559",
                 "shasum": ""
             },
             "require": {
@@ -3980,7 +3980,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.59.1"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.60.0"
             },
             "funding": [
                 {
@@ -3996,7 +3996,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-06T03:59:59+00:00"
+            "time": "2024-06-10T06:03:18+00:00"
         },
         {
             "name": "symfony/process",
