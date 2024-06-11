@@ -1,0 +1,6 @@
+configurations/*.db
+configurations/*.sqlite
+*.db
+*.db*
+*.sqlite
+.env
