@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+
+use Turso\Todo\CLI\Todo;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$art = <<<ART
+████████╗ ██████╗ ██████╗  ██████╗      ██████╗██╗     ██╗            ████████╗██╗   ██╗██████╗ ███████╗ ██████╗ 
+╚══██╔══╝██╔═══██╗██╔══██╗██╔═══██╗    ██╔════╝██║     ██║            ╚══██╔══╝██║   ██║██╔══██╗██╔════╝██╔═══██╗
+   ██║   ██║   ██║██║  ██║██║   ██║    ██║     ██║     ██║               ██║   ██║   ██║██████╔╝███████╗██║   ██║
+   ██║   ██║   ██║██║  ██║██║   ██║    ██║     ██║     ██║               ██║   ██║   ██║██╔══██╗╚════██║██║   ██║
+   ██║   ╚██████╔╝██████╔╝╚██████╔╝    ╚██████╗███████╗██║               ██║   ╚██████╔╝██║  ██║███████║╚██████╔╝
+   ╚═╝    ╚═════╝ ╚═════╝  ╚═════╝      ╚═════╝╚══════╝╚═╝               ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝ ╚═════╝ 
+ART;
+
+echo $art . PHP_EOL;
+function main()
+{
+    echo str_repeat('-', WIDTH - 18) . "  Todo CLI - " . VERSION . PHP_EOL;
+
+    while (true) {
+        echo "[L] List | [A] Add | [E] Edit | [D] Delete | [X] Exit" . PHP_EOL;
+        echo "command: ";
+
+        $choice = trim(fgets(STDIN));
+
+        $app = new Todo();
+
+        switch (strtolower($choice)) {
+            case 'l':
+                $app->listTodos();
+                break;
+            case 'a':
+                $app->addTodo();
+                clearScreen();
+                break;
+            case 'e':
+                $app->editTodo();
+                clearScreen();
+                break;
+            case 'd':
+                $app->deleteTodo();
+                clearScreen();
+                break;
+            case 'x':
+                exit("Goodbye!" . PHP_EOL);
+            default:
+                echo "Invalid choice." . PHP_EOL;
+                clearScreen();
+        }
+    }
+
+    echo PHP_EOL;
+}
+
+main();
