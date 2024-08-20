@@ -1,0 +1,22 @@
+{
+    "name": "darkterminal/php-todo-cli",
+    "description": "Todo-CLI with Turso",
+    "version": "1.0.0",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Turso\\Todo\\CLI\\": "src/"
+        },
+        "files": ["src/helpers.php"]
+    },
+    "authors": [
+        {
+            "name": "Imam Ali Mustofa",
+            "email": "d.darkterminal@gmail.com"
+        }
+    ],
+    "require": {
+        "tursodatabase/turso-doctrine-dbal": "^1.1"
+    }
+}

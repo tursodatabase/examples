@@ -41,6 +41,9 @@ Kitchen sink applications featuring Turso and your favorite framework.
 - [Web Traffic Tracker]: A simple web traffic analytics tracking API featuring Turso's [Embedded Replicas] and [Actix].
 - [Expenses Tracker w/ Elysia]: A personal expenses tracking application built with [Elysia], [Bun], and Turso's [Embedded Replicas].
 - [Expenses Tracker w/ Hono]: A personal expenses tracking application built with [Hono], [Bun], and Turso.
+- [PHP Extension Example Usage]: A code samples for using Turso Client PHP in native way with [Turso Client PHP].
+- [Laravel Authenticated Todo List]: A simple todo list app using [Turso Client PHP], [Turso Driver Laravel], [Laravel], [Laravel Breeze], and [Livewire Volt].
+- [Symfony 7 Rest API CRUD]: A simple rest api using [Turso Client PHP], [Turso Doctrine DBAL], [Symfony], and [Doctrine DBAL].
 
 ## Desktop
 
@@ -62,6 +65,14 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Flask]: https://flask.palletsprojects.com
 [htmx]: https://htmx.org
 [Tauri]: https://tauri.app
+[Turso Client PHP]: https://github.com/tursodatabase/turso-client-php
+[Turso Driver Laravel]: https://github.com/tursodatabase/turso-driver-laravel
+[Turso Doctrine DBAL]: https://github.com/tursodatabase/turso-doctrine-dbal
+[Laravel]: https://laravel.com
+[Laravel Breeze]: https://github.com/laravel/breeze
+[Livewire Volt]: https://livewire.laravel.com/docs/volt
+[Symfony]: https://symfony.com
+[Doctrine DBAL]: https://www.doctrine-project.org/projects/doctrine-dbal/en/4.0/index.html
 [Cloudflare Workers]: https://workers.cloudflare.com
 [multitenancy]: https://turso.tech/multitenancy
 [Akamai's Linode]: https://www.linode.com
@@ -91,3 +102,6 @@ Kitchen sink applications featuring Turso and your favorite framework.
 [Expenses Tracker w/ Hono]: /app-expenses-tracker-hono
 [A/B testing w/ Turso, NextJs & Growthbook]: /app-ab-testing-nextjs-growthbook
 [Workers-Turso TypeScript Demo]: /app-workers-turso-ts-demo
+[PHP Extension Example Usage]: /php-extension-usages-demo
+[Laravel Authenticated Todo List]: /laravel-authenticated-todo-list
+[Symfony 7 Rest API CRUD]: /symfony7-rest-api-crud
