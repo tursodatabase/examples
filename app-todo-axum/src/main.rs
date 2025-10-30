@@ -28,7 +28,7 @@ async fn main() {
 
     let _ = conn
         .execute(
-            "CREATE TABLE IF NOT EXISTS todos(task varchar non null)",
+            "CREATE TABLE IF NOT EXISTS todos(task varchar not null)",
             (),
         )
         .await;
